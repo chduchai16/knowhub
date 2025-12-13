@@ -1,0 +1,33 @@
+package com.spring.knowhub.infrastructure.mappers.user;
+
+import com.spring.knowhub.domain.models.user.Permission;
+import com.spring.knowhub.infrastructure.entities.user.PermissionEntity;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class PermissionMapper {
+
+    private final ModelMapper modelMapper ;
+    private TypeMap<Permission , PermissionEntity> fromDomainToEntityTypeMap ;
+    private TypeMap<PermissionEntity , Permission> fromEntityToDomainTypeMap ;
+
+    public PermissionEntity fromDomainToEntity(Permission permission){
+        if (fromDomainToEntityTypeMap == null) {
+            fromDomainToEntityTypeMap = modelMapper.createTypeMap(Permission.class, PermissionEntity.class);
+            fromDomainToEntityTypeMap.implicitMappings();
+        }
+        return fromDomainToEntityTypeMap.map(permission);
+    }
+
+    public Permission fromEntityToDomain(PermissionEntity permissionEntity){
+        if (fromEntityToDomainTypeMap == null) {
+            fromEntityToDomainTypeMap = modelMapper.createTypeMap(PermissionEntity.class, Permission.class);
+            fromEntityToDomainTypeMap.implicitMappings();
+        }
+        return fromEntityToDomainTypeMap.map(permissionEntity);
+    }
+}

@@ -1,0 +1,81 @@
+package com.spring.knowhub.infrastructure.mappers.post;
+
+import com.spring.knowhub.domain.models.post.Post;
+import com.spring.knowhub.infrastructure.entities.post.PostEntity;
+import com.spring.knowhub.infrastructure.mappers.user.UserMapper;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class PostMapper {
+
+    private final ModelMapper modelMapper ;
+    private final UserMapper userMapper ;
+    private final PostMediaMapper postMediaMapper ;
+    private TypeMap<Post , PostEntity> fromDomainToEntityTypeMap;
+    private TypeMap<PostEntity , Post> fromEntityToDomainTypeMap;
+
+    public PostEntity fromDomainToEntity(Post post) {
+        if (fromDomainToEntityTypeMap == null) {
+            fromDomainToEntityTypeMap = modelMapper.createTypeMap(Post.class, PostEntity.class);
+            fromDomainToEntityTypeMap.getMappings().clear();
+            fromDomainToEntityTypeMap.addMappings(mapper -> {
+                mapper.skip(PostEntity :: setUser);
+                mapper.skip(PostEntity :: setMedia);
+            }) ;
+            fromDomainToEntityTypeMap.implicitMappings() ;
+        }
+
+        PostEntity postEntity = fromDomainToEntityTypeMap.map(post);
+
+        // map user
+        if(post.getUser() != null) {
+            postEntity.setUser(userMapper.fromDomainToEntity(post.getUser()));
+        }
+        // map media
+        if(post.getMedia() != null && !post.getMedia().isEmpty()) {
+            postEntity.setMedia(
+                    post.getMedia()
+                            .stream()
+                            .map(postMediaMapper::fromModelToEntity)
+                            .toList()
+            );
+        }
+
+        return postEntity ;
+    }
+
+    public Post fromEntityToDomain(PostEntity postEntity) {
+        if (fromEntityToDomainTypeMap == null) {
+            fromEntityToDomainTypeMap = modelMapper.createTypeMap(PostEntity.class, Post.class);
+            fromEntityToDomainTypeMap.getMappings().clear();
+            fromEntityToDomainTypeMap.addMappings(mapper -> {
+                mapper.skip(Post :: setUser);
+                mapper.skip(Post :: setMedia);
+            }) ;
+            fromEntityToDomainTypeMap.implicitMappings() ;
+        }
+
+        Post post = fromEntityToDomainTypeMap.map(postEntity);
+
+        // map user
+        if(postEntity.getUser() != null) {
+            post.setUser(userMapper.fromEntityToDomain(postEntity.getUser()));
+        }
+        // map media
+        if(postEntity.getMedia() != null && !postEntity.getMedia().isEmpty()) {
+            post.setMedia(
+                    postEntity.getMedia()
+                            .stream()
+                            .map(postMediaMapper::fromEntityToModel)
+                            .toList()
+            );
+        }
+
+        return post ;
+    }
+
+}

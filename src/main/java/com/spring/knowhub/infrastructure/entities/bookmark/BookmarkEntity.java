@@ -15,7 +15,6 @@ import lombok.EqualsAndHashCode;
 @Data
 public class BookmarkEntity extends BaseEntity {
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;

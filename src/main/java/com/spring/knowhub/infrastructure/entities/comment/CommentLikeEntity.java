@@ -15,7 +15,6 @@ import lombok.EqualsAndHashCode;
 @Data
 public class CommentLikeEntity extends BaseEntity {
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id", nullable = false)
     private CommentEntity comment;

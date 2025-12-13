@@ -17,5 +17,7 @@ public class PermissionEntity extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String code;
 
+    private String description;
+
 }
 

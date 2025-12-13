@@ -12,7 +12,6 @@ import lombok.EqualsAndHashCode;
 @Data
 public class NotificationEntity extends BaseEntity {
 
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private NotificationType type;
