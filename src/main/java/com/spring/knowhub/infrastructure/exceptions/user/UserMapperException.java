@@ -1,0 +1,28 @@
+package com.spring.knowhub.infrastructure.exceptions.user;
+
+// exception khi map user giữa entity và domain
+public class UserMapperException extends UserInfrastructureException {
+    public UserMapperException(String message) {
+        super("USER_MAPPER_ERROR", message);
+    }
+
+    public UserMapperException(String message, Throwable cause) {
+        super("USER_MAPPER_ERROR", message, cause);
+    }
+
+    public static UserMapperException entityToDomainMappingFailed(String details) {
+        return new UserMapperException("Lỗi khi map UserEntity sang User domain: " + details);
+    }
+
+    public static UserMapperException domainToEntityMappingFailed(String details) {
+        return new UserMapperException("Lỗi khi map User domain sang UserEntity: " + details);
+    }
+
+    public static UserMapperException nullRoleMapping() {
+        return new UserMapperException("Lỗi khi map roles: tập hợp roles là null hoặc rỗng");
+    }
+
+    public static UserMapperException invalidFieldMapping(String fieldName, String reason) {
+        return new UserMapperException("Lỗi khi map trường '" + fieldName + "': " + reason);
+    }
+}
