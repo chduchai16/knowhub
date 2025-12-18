@@ -1,16 +1,18 @@
 package com.spring.knowhub.application.queries.user.user;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Component;
+
 import com.spring.knowhub.application.buses.QueryHandler;
-import com.spring.knowhub.application.exceptions.user.user.GetUserQueryException;
+import com.spring.knowhub.application.exceptions.user.user.GetUserException;
 import com.spring.knowhub.domain.exceptions.user.user.UserNotFoundException;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
-import com.spring.knowhub.infrastructure.exceptions.user.UserRepositoryException;
+import com.spring.knowhub.infrastructure.exceptions.user.user.UserRepositoryException;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -37,21 +39,18 @@ public class GetUserByIdQueryHandler implements QueryHandler<GetUserByIdQuery, U
 
         } catch (UserNotFoundException ex) {
             log.warn("User không tồn tại: {}", ex.getMessage());
-            throw new GetUserQueryException(
-                    "User không tồn tại: " + ex.getMessage(),
-                    ex
-            );
+            throw ex;
 
         } catch (UserRepositoryException ex) {
             log.error("Lỗi database khi lấy user: {}", ex.getMessage(), ex);
-            throw new GetUserQueryException(
+            throw new GetUserException(
                     "Lỗi lấy user từ database: " + ex.getMessage(),
                     ex
             );
 
         } catch (Exception ex) {
             log.error("Lỗi không mong muốn khi lấy user", ex);
-            throw new GetUserQueryException(
+            throw new GetUserException(
                     "Lỗi không mong muốn: " + ex.getMessage(),
                     ex
             );
@@ -60,11 +59,11 @@ public class GetUserByIdQueryHandler implements QueryHandler<GetUserByIdQuery, U
 
     private void validateQuery(GetUserByIdQuery query) {
         if (query == null) {
-            throw GetUserQueryException.missingRequiredField("query");
+            throw GetUserException.missingRequiredField("query");
         }
 
         if (query.getUserId() == null || query.getUserId() <= 0) {
-            throw GetUserQueryException.missingRequiredField("userId");
+            throw GetUserException.missingRequiredField("userId");
         }
     }
 

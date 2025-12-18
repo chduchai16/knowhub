@@ -5,7 +5,7 @@ import com.spring.knowhub.domain.exceptions.user.user.DuplicateUserException;
 import com.spring.knowhub.domain.exceptions.user.user.InvalidUserException;
 import com.spring.knowhub.domain.exceptions.user.user.UserDomainException;
 import com.spring.knowhub.domain.exceptions.user.user.UserNotFoundException;
-import com.spring.knowhub.infrastructure.exceptions.user.UserInfrastructureException;
+import com.spring.knowhub.infrastructure.exceptions.user.user.UserInfrastructureException;
 import com.spring.knowhub.presentation.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

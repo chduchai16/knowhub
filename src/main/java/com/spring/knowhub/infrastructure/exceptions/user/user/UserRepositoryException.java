@@ -1,7 +1,7 @@
-package com.spring.knowhub.infrastructure.exceptions.user;
+package com.spring.knowhub.infrastructure.exceptions.user.user;
 
 public class UserRepositoryException extends UserInfrastructureException {
-    public UserRepositoryException(String message) {
+    public UserRepositoryException(String message ){
         super("USER_REPOSITORY_ERROR", message);
     }
 
@@ -19,9 +19,5 @@ public class UserRepositoryException extends UserInfrastructureException {
 
     public static UserRepositoryException findFailed(String details) {
         return new UserRepositoryException("Lỗi khi tìm kiếm User: " + details);
-    }
-
-    public static UserRepositoryException constraintViolation(String fieldName, String value) {
-        return new UserRepositoryException("Vi phạm constraint: Trường '" + fieldName + "' với giá trị '" + value + "' đã tồn tại");
     }
 }

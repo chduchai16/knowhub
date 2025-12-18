@@ -1,4 +1,4 @@
-package com.spring.knowhub.infrastructure.exceptions.user;
+package com.spring.knowhub.infrastructure.exceptions.user.user;
 
 // exception khi map user giữa entity và domain
 public class UserMapperException extends UserInfrastructureException {
@@ -11,11 +11,11 @@ public class UserMapperException extends UserInfrastructureException {
     }
 
     public static UserMapperException entityToDomainMappingFailed(String details) {
-        return new UserMapperException("Lỗi khi map UserEntity sang User domain: " + details);
+        return new UserMapperException("Lỗi khi map User Entity sang User domain: " + details);
     }
 
     public static UserMapperException domainToEntityMappingFailed(String details) {
-        return new UserMapperException("Lỗi khi map User domain sang UserEntity: " + details);
+        return new UserMapperException("Lỗi khi map User domain sang User Entity: " + details);
     }
 
     public static UserMapperException nullRoleMapping() {

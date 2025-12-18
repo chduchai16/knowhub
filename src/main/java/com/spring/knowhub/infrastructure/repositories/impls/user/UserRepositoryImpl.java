@@ -3,8 +3,8 @@ package com.spring.knowhub.infrastructure.repositories.impls.user;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
 import com.spring.knowhub.infrastructure.entities.user.UserEntity;
-import com.spring.knowhub.infrastructure.exceptions.user.UserMapperException;
-import com.spring.knowhub.infrastructure.exceptions.user.UserRepositoryException;
+import com.spring.knowhub.infrastructure.exceptions.user.user.UserMapperException;
+import com.spring.knowhub.infrastructure.exceptions.user.user.UserRepositoryException;
 import com.spring.knowhub.infrastructure.mappers.user.UserMapper;
 import com.spring.knowhub.infrastructure.repositories.jpas.user.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,20 +34,14 @@ public class UserRepositoryImpl implements UserRepository {
             log.info("User đã lưu thành công với ID: {}", savedUser.getId());
             return Optional.of(savedUser);
         } catch (DataIntegrityViolationException ex) {
-            log.error("Vi phạm ràng buộc database: {}", ex.getMessage(), ex);
-            if (ex.getMessage() != null && ex.getMessage().contains("email")) {
-                throw UserRepositoryException.constraintViolation("email", user.getEmail());
-            }
-            if (ex.getMessage() != null && ex.getMessage().contains("username")) {
-                throw UserRepositoryException.constraintViolation("username", user.getUsername());
-            }
-            throw UserRepositoryException.saveFailed(ex.getMessage());
+            log.error("Vi phạm ràng buộc database khi lưu user: {}", user.getUsername(), ex);
+            throw new UserRepositoryException("Vi phạm ràng buộc database: " + ex.getMostSpecificCause().getMessage(), ex);
         } catch (UserMapperException ex) {
-            log.error("Lỗi mapping khi lưu user: {}", ex.getMessage(), ex);
+            log.error("Lỗi mapping khi lưu user: {}", user.getUsername(), ex);
             throw ex;
         } catch (Exception ex) {
-            log.error("Lỗi không lường trước khi lưu user", ex);
-            throw UserRepositoryException.saveFailed(ex.getMessage());
+            log.error("Lỗi khi thực hiện lưu user: {}", user.getUsername(), ex);
+            throw UserRepositoryException.saveFailed("Lỗi khi lưu user: " + user.getUsername());
         }
     }
 
@@ -58,8 +52,8 @@ public class UserRepositoryImpl implements UserRepository {
             userJpaRepository.deleteById(id);
             log.info("User với ID {} đã được xóa thành công", id);
         } catch (Exception ex) {
-            log.error("Lỗi khi xóa user với ID: {}", id, ex);
-            throw UserRepositoryException.deleteFailed(ex.getMessage());
+            log.error("Lỗi khi thực hiện xóa user theo ID: {}", id, ex);
+            throw UserRepositoryException.deleteFailed("Lỗi khi xóa user theo ID: " + id);
         }
     }
 
@@ -73,8 +67,9 @@ public class UserRepositoryImpl implements UserRepository {
             log.error("Lỗi mapping khi tìm user theo ID: {}", id, ex);
             throw ex;
         } catch (Exception ex) {
-            log.error("Lỗi database khi tìm user theo ID: {}", id, ex);
-            throw UserRepositoryException.findFailed(ex.getMessage());
+            log.error("Lỗi khi thực hiện tìm kiếm user theo ID: {}", id, ex);
+            throw UserRepositoryException.findFailed("Lỗi khi tìm user theo ID: " + id
+            );
         }
     }
 
@@ -82,14 +77,13 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> findByUsername(String username) {
         log.debug("Tìm user theo username: {}", username);
         try {
-            return userJpaRepository.findByUsername(username)
-                    .map(userMapper::fromEntityToDomain);
+            return userJpaRepository.findByUsername(username).map(userMapper::fromEntityToDomain);
         } catch (UserMapperException ex) {
             log.error("Lỗi mapping khi tìm user theo username: {}", username, ex);
             throw ex;
         } catch (Exception ex) {
-            log.error("Lỗi database khi tìm user theo username: {}", username, ex);
-            throw UserRepositoryException.findFailed(ex.getMessage());
+            log.error("Lỗi khi thực hiện tìm kiếm user theo username: {}", username, ex);
+            throw UserRepositoryException.findFailed("Lỗi khi tìm user theo username: " + username);
         }
     }
 
@@ -103,15 +97,18 @@ public class UserRepositoryImpl implements UserRepository {
             log.error("Lỗi mapping khi tìm user theo email: {}", email, ex);
             throw ex;
         } catch (Exception ex) {
-            log.error("Lỗi database khi tìm user theo email: {}", email, ex);
-            throw UserRepositoryException.findFailed(ex.getMessage());
+            log.error("Lỗi khi thực hiện tìm kiếm user theo email: {}", email, ex);
+            throw UserRepositoryException.findFailed("Lỗi khi tìm user theo email: " + email);
         }
     }
 
     @Override
     public Page<User> findUsersPaged(Pageable pageable) {
-        log.debug("Lấy danh sách user phân trang: page={}, size={}", 
-                  pageable.getPageNumber(), pageable.getPageSize());
+        log.debug(
+                "Lấy danh sách user phân trang: page={}, size={}",
+                pageable.getPageNumber(),
+                pageable.getPageSize()
+        );
         try {
             Page<UserEntity> entityPage = userJpaRepository.findAll(pageable);
             return entityPage.map(userMapper::fromEntityToDomain);
@@ -119,8 +116,8 @@ public class UserRepositoryImpl implements UserRepository {
             log.error("Lỗi mapping khi lấy danh sách user phân trang", ex);
             throw ex;
         } catch (Exception ex) {
-            log.error("Lỗi database khi lấy danh sách user phân trang", ex);
-            throw UserRepositoryException.findFailed(ex.getMessage());
+            log.error("Lỗi khi thực hiện lấy danh sách user phân trang", ex);
+            throw UserRepositoryException.findFailed("Lỗi khi lấy danh sách user phân trang: " + ex.getMessage());
         }
     }
 }

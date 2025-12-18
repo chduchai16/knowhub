@@ -4,7 +4,7 @@ import com.spring.knowhub.domain.models.user.Role;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.infrastructure.entities.user.RoleEntity;
 import com.spring.knowhub.infrastructure.entities.user.UserEntity;
-import com.spring.knowhub.infrastructure.exceptions.user.UserMapperException;
+import com.spring.knowhub.infrastructure.exceptions.user.user.UserMapperException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;

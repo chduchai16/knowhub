@@ -1,23 +1,23 @@
-package com.spring.knowhub.application.exceptions.user.user;
+package com.spring.knowhub.application.exceptions.user.permission;
 
+public class PermissionApplicationException extends RuntimeException {
 
-public class UserApplicationException extends RuntimeException {
     private String errorCode;
 
-    public UserApplicationException(String message) {
+    public PermissionApplicationException(String message) {
         super(message);
     }
 
-    public UserApplicationException(String errorCode, String message) {
+    public PermissionApplicationException(String errorCode, String message) {
         super(message);
         this.errorCode = errorCode;
     }
 
-    public UserApplicationException(String message, Throwable cause) {
+    public PermissionApplicationException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public UserApplicationException(String errorCode, String message, Throwable cause) {
+    public PermissionApplicationException(String errorCode, String message, Throwable cause) {
         super(message, cause);
         this.errorCode = errorCode;
     }
@@ -34,4 +34,5 @@ public class UserApplicationException extends RuntimeException {
     public String getMessage() {
         return super.getMessage();
     }
+
 }

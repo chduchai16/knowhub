@@ -1,10 +1,10 @@
 package com.spring.knowhub.application.queries.user.user;
 
 import com.spring.knowhub.application.buses.QueryHandler;
-import com.spring.knowhub.application.exceptions.user.user.GetUserQueryException;
+import com.spring.knowhub.application.exceptions.user.user.GetUserException;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
-import com.spring.knowhub.infrastructure.exceptions.user.UserRepositoryException;
+import com.spring.knowhub.infrastructure.exceptions.user.user.UserRepositoryException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,14 +31,14 @@ public class GetUsersPagedQueryHandler implements QueryHandler<GetUsersPagedQuer
 
         } catch (UserRepositoryException ex) {
             log.error("Lỗi database khi lấy danh sách user: {}", ex.getMessage(), ex);
-            throw new GetUserQueryException(
+            throw new GetUserException(
                     "Lỗi lấy danh sách user từ database: " + ex.getMessage(),
                     ex
             );
 
         } catch (Exception ex) {
             log.error("Lỗi không mong muốn khi lấy danh sách user", ex);
-            throw new GetUserQueryException(
+            throw new GetUserException(
                     "Lỗi không mong muốn: " + ex.getMessage(),
                     ex
             );
@@ -47,11 +47,11 @@ public class GetUsersPagedQueryHandler implements QueryHandler<GetUsersPagedQuer
 
     private void validateQuery(GetUsersPagedQuery query) {
         if (query == null) {
-            throw GetUserQueryException.missingRequiredField("query");
+            throw GetUserException.missingRequiredField("query");
         }
 
         if (query.getPageable() == null) {
-            throw GetUserQueryException.missingRequiredField("pageable");
+            throw GetUserException.missingRequiredField("pageable");
         }
     }
 

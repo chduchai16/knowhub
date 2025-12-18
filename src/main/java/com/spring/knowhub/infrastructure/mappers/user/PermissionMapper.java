@@ -2,6 +2,7 @@ package com.spring.knowhub.infrastructure.mappers.user;
 
 import com.spring.knowhub.domain.models.user.Permission;
 import com.spring.knowhub.infrastructure.entities.user.PermissionEntity;
+import com.spring.knowhub.infrastructure.exceptions.user.permission.PermissionMapperException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -16,18 +17,27 @@ public class PermissionMapper {
     private TypeMap<PermissionEntity , Permission> fromEntityToDomainTypeMap ;
 
     public PermissionEntity fromDomainToEntity(Permission permission){
-        if (fromDomainToEntityTypeMap == null) {
-            fromDomainToEntityTypeMap = modelMapper.createTypeMap(Permission.class, PermissionEntity.class);
-            fromDomainToEntityTypeMap.implicitMappings();
+        try {
+            if (fromDomainToEntityTypeMap == null) {
+                fromDomainToEntityTypeMap = modelMapper.createTypeMap(Permission.class, PermissionEntity.class);
+                fromDomainToEntityTypeMap.implicitMappings();
+            }
+            return fromDomainToEntityTypeMap.map(permission);
+
+        } catch (Exception e) {
+            throw PermissionMapperException.domainToEntityMappingFailed(e.getMessage());
         }
-        return fromDomainToEntityTypeMap.map(permission);
     }
 
     public Permission fromEntityToDomain(PermissionEntity permissionEntity){
-        if (fromEntityToDomainTypeMap == null) {
-            fromEntityToDomainTypeMap = modelMapper.createTypeMap(PermissionEntity.class, Permission.class);
-            fromEntityToDomainTypeMap.implicitMappings();
+        try {
+            if (fromEntityToDomainTypeMap == null) {
+                fromEntityToDomainTypeMap = modelMapper.createTypeMap(PermissionEntity.class, Permission.class);
+                fromEntityToDomainTypeMap.implicitMappings();
+            }
+            return fromEntityToDomainTypeMap.map(permissionEntity);
+        } catch (Exception e) {
+            throw PermissionMapperException.entityToDomainMappingFailed(e.getMessage());
         }
-        return fromEntityToDomainTypeMap.map(permissionEntity);
     }
 }
