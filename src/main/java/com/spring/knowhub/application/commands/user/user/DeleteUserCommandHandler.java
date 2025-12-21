@@ -23,6 +23,7 @@ public class DeleteUserCommandHandler implements CommandHandler<DeleteUserComman
 
     @Override
     public Long handle(DeleteUserCommand command) {
+        log.info("Bắt đầu thực hiện xóa user với ID: {}", command.getUserId());
         try {
             validateCommand(command);
             Optional<User> existingUser = userRepository.findById(command.getUserId());

@@ -1,6 +1,5 @@
 package com.spring.knowhub.domain.exceptions.user.user;
 
-// exception khi user không hợp lệ
 public class InvalidUserException extends UserDomainException {
     public InvalidUserException(String message) {
         super("INVALID_USER", message);

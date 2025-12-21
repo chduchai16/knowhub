@@ -26,6 +26,7 @@ public class UpdatePermissionCommandHandler implements CommandHandler<UpdatePerm
 
     @Override
     public Long handle(UpdatePermissionCommand command) {
+        log.info("Bắt đầu thực hiện cập nhật permission với ID: {}", command.getId());
         try {
             validateCommand(command);
             Optional<Permission> existingPermission = permissionRepository.findById(command.getId());

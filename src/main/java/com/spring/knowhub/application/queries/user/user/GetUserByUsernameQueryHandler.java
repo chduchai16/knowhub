@@ -30,17 +30,14 @@ public class GetUserByUsernameQueryHandler implements QueryHandler<GetUserByUser
 
     @Override
     public User handle(GetUserByUsernameQuery query) {
-        log.debug("Bắt đầu lấy thông tin user với username: {}", query.getUsername());
-
+        log.debug("Bắt đầu thực hiện lấy thông tin user với username: {}", query.getUsername());
         try {
             validateQuery(query);
-
             Optional<User> user = userRepository.findByUsername(query.getUsername());
             if (user.isEmpty()) {
                 log.warn("User không tồn tại với username: {}", query.getUsername());
                 throw UserNotFoundException.byUsername(query.getUsername());
             }
-
             log.debug("Lấy thông tin user thành công với username: {}", query.getUsername());
             return user.get();
         } catch (UserNotFoundException ex) {

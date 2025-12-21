@@ -24,6 +24,7 @@ public class GetPermissionByIdQueryHandler implements QueryHandler<GetPermission
 
     @Override
     public Permission handle(GetPermissionByIdQuery query) {
+        log.info("Bắt đầu thực hiện lấy permission với id: {}", query.getId());
         try {
             validateQuery(query);
             Optional<Permission> permissionOpt = permissionRepository.findById(query.getId());

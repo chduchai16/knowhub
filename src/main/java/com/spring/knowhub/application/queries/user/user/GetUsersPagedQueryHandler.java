@@ -19,23 +19,18 @@ public class GetUsersPagedQueryHandler implements QueryHandler<GetUsersPagedQuer
 
     @Override
     public Page<User> handle(GetUsersPagedQuery query) {
-        log.debug("Bắt đầu lấy danh sách user với page: {}, size: {}",query.getPageable().getPageNumber(),query.getPageable().getPageSize());
-
+        log.debug("Bắt đầu thực hiện lấy danh sách user với page: {}, size: {}",query.getPageable().getPageNumber(),query.getPageable().getPageSize());
         try {
             validateQuery(query);
-
             Page<User> users = userRepository.findUsersPaged(query.getPageable());
-
             log.debug("Lấy danh sách user thành công, total: {}", users.getTotalElements());
             return users;
-
         } catch (UserRepositoryException ex) {
             log.error("Lỗi database khi lấy danh sách user: {}", ex.getMessage(), ex);
             throw new GetUserException(
                     "Lỗi lấy danh sách user từ database: " + ex.getMessage(),
                     ex
             );
-
         } catch (Exception ex) {
             log.error("Lỗi không mong muốn khi lấy danh sách user", ex);
             throw new GetUserException(

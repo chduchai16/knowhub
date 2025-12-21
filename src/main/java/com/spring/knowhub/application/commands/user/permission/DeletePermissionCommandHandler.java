@@ -23,7 +23,9 @@ public class DeletePermissionCommandHandler implements CommandHandler<DeletePerm
 
     @Override
     public Long handle(DeletePermissionCommand command) {
+        log.info("Bắt đầu thực hiện xóa permission với id: {}", command.getId());
         try {
+            validateCommand(command);
             Optional<Permission> existingPermission = permissionRepository.findById(command.getId());
             if(existingPermission.isEmpty()) {
                 log.error("Permission không tồn tại với id: {}", command.getId());

@@ -1,9 +1,9 @@
 package com.spring.knowhub.application.commands.user.permission;
 
-import com.spring.knowhub.application.exceptions.user.permission.CreatePermissionException;
 import org.springframework.stereotype.Component;
 
 import com.spring.knowhub.application.buses.CommandHandler;
+import com.spring.knowhub.application.exceptions.user.permission.CreatePermissionException;
 import com.spring.knowhub.domain.exceptions.user.permission.InvalidPermissionException;
 import com.spring.knowhub.domain.repositories.user.PermissionRepository;
 
@@ -24,6 +24,7 @@ public class CreatePermissionCommandHandler implements CommandHandler<CreatePerm
 
     @Override
     public Long handle(CreatePermissionCommand query) {
+        log.info("Bắt đầu thực hiện tạo permission với code: {}", query.getCode());
         try {
             validateCommand(query);
             var permission = new com.spring.knowhub.domain.models.user.Permission();
@@ -36,14 +37,14 @@ public class CreatePermissionCommandHandler implements CommandHandler<CreatePerm
             throw e;
         } catch (Exception ex) {
             log.error("Lỗi không xác định khi tạo permission: {}", ex.getMessage());
-            throw new CreatePermissionException("Lỗi không xác định khi tạo permission", ex);
+            throw new CreatePermissionException("Lỗi không xác định khi tạo permission: " + ex.getMessage(), ex);
         }
     }
 
     // kiểm tra code
     private void validateCommand(CreatePermissionCommand command) {
         if (command.getCode() == null || command.getCode().isEmpty()) {
-            throw CreatePermissionException.missingRequiredField("code") ;
+            throw InvalidPermissionException.InvalidPermissionCodeException("code") ;
         }
     }
 

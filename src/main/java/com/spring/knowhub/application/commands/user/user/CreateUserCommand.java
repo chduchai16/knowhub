@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CreateUserCommand implements Command {
+public class CreateUserCommand implements Command<Long> {
     private String username;
     private String email;
     private String password;

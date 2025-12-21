@@ -27,6 +27,7 @@ public class CreateUserCommandHandler implements CommandHandler<CreateUserComman
 
     @Override
     public Long handle(CreateUserCommand command) {
+        log.info("Bắt đầu thực hiện tạo user với username: {}", command.getUsername());
         try {
             validateCommand(command);
             // check trùng username

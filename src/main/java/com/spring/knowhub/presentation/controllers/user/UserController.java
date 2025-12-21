@@ -59,9 +59,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> getUserById(@PathVariable Long id) {
         log.info("Lấy thông tin user với ID: {}", id);
-
         User user = queryBus.execute(new GetUserByIdQuery(id));
-
         log.info("Lấy thông tin user thành công với ID: {}", id);
         return ResponseEntity.ok(new ApiResponse<>(
             "SUCCESS",
@@ -100,7 +98,6 @@ public class UserController {
                 users.getSize()
             )
         );
-        
         log.info("Lấy danh sách user thành công, total: {}", users.getTotalElements());
         return ResponseEntity.ok(new ApiResponse<>(
             "SUCCESS",
@@ -121,7 +118,6 @@ public class UserController {
             request.getBio(),
             request.getAvatarUrl()
         );
-
         Long userId = commandBus.execute(command);
         log.info("Cập nhật user thành công với ID: {}", userId);
         return ResponseEntity.ok(new ApiResponse<>(
@@ -134,7 +130,6 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable Long id) {
         log.info("Nhận yêu cầu xóa user với ID: {}", id);
-
         Long userId = commandBus.execute(new DeleteUserCommand(id));
         log.info("Xóa user thành công với ID: {}", userId);
         return ResponseEntity.ok(new ApiResponse<>(

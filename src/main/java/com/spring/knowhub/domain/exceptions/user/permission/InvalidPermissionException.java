@@ -11,7 +11,7 @@ public class InvalidPermissionException extends PermissionDomainException {
     }
 
     public static InvalidPermissionException InvalidPermissionCodeException(String code) {
-        return new InvalidPermissionException("Quyền với mã '" + code + "' không hợp lệ");
+        return new InvalidPermissionException("Quyền với '" + code + "' không hợp lệ");
     }
 
 }

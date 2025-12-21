@@ -23,31 +23,25 @@ public class GetUserByIdQueryHandler implements QueryHandler<GetUserByIdQuery, U
 
     @Override
     public User handle(GetUserByIdQuery query) {
-        log.debug("Bắt đầu lấy thông tin user với ID: {}", query.getUserId());
-
+        log.debug("Bắt đầu thực hiện lấy thông tin user với ID: {}", query.getUserId());
         try {
             validateQuery(query);
-
             Optional<User> user = userRepository.findById(query.getUserId());
             if (user.isEmpty()) {
                 log.warn("User không tồn tại với ID: {}", query.getUserId());
                 throw UserNotFoundException.byId(query.getUserId());
             }
-
             log.debug("Lấy thông tin user thành công với ID: {}", query.getUserId());
             return user.get();
-
         } catch (UserNotFoundException ex) {
             log.warn("User không tồn tại: {}", ex.getMessage());
             throw ex;
-
         } catch (UserRepositoryException ex) {
             log.error("Lỗi database khi lấy user: {}", ex.getMessage(), ex);
             throw new GetUserException(
                     "Lỗi lấy user từ database: " + ex.getMessage(),
                     ex
             );
-
         } catch (Exception ex) {
             log.error("Lỗi không mong muốn khi lấy user", ex);
             throw new GetUserException(
@@ -61,7 +55,6 @@ public class GetUserByIdQueryHandler implements QueryHandler<GetUserByIdQuery, U
         if (query == null) {
             throw GetUserException.missingRequiredField("query");
         }
-
         if (query.getUserId() == null || query.getUserId() <= 0) {
             throw GetUserException.missingRequiredField("userId");
         }

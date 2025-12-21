@@ -25,6 +25,7 @@ public class UpdateUserCommandHandler implements CommandHandler<UpdateUserComman
 
     @Override
     public Long handle(UpdateUserCommand command) {
+        log.info("Bắt đầu thực hiện cập nhật user với ID: {}", command.getUserId());
         try {
             validateCommand(command);
             Optional<User> existingUser = userRepository.findById(command.getUserId());
