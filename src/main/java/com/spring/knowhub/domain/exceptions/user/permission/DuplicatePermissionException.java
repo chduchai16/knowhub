@@ -9,7 +9,7 @@ public class DuplicatePermissionException extends PermissionDomainException {
         super("DUPLICATE_PERMISSION", message, cause);
     }
 
-    public static DuplicatePermissionException DuplicattePermissionException (String code){
+    public static DuplicatePermissionException DuplicatePermissionException (String code){
         return new DuplicatePermissionException("Quyền với mã '" + code + "' đã tồn tại");
     }
 }

@@ -1,9 +1,5 @@
 package com.spring.knowhub.domain.exceptions.user.user;
 
-import lombok.Getter;
-
-
-@Getter
 public class UserDomainException extends RuntimeException {
 
     private final String errorCode;
@@ -17,6 +13,10 @@ public class UserDomainException extends RuntimeException {
     public UserDomainException(String errorCode, String message, Throwable cause) {
         super(message, cause);
         this.errorCode = errorCode;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
     }
 
     @Override

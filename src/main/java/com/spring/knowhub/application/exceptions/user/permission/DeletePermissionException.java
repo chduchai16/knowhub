@@ -13,4 +13,8 @@ public class DeletePermissionException extends PermissionApplicationException {
     public static DeletePermissionException missingRequiredField(String fieldName) {
         return new DeletePermissionException("Trường bắt buộc '" + fieldName + "' bị thiếu");
     }
+
+    public static DeletePermissionException invalidField(String details) {
+        return new DeletePermissionException("Trường không hợp lệ. " + details);
+    }
 }

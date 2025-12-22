@@ -24,16 +24,13 @@ public class PermissionRepositoryImpl implements PermissionRepository {
 
     @Override
     public Optional<Permission> save(Permission permission) {
-        log.info("Đang lưu quyền: {}", permission.getCode());
+        log.info("Bắt đầu lưu quyền: {}", permission.getCode());
         try {
             PermissionEntity entity = permissionMapper.fromDomainToEntity(permission);
             PermissionEntity savedEntity = jpaPermissionRepository.save(entity);
             Permission savedPermission = permissionMapper.fromEntityToDomain(savedEntity);
             log.info("Quyền đã lưu thành công với ID: {}", savedPermission.getId());
             return Optional.of(savedPermission);
-        } catch (PermissionNotFoundException e) {
-            log.error("Lỗi khi tìm kiếm quyền liên quan khi lưu: {}", permission.getCode(), e);
-            throw e;
         }
         catch (PermissionMapperException e) {
             log.error("Lỗi mapping khi lưu quyền: {}", permission.getCode(), e);
@@ -47,7 +44,7 @@ public class PermissionRepositoryImpl implements PermissionRepository {
 
     @Override
     public void deleteById(Long id) {
-        log.info("Xóa quyền với ID: {}", id);
+        log.info("Bắt đầu xóa quyền với ID: {}", id);
         try {
             Optional <Permission> permissionOpt = findById(id);
             if (permissionOpt.isEmpty()) {
@@ -68,7 +65,7 @@ public class PermissionRepositoryImpl implements PermissionRepository {
 
     @Override
     public Optional<Permission> findById(Long id) {
-        log.info("Tìm kiếm quyền với ID: {}", id);
+        log.info("Bắt đầu tìm kiếm quyền với ID: {}", id);
         try {
             Optional<PermissionEntity> entityOpt = jpaPermissionRepository.findById(id);
             if (entityOpt.isEmpty()) {
@@ -90,8 +87,30 @@ public class PermissionRepositoryImpl implements PermissionRepository {
     }
 
     @Override
+    public Optional<Permission> findByCode(String code) {
+        log.info("Bắt đầu tìm kiếm quyền với code: {}", code);
+        try {
+            Optional<PermissionEntity> entityOpt = jpaPermissionRepository.findByCode(code);
+            if (entityOpt.isEmpty()) {
+                throw PermissionNotFoundException.permissionNotFoundByCode(code);
+            }
+            Permission permission = permissionMapper.fromEntityToDomain(entityOpt.get());
+            return Optional.of(permission);
+        } catch (PermissionNotFoundException ex) {
+            log.error("Lỗi khi tìm kiếm quyền: {}", ex.getMessage(), ex);
+            throw ex;
+        } catch (PermissionMapperException ex) {
+            log.error("Lỗi khi map Permission Entity sang Permission Domain cho code {}: {}", code, ex.getMessage(), ex);
+            throw ex;
+        } catch (Exception ex) {
+            log.error("Lỗi khi thực hiện tìm kiếm quyền với code {}: {}", code, ex.getMessage(), ex);
+            throw PermissionRepositoryException.findFailed("Lỗi khi tìm kiếm quyền với code " + code);
+        }
+    }
+
+    @Override
     public List<Permission> findAll() {
-        log.info("Tìm kiếm tất cả quyền");
+        log.info("Bắt đầu tìm kiếm tất cả quyền");
         try {
             List<PermissionEntity> entities = jpaPermissionRepository.findAll();
             log.info("Tìm thấy {} quyền", entities.size());

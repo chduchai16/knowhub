@@ -23,9 +23,8 @@ public class UserMapper {
 
     public UserEntity fromDomainToEntity(User user) {
         try {
-            // Validate user field
             if (user == null) {
-                throw UserMapperException.invalidFieldMapping("user", "user không được phép null");
+                throw UserMapperException.entityToDomainMappingFailed("Đối tượng truyền vào bị null") ;
             }
 
             if (fromDomainToEntityTypeMap == null) {
@@ -38,7 +37,6 @@ public class UserMapper {
 
             UserEntity userEntity = fromDomainToEntityTypeMap.map(user) ;
 
-            // map roles - nếu roles tồn tại thì map, không thì bỏ qua
             if(user.getRoles() != null && !user.getRoles().isEmpty()) {
                 try {
                     Set<RoleEntity> roles = user.getRoles().stream()
@@ -46,13 +44,13 @@ public class UserMapper {
                             .collect(java.util.stream.Collectors.toSet()) ;
                     userEntity.setRoles(roles) ;
                 } catch (Exception ex) {
-                    throw UserMapperException.nullRoleMapping();
+                    throw UserMapperException.entityToDomainMappingFailed("Lỗi mapping roles: " + ex.getMessage()) ;
                 }
             }
 
             return userEntity ;
         } catch (UserMapperException ex) {
-            throw ex;  // Re-throw UserMapperException đã được throw
+            throw ex;
         } catch (Exception e) {
             throw UserMapperException.domainToEntityMappingFailed(e.getMessage());
         }
@@ -62,7 +60,7 @@ public class UserMapper {
         try {
             // Validate userEntity field
             if (userEntity == null) {
-                throw UserMapperException.invalidFieldMapping("userEntity", "userEntity không được phép null");
+                throw UserMapperException.entityToDomainMappingFailed("Đối tượng truyền vào bị null") ;
             }
 
             if (fromEntityToDomainTypeMap == null) {
@@ -83,13 +81,13 @@ public class UserMapper {
                             .collect(java.util.stream.Collectors.toSet()) ;
                     user.setRoles(roles) ;
                 } catch (Exception ex) {
-                    throw UserMapperException.nullRoleMapping();
+                    throw UserMapperException.entityToDomainMappingFailed("Lỗi mapping roles: " + ex.getMessage()) ;
                 }
             }
 
             return user ;
         } catch (UserMapperException ex) {
-            throw ex;  // Re-throw UserMapperException đã được throw
+            throw ex;
         } catch (Exception e) {
             throw UserMapperException.entityToDomainMappingFailed(e.getMessage());
         }

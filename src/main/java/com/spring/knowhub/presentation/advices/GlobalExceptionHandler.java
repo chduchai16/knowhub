@@ -11,12 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.spring.knowhub.domain.exceptions.user.permission.InvalidPermissionException;
 import com.spring.knowhub.domain.exceptions.user.permission.PermissionDomainException;
-import com.spring.knowhub.domain.exceptions.user.permission.PermissionNotFoundException;
-import com.spring.knowhub.domain.exceptions.user.user.DuplicateUserException;
-import com.spring.knowhub.domain.exceptions.user.user.InvalidUserException;
-import com.spring.knowhub.domain.exceptions.user.user.UserNotFoundException;
 import com.spring.knowhub.infrastructure.exceptions.user.permission.PermissionRepositoryException;
 import com.spring.knowhub.presentation.response.ApiResponse;
 

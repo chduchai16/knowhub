@@ -2,6 +2,7 @@ package com.spring.knowhub.presentation.controllers.user;
 
 import java.util.List;
 
+import com.spring.knowhub.application.commands.user.permission.DeletePermissionCommand;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,68 +38,83 @@ public class PermissionController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<?>> getAllPermissions() {
-        log.info("Nhận yêu cầu lấy tất cả quyền");
-        List<Permission> permissions = queryBus.execute(new GetAllPermissionQuery()) ;
-        ApiResponse<List<Permission>> response = new ApiResponse<>(
-            "SUCCESS",
-            "Lấy tất cả quyền thành công",
-            permissions
-        );
-        log.info("Trả về danh sách quyền với tổng số: {}", permissions.size());
-        return ResponseEntity.ok(response);
+        log.info("GET /api/permissions");
+
+        List<Permission> permissions =
+                queryBus.execute(new GetAllPermissionQuery());
+
+        return ResponseEntity.ok(new ApiResponse<>(
+                "SUCCESS",
+                "Lấy tất cả quyền thành công",
+                permissions
+        ));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> getPermissionById(
             @PathVariable Long id
     ) {
-        log.info("Nhận yêu cầu lấy quyền theo ID");
-        Permission permission = queryBus.execute(new GetPermissionByIdQuery(id)) ;
-        ApiResponse<Permission> response = new ApiResponse<>(
-            "SUCCESS",
-            "Lấy quyền thành công",
-            permission
-        );
-        log.info("Trả về quyền với ID: {}", id);
-        return ResponseEntity.ok(response);
+        log.info("GET /api/permissions/{}", id);
+
+        Permission permission =
+                queryBus.execute(new GetPermissionByIdQuery(id));
+
+        return ResponseEntity.ok(new ApiResponse<>(
+                "SUCCESS",
+                "Lấy quyền thành công",
+                permission
+        ));
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createPermission(
             @RequestBody CreatePermissionRequest request
     ) {
-        CreatePermissionCommand command = new CreatePermissionCommand(
-            request.getCode()
+        log.info("POST /api/permissions - code={}", request.getCode());
+
+        Long id = commandBus.execute(
+                new CreatePermissionCommand(request.getCode())
         );
-        Long id = commandBus.execute( command ) ;
-        ApiResponse<Long> response = new ApiResponse<>(
+
+        return ResponseEntity.ok(new ApiResponse<>(
                 "SUCCESS",
                 "Tạo quyền thành công",
                 id
-        );
-        return ResponseEntity.ok( response ) ;
+        ));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> updatePermission(
+            @PathVariable Long id,
             @RequestBody UpdatePermissionRequest request
     ) {
-        Long id = commandBus.execute(new UpdatePermissionCommand(request.getId() , request.getCode())) ;
-        ApiResponse<Long> response = new ApiResponse<>(
+        log.info("PUT /api/permissions/{}", id);
+
+        Long updatedId = commandBus.execute(
+                new UpdatePermissionCommand(id, request.getCode())
+        );
+
+        return ResponseEntity.ok(new ApiResponse<>(
                 "SUCCESS",
                 "Cập nhật quyền thành công",
-                id
-        );
-        return ResponseEntity.ok( response ) ;
+                updatedId
+        ));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> deletePermission(
             @PathVariable Long id
     ) {
-        Long deletedId = commandBus.execute(new UpdatePermissionCommand(id , null)) ;
-        ApiResponse<Long> response = new ApiResponse<>("SUCCESS" , "Xóa quyền thành công" , deletedId) ;
-        return ResponseEntity.ok(response) ;
-    }
+        log.info("DELETE /api/permissions/{}", id);
 
+        Long deletedId = commandBus.execute(
+                new DeletePermissionCommand(id)
+        );
+
+        return ResponseEntity.ok(new ApiResponse<>(
+                "SUCCESS",
+                "Xóa quyền thành công",
+                deletedId
+        ));
+    }
 }

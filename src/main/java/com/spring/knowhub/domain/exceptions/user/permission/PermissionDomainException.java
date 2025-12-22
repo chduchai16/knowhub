@@ -1,9 +1,6 @@
 package com.spring.knowhub.domain.exceptions.user.permission;
 
 
-import lombok.Getter;
-
-@Getter
 public class PermissionDomainException extends RuntimeException {
     private final String errorCode;
 
@@ -15,6 +12,10 @@ public class PermissionDomainException extends RuntimeException {
     public PermissionDomainException(String errorCode, String message, Throwable cause) {
         super(message, cause);
         this.errorCode = errorCode;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
     }
 
     @Override

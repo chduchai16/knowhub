@@ -13,4 +13,8 @@ public class UpdatePermissionException extends PermissionApplicationException {
     public static UpdatePermissionException missingRequiredField(String fieldName) {
         return new UpdatePermissionException("Trường bắt buộc '" + fieldName + "' bị thiếu");
     }
+
+    public static UpdatePermissionException invalidField(String fieldName) {
+        return new UpdatePermissionException("Trường '" + fieldName + "' không hợp lệ");
+    }
 }

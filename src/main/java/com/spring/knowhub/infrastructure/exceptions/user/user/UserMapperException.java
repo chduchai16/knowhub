@@ -17,12 +17,4 @@ public class UserMapperException extends UserInfrastructureException {
     public static UserMapperException domainToEntityMappingFailed(String details) {
         return new UserMapperException("Lỗi khi map User domain sang User Entity: " + details);
     }
-
-    public static UserMapperException nullRoleMapping() {
-        return new UserMapperException("Lỗi khi map roles: tập hợp roles là null hoặc rỗng");
-    }
-
-    public static UserMapperException invalidFieldMapping(String fieldName, String reason) {
-        return new UserMapperException("Lỗi khi map trường '" + fieldName + "': " + reason);
-    }
 }

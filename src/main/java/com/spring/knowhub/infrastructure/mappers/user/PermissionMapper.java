@@ -18,12 +18,14 @@ public class PermissionMapper {
 
     public PermissionEntity fromDomainToEntity(Permission permission){
         try {
+            if(permission == null) {
+                throw PermissionMapperException.domainToEntityMappingFailed("Đối tượng truyền vào bị null") ;
+            }
             if (fromDomainToEntityTypeMap == null) {
                 fromDomainToEntityTypeMap = modelMapper.createTypeMap(Permission.class, PermissionEntity.class);
                 fromDomainToEntityTypeMap.implicitMappings();
             }
             return fromDomainToEntityTypeMap.map(permission);
-
         } catch (Exception e) {
             throw PermissionMapperException.domainToEntityMappingFailed(e.getMessage());
         }
@@ -31,6 +33,9 @@ public class PermissionMapper {
 
     public Permission fromEntityToDomain(PermissionEntity permissionEntity){
         try {
+            if(permissionEntity == null) {
+                throw PermissionMapperException.entityToDomainMappingFailed("Đối tượng truyền vào bị null") ;
+            }
             if (fromEntityToDomainTypeMap == null) {
                 fromEntityToDomainTypeMap = modelMapper.createTypeMap(PermissionEntity.class, Permission.class);
                 fromEntityToDomainTypeMap.implicitMappings();

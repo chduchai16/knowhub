@@ -34,75 +34,75 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createUser(@RequestBody CreateUserRequest request) {
-        log.info("Nhận yêu cầu tạo user với username: {}", request.getUsername());
+        log.info("POST /api/users - username={}", request.getUsername());
 
-        CreateUserCommand command = new CreateUserCommand(
-            request.getUsername(),
-            request.getEmail(),
-            request.getPassword(),
-            request.getFullName(),
-            request.getBio(),
-            request.getAvatarUrl()
-        );
+        Long userId = commandBus.execute(new CreateUserCommand(
+                request.getUsername(),
+                request.getEmail(),
+                request.getPassword(),
+                request.getFullName(),
+                request.getBio(),
+                request.getAvatarUrl()
+        ));
 
-        Long userId = commandBus.execute(command);
-
-        log.info("Tạo user thành công với ID: {}", userId);
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(new ApiResponse<>(
-                "SUCCESS",
-                "Tạo user thành công",
-                userId
-            ));
+                .body(new ApiResponse<>(
+                        "SUCCESS",
+                        "Tạo user thành công",
+                        userId
+                ));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> getUserById(@PathVariable Long id) {
-        log.info("Lấy thông tin user với ID: {}", id);
+        log.info("GET /api/users/{}", id);
+
         User user = queryBus.execute(new GetUserByIdQuery(id));
-        log.info("Lấy thông tin user thành công với ID: {}", id);
+
         return ResponseEntity.ok(new ApiResponse<>(
-            "SUCCESS",
-            "Lấy user thành công",
-            user
+                "SUCCESS",
+                "Lấy user thành công",
+                user
         ));
     }
 
     @GetMapping("/search/username/{username}")
     public ResponseEntity<ApiResponse<?>> getUserByUsername(@PathVariable String username) {
-        log.info("Lấy thông tin user với username: {}", username);
+        log.info("GET /api/users/search/username/{}", username);
 
         User user = queryBus.execute(new GetUserByUsernameQuery(username));
-        log.info("Lấy thông tin user thành công với username: {}", username);
+
         return ResponseEntity.ok(new ApiResponse<>(
-            "SUCCESS",
-            "Lấy user thành công",
-            user
+                "SUCCESS",
+                "Lấy user thành công",
+                user
         ));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<?>> getUsers(Pageable pageable) {
-        log.info("Lấy danh sách user với page: {}, size: {}",
+        log.info(
+                "GET /api/users?page={}&size={}",
                 pageable.getPageNumber(),
-                pageable.getPageSize());
+                pageable.getPageSize()
+        );
 
         Page<User> users = queryBus.execute(new GetUsersPagedQuery(pageable));
-        
+
         PaginatedResponse<User> paginatedResponse = new PaginatedResponse<>(
-            users.getContent(),
-            new PaginationInfo(
-                users.getTotalElements(),
-                users.getTotalPages(),
-                users.getNumber(),
-                users.getSize()
-            )
+                users.getContent(),
+                new PaginationInfo(
+                        users.getTotalElements(),
+                        users.getTotalPages(),
+                        users.getNumber(),
+                        users.getSize()
+                )
         );
-        log.info("Lấy danh sách user thành công, total: {}", users.getTotalElements());
+
         return ResponseEntity.ok(new ApiResponse<>(
-            "SUCCESS",
-            "Lấy danh sách user thành công",
-            paginatedResponse
+                "SUCCESS",
+                "Lấy danh sách user thành công",
+                paginatedResponse
         ));
     }
 
@@ -110,33 +110,35 @@ public class UserController {
     public ResponseEntity<ApiResponse<?>> updateUser(
             @PathVariable Long id,
             @RequestBody UpdateUserRequest request) {
-        log.info("Nhận yêu cầu cập nhật user với ID: {}", id);
 
-        UpdateUserCommand command = new UpdateUserCommand(
-            id,
-            request.getFullName(),
-            request.getBio(),
-            request.getAvatarUrl()
-        );
-        Long userId = commandBus.execute(command);
-        log.info("Cập nhật user thành công với ID: {}", userId);
+        log.info("PUT /api/users/{}", id);
+
+        Long userId = commandBus.execute(new UpdateUserCommand(
+                id,
+                request.getFullName(),
+                request.getBio(),
+                request.getAvatarUrl()
+        ));
+
         return ResponseEntity.ok(new ApiResponse<>(
-            "SUCCESS",
-            "Cập nhật user thành công",
-            userId
+                "SUCCESS",
+                "Cập nhật user thành công",
+                userId
         ));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable Long id) {
-        log.info("Nhận yêu cầu xóa user với ID: {}", id);
+        log.info("DELETE /api/users/{}", id);
+
         Long userId = commandBus.execute(new DeleteUserCommand(id));
-        log.info("Xóa user thành công với ID: {}", userId);
+
         return ResponseEntity.ok(new ApiResponse<>(
-            "SUCCESS",
-            "Xóa user thành công",
-            userId
+                "SUCCESS",
+                "Xóa user thành công",
+                userId
         ));
     }
 }
+
 
