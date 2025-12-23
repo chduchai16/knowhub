@@ -24,6 +24,7 @@ public class User {
         this.bio = bio;
         this.avatarUrl = avatarUrl;
         this.status = status;
+        this.role = role;
     }
 
     public User() {

@@ -14,4 +14,5 @@ public interface RoleRepository {
     Optional<Role> findById(Long id);
     Page<Role> findRolesPaged(Pageable pageable , String keyword);
     Boolean existsByName(String name);
+    Boolean existsById(Long id);
 }

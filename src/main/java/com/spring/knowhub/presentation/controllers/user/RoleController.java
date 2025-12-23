@@ -8,11 +8,13 @@ import com.spring.knowhub.application.commands.user.role.UpdateRoleCommand;
 import com.spring.knowhub.application.queries.user.role.GetPagedRoleQuery;
 import com.spring.knowhub.application.queries.user.role.GetRoleByIdQuery;
 import com.spring.knowhub.domain.models.user.Role;
+import com.spring.knowhub.presentation.mappers.user.RoleResponseMapper;
 import com.spring.knowhub.presentation.requests.user.CreateRoleRequest;
 import com.spring.knowhub.presentation.requests.user.UpdateRoleRequest;
 import com.spring.knowhub.presentation.response.ApiResponse;
 import com.spring.knowhub.presentation.response.PaginatedResponse;
 import com.spring.knowhub.presentation.response.PaginationInfo;
+import com.spring.knowhub.presentation.response.user.RoleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ public class RoleController {
 
     private final CommandBus commandBus ;
     private final QueryBus queryBus;
+    private final RoleResponseMapper roleResponseMapper ;
 
     @GetMapping
     public ResponseEntity<ApiResponse<?>> getPagedRoles (
@@ -48,8 +51,8 @@ public class RoleController {
                 rolePage.getSize()
         ) ;
 
-        PaginatedResponse<Role> paginatedResponse = new PaginatedResponse<>(
-                rolePage.getContent(),
+        PaginatedResponse<RoleResponse> paginatedResponse = new PaginatedResponse<>(
+                rolePage.getContent().stream().map(roleResponseMapper :: fromDomainToResponse).toList(),
                 paginationInfo
         ) ;
 
@@ -67,10 +70,11 @@ public class RoleController {
         log.info("GET /api/roles/{}", id );
         GetRoleByIdQuery query = new GetRoleByIdQuery(id);
         Role role = queryBus.execute(query);
+        RoleResponse response = roleResponseMapper.fromDomainToResponse(role) ;
         return ResponseEntity.ok(new ApiResponse<>(
                 "SUCCESS",
                 "Lấy role thành công",
-                role
+                response
         ));
     }
 

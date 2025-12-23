@@ -9,11 +9,13 @@ import com.spring.knowhub.application.queries.user.user.GetUserByIdQuery;
 import com.spring.knowhub.application.queries.user.user.GetUserByUsernameQuery;
 import com.spring.knowhub.application.queries.user.user.GetUsersPagedQuery;
 import com.spring.knowhub.domain.models.user.User;
+import com.spring.knowhub.presentation.mappers.user.UserResponseMapper;
 import com.spring.knowhub.presentation.requests.user.CreateUserRequest;
 import com.spring.knowhub.presentation.requests.user.UpdateUserRequest;
 import com.spring.knowhub.presentation.response.ApiResponse;
 import com.spring.knowhub.presentation.response.PaginatedResponse;
 import com.spring.knowhub.presentation.response.PaginationInfo;
+import com.spring.knowhub.presentation.response.user.UserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,6 +33,7 @@ public class UserController {
 
     private final CommandBus commandBus;
     private final QueryBus queryBus;
+    private final UserResponseMapper userResponseMapper;
 
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createUser(@RequestBody CreateUserRequest request) {
@@ -57,26 +60,24 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> getUserById(@PathVariable Long id) {
         log.info("GET /api/users/{}", id);
-
         User user = queryBus.execute(new GetUserByIdQuery(id));
-
+        UserResponse userResponse = userResponseMapper.fromUserToUserResponse(user) ;
         return ResponseEntity.ok(new ApiResponse<>(
                 "SUCCESS",
                 "Lấy user thành công",
-                user
+                userResponse
         ));
     }
 
     @GetMapping("/search/username/{username}")
     public ResponseEntity<ApiResponse<?>> getUserByUsername(@PathVariable String username) {
         log.info("GET /api/users/search/username/{}", username);
-
         User user = queryBus.execute(new GetUserByUsernameQuery(username));
-
+        UserResponse userResponse = userResponseMapper.fromUserToUserResponse(user) ;
         return ResponseEntity.ok(new ApiResponse<>(
                 "SUCCESS",
                 "Lấy user thành công",
-                user
+                userResponse
         ));
     }
 
@@ -90,8 +91,8 @@ public class UserController {
 
         Page<User> users = queryBus.execute(new GetUsersPagedQuery(pageable));
 
-        PaginatedResponse<User> paginatedResponse = new PaginatedResponse<>(
-                users.getContent(),
+        PaginatedResponse<UserResponse> paginatedResponse = new PaginatedResponse<>(
+                users.getContent().stream().map(userResponseMapper::fromUserToUserResponse).toList(),
                 new PaginationInfo(
                         users.getTotalElements(),
                         users.getTotalPages(),
@@ -107,18 +108,19 @@ public class UserController {
         ));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping()
     public ResponseEntity<ApiResponse<?>> updateUser(
-            @PathVariable Long id,
-            @RequestBody UpdateUserRequest request) {
+            @RequestBody UpdateUserRequest request
+    ) {
 
-        log.info("PUT /api/users/{}", id);
+        log.info("PUT /api/users/{}", request.getUserId());
 
         Long userId = commandBus.execute(new UpdateUserCommand(
-                id,
+                request.getUserId(),
                 request.getFullName(),
                 request.getBio(),
-                request.getAvatarUrl()
+                request.getAvatarUrl() ,
+                request.getRoleId()
         ));
 
         return ResponseEntity.ok(new ApiResponse<>(

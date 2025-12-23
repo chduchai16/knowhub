@@ -4,6 +4,8 @@ package com.spring.knowhub.application.commands.user.user;
 import com.spring.knowhub.application.buses.CommandHandler;
 import com.spring.knowhub.application.validators.user.user.UpdateUserValidator;
 import com.spring.knowhub.domain.exceptions.user.user.UserNotFoundException;
+import com.spring.knowhub.domain.models.user.Role;
+import com.spring.knowhub.domain.repositories.user.RoleRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.spring.knowhub.domain.models.user.User;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class UpdateUserCommandHandler implements CommandHandler<UpdateUserCommand, Long> {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository ;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -22,6 +25,7 @@ public class UpdateUserCommandHandler implements CommandHandler<UpdateUserComman
         UpdateUserValidator.validate(command);
         User user = userRepository.findById(command.getUserId())
                 .orElseThrow(() -> UserNotFoundException.byId(command.getUserId()));
+
         applyUpdates(user, command);
         userRepository.save(user);
         return user.getId();
@@ -41,6 +45,11 @@ public class UpdateUserCommandHandler implements CommandHandler<UpdateUserComman
         }
         if (command.getAvatarUrl() != null) {
             user.setAvatarUrl(command.getAvatarUrl());
+        }
+        if (command.getRoleId() != null) {
+            Role role = roleRepository.findById(command.getRoleId())
+                    .orElseThrow(() -> new RuntimeException("Role not found with ID: " + command.getRoleId()));
+            user.setRole(role);
         }
     }
 }

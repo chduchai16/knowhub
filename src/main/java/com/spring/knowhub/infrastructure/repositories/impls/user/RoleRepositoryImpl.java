@@ -124,5 +124,18 @@ public class RoleRepositoryImpl implements RoleRepository {
         }
     }
 
+    @Override
+    public Boolean existsById(Long id) {
+        log.info("Kiểm tra tồn tại vai trò với ID: {}", id);
+        try {
+            Boolean exists = jpaRoleRepository.existsById(id);
+            log.info("Kết quả tồn tại vai trò với ID {}: {}", id, exists);
+            return exists;
+        } catch (Exception ex) {
+            log.error("Lỗi khi kiểm tra tồn tại vai trò với ID: {}", id, ex);
+            throw RoleRepositoryException.findFailed( "Kiểm tra tồn tại lỗi: " + ex.getMessage());
+        }
+    }
+
 }
 
