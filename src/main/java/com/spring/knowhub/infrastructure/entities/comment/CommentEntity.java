@@ -25,7 +25,7 @@ public class CommentEntity extends BaseEntity {
     @JoinColumn(name = "parent_id")
     private CommentEntity parent;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "NVARCHAR(MAX)", nullable = false)
     private String content;
 
 }

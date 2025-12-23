@@ -8,4 +8,5 @@ import lombok.Data;
 public class GetPagedRoleQuery {
     private int page ;
     private int pageSize ;
+    private String keyword ;
 }

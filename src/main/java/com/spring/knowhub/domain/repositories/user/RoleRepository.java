@@ -12,6 +12,6 @@ public interface RoleRepository {
     Optional<Role> save(Role role);
     Void deleteById(Long id);
     Optional<Role> findById(Long id);
-    Page<Role> findRolesPaged(Pageable pageable);
-    Set<Permission> findByIds (Set<Long> ids);
+    Page<Role> findRolesPaged(Pageable pageable , String keyword);
+    Boolean existsByName(String name);
 }

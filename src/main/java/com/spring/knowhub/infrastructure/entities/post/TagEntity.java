@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 public class TagEntity extends BaseEntity {
 
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String name;
 
 }

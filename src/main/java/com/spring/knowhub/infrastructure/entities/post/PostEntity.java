@@ -21,7 +21,7 @@ public class PostEntity extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String content;
 
     @Enumerated(EnumType.STRING)

@@ -13,4 +13,6 @@ public interface UserRepository {
     Optional<User> findByUsername(String username);
     Optional<User> findByEmail(String email);
     Page<User> findUsersPaged(Pageable pageable);
+    Boolean existsByUsername(String username);
+    Boolean existsByEmail(String email);
 }

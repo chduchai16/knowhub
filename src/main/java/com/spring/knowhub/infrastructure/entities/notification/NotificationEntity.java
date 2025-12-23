@@ -16,10 +16,10 @@ public class NotificationEntity extends BaseEntity {
     @Column(nullable = false)
     private NotificationType type;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String content;
 
 }

@@ -19,7 +19,7 @@ public class PostMediaEntity extends BaseEntity {
     @Column(name = "post_id", insertable = false, updatable = false)
     private Long postId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String url;
 
     @Enumerated(EnumType.STRING)

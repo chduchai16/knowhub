@@ -14,9 +14,10 @@ import lombok.Getter;
 public class PermissionEntity extends BaseEntity {
 
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String code;
 
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
 }

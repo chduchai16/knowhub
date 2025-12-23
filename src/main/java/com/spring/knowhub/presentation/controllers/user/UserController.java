@@ -42,7 +42,8 @@ public class UserController {
                 request.getPassword(),
                 request.getFullName(),
                 request.getBio(),
-                request.getAvatarUrl()
+                request.getAvatarUrl(),
+                request.getRoleId()
         ));
 
         return ResponseEntity.status(HttpStatus.CREATED)

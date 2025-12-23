@@ -4,6 +4,7 @@ import com.spring.knowhub.application.buses.CommandHandler;
 import com.spring.knowhub.application.validators.user.role.CreateRoleValidator;
 import com.spring.knowhub.domain.models.user.Permission;
 import com.spring.knowhub.domain.models.user.Role;
+import com.spring.knowhub.domain.repositories.user.PermissionRepository;
 import com.spring.knowhub.domain.repositories.user.RoleRepository;
 import com.spring.knowhub.infrastructure.exceptions.user.role.RoleRepositoryException;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.Set;
 public class CreateRoleCommandHandler implements CommandHandler<CreateRoleCommand , Long> {
 
     private final RoleRepository roleRepository ;
+    private final PermissionRepository permissionRepository ;
 
     @Override
     public boolean supports(Object command) {
@@ -25,7 +27,7 @@ public class CreateRoleCommandHandler implements CommandHandler<CreateRoleComman
     @Override
     public Long handle(CreateRoleCommand command) {
         CreateRoleValidator.validate(command.getName());
-        Set<Permission> permissions = roleRepository.findByIds(command.getPermissionIds());
+        Set<Permission> permissions = permissionRepository.findByIds(command.getPermissionIds());
         Role role = new Role(
                 null ,
                 command.getName() ,

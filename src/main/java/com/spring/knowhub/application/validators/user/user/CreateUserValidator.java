@@ -10,7 +10,9 @@ public class CreateUserValidator {
         if (command == null) {
             throw CreateUserException.missingRequiredField("command");
         }
-
+        if(command.getRoleId() == null ){
+            throw CreateUserException.missingRequiredField("roleId");
+        }
         validateUsername(command.getUsername());
         validateEmail(command.getEmail());
         validatePassword(command.getPassword());
@@ -21,17 +23,17 @@ public class CreateUserValidator {
         if (isBlank(username)) {
             throw CreateUserException.missingRequiredField("username");
         }
-
-        String trimmed = username.trim();
-
-        if (trimmed.length() < 3 || trimmed.length() > 20) {
+        if (username.contains(" ")) {
             throw InvalidUserException.invalidUsername(username);
         }
-
-        if (!trimmed.matches("^[a-zA-Z0-9_]+$")) {
+        if (username.length() < 3 || username.length() > 20) {
+            throw InvalidUserException.invalidUsername(username);
+        }
+        if (!username.matches("^[a-zA-Z0-9_]+$")) {
             throw InvalidUserException.invalidUsername(username);
         }
     }
+
 
     private static void validateEmail(String email) {
         if (isBlank(email)) {

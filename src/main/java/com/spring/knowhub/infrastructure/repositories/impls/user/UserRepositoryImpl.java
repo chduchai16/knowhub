@@ -120,4 +120,26 @@ public class UserRepositoryImpl implements UserRepository {
             throw UserRepositoryException.findFailed("Lỗi khi lấy danh sách user phân trang: " + ex.getMessage());
         }
     }
+
+    @Override
+    public Boolean existsByUsername(String username) {
+        log.info("Kiểm tra tồn tại user theo username: {}", username);
+        try {
+            return userJpaRepository.existsByUsername(username);
+        } catch (Exception ex) {
+            log.error("Lỗi khi kiểm tra tồn tại user theo username: {}", username, ex);
+            throw UserRepositoryException.findFailed("Lỗi khi kiểm tra tồn tại user theo username: " + username);
+        }
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        log.info("Kiểm tra tồn tại user theo email: {}", email);
+        try {
+            return userJpaRepository.existsByEmail(email);
+        } catch (Exception ex) {
+            log.error("Lỗi khi kiểm tra tồn tại user theo email: {}", email, ex);
+            throw UserRepositoryException.findFailed("Lỗi khi kiểm tra tồn tại user theo email: " + email);
+        }
+    }
 }

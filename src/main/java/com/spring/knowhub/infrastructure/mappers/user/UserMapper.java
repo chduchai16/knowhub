@@ -30,19 +30,18 @@ public class UserMapper {
             if (fromDomainToEntityTypeMap == null) {
                 fromDomainToEntityTypeMap = modelMapper.createTypeMap(User.class, UserEntity.class);
                 fromDomainToEntityTypeMap.addMappings(mapper -> {
-                    mapper.skip(UserEntity::setRoles);
+                    mapper.skip(UserEntity::setRole);
                 }) ;
                 fromDomainToEntityTypeMap.implicitMappings();
             }
 
             UserEntity userEntity = fromDomainToEntityTypeMap.map(user) ;
 
-            if(user.getRoles() != null && !user.getRoles().isEmpty()) {
+            if(user.getRole() != null) {
                 try {
-                    Set<RoleEntity> roles = user.getRoles().stream()
-                            .map(roleMapper::fromDomainToEntity)
-                            .collect(java.util.stream.Collectors.toSet()) ;
-                    userEntity.setRoles(roles) ;
+                    Role role = user.getRole();
+                    RoleEntity roleEntity = roleMapper.fromDomainToEntity(role) ;
+                    userEntity.setRole(roleEntity) ;
                 } catch (Exception ex) {
                     throw UserMapperException.entityToDomainMappingFailed("Lỗi mapping roles: " + ex.getMessage()) ;
                 }
@@ -58,7 +57,6 @@ public class UserMapper {
 
     public User fromEntityToDomain(UserEntity userEntity) {
         try {
-            // Validate userEntity field
             if (userEntity == null) {
                 throw UserMapperException.entityToDomainMappingFailed("Đối tượng truyền vào bị null") ;
             }
@@ -66,20 +64,18 @@ public class UserMapper {
             if (fromEntityToDomainTypeMap == null) {
                 fromEntityToDomainTypeMap = modelMapper.createTypeMap(UserEntity.class, User.class);
                 fromEntityToDomainTypeMap.addMappings(mapper -> {
-                    mapper.skip(User::setRoles);
+                    mapper.skip(User::setRole);
                 }) ;
                 fromEntityToDomainTypeMap.implicitMappings();
             }
 
             User user = fromEntityToDomainTypeMap.map(userEntity) ;
 
-            // map roles - nếu roles tồn tại thì map, không thì bỏ qua
-            if(userEntity.getRoles() != null && !userEntity.getRoles().isEmpty()) {
+            if(userEntity.getRole() != null) {
                 try {
-                    Set<Role> roles = userEntity.getRoles().stream()
-                            .map(roleMapper::fromEntityToDomain)
-                            .collect(java.util.stream.Collectors.toSet()) ;
-                    user.setRoles(roles) ;
+                    RoleEntity roleEntity = userEntity.getRole();
+                    Role role = roleMapper.fromEntityToDomain(roleEntity) ;
+                    user.setRole(role) ;
                 } catch (Exception ex) {
                     throw UserMapperException.entityToDomainMappingFailed("Lỗi mapping roles: " + ex.getMessage()) ;
                 }

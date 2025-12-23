@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -87,6 +89,19 @@ public class PermissionRepositoryImpl implements PermissionRepository {
     }
 
     @Override
+    public Set<Permission> findByIds(Set<Long> ids) {
+        log.info("Bắt đầu tìm kiếm quyền với IDs: {}", ids);
+        try {
+            Set<PermissionEntity> entities = jpaPermissionRepository.findByIdIn(ids);
+            log.info("Tìm thấy {} quyền", entities.size());
+            return entities.stream().map(permissionMapper::fromEntityToDomain).collect(Collectors.toSet());
+        } catch (Exception e) {
+            log.error("Lỗi khi thực hiện tìm kiếm quyền với IDs {}: {}", ids,  e.getMessage(), e);
+            throw PermissionRepositoryException.findFailed("Lỗi khi tìm kiếm quyền với IDs " + ids);
+        }
+    }
+
+    @Override
     public Optional<Permission> findByCode(String code) {
         log.info("Bắt đầu tìm kiếm quyền với code: {}", code);
         try {
@@ -118,6 +133,17 @@ public class PermissionRepositoryImpl implements PermissionRepository {
         } catch (Exception e) {
             log.error("Lỗi khi thực hiện tìm kiếm tất cả quyền: {}", e.getMessage(), e);
             throw PermissionRepositoryException.findFailed("Lỗi khi tìm kiếm tất cả quyền: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Boolean existsByCode(String code) {
+        log.info("Kiểm tra tồn tại quyền với code: {}", code);
+        try {
+            return jpaPermissionRepository.existsByCode(code);
+        } catch (Exception e) {
+            log.error("Lỗi khi kiểm tra tồn tại quyền với code {}: {}", code, e.getMessage(), e);
+            throw PermissionRepositoryException.findFailed("Lỗi khi kiểm tra tồn tại quyền với code " + code);
         }
     }
 }

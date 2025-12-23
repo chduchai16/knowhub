@@ -23,7 +23,7 @@ public class GetPagedRoleQueryHandler implements QueryHandler<GetPagedRoleQuery 
     public Page<Role> handle(GetPagedRoleQuery query) {
         try {
             PageRequest pageRequest = PageRequest.of(query.getPage(), query.getPageSize());
-            return roleRepository.findRolesPaged(pageRequest);
+            return roleRepository.findRolesPaged(pageRequest , query.getKeyword());
         } catch (Exception ex){
             throw ex ;
         }

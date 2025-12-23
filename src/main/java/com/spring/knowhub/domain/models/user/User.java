@@ -13,11 +13,9 @@ public class User {
     private String bio ;
     private String avatarUrl ;
     private UserStatus status ;
-    private Set<Role> roles ;
+    private Role role ;
 
-    public User(){}
-
-    public User(Long id, String username, String email, String password, String fullName, String bio, String avatarUrl, UserStatus status, Set<Role> roles) {
+    public User(Long id, String username, String email, String password, String fullName, String bio, String avatarUrl, UserStatus status, Role role) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -26,7 +24,9 @@ public class User {
         this.bio = bio;
         this.avatarUrl = avatarUrl;
         this.status = status;
-        this.roles = roles;
+    }
+
+    public User() {
     }
 
     public Long getId() {
@@ -93,11 +93,11 @@ public class User {
         this.status = status;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(Role roles) {
+        this.role = roles;
     }
 }

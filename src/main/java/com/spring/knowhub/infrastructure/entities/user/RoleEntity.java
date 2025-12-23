@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 public class RoleEntity extends BaseEntity {
 
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY)

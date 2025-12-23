@@ -18,13 +18,13 @@ public abstract class BaseEntity {
     @Column(name = "created_by")
     private Long createdBy;
 
-    @Column(name = "created_by_name")
+    @Column(name = "created_by_name", columnDefinition = "NVARCHAR(MAX)")
     private String createdByName;
 
     @Column(name = "updated_by")
     private Long updatedBy;
 
-    @Column(name = "updated_by_name")
+    @Column(name = "updated_by_name", columnDefinition = "NVARCHAR(MAX)")
     private String updatedByName;
 
     @CreationTimestamp

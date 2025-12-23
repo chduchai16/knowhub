@@ -12,18 +12,17 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class CreatePermissionCommandHandler
-        implements CommandHandler<CreatePermissionCommand, Long> {
+public class CreatePermissionCommandHandler implements CommandHandler<CreatePermissionCommand, Long> {
 
     private final PermissionRepository permissionRepository;
 
     @Override
     public Long handle(CreatePermissionCommand command) {
         CreatePermissionValidator.validate(command);
-        permissionRepository.findByCode(command.getCode())
-                .ifPresent(p -> {
-                    throw DuplicatePermissionException.DuplicatePermissionException(command.getCode());
-                });
+        Boolean exists = permissionRepository.existsByCode(command.getCode());
+        if (exists) {
+            throw DuplicatePermissionException.DuplicatePermissionException(command.getCode());
+        }
         Permission permission = new Permission();
         permission.setCode(command.getCode());
         return permissionRepository.save(permission)

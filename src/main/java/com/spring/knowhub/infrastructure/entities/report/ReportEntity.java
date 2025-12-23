@@ -33,7 +33,7 @@ public class ReportEntity extends BaseEntity {
     @Column(nullable = false)
     private ReportType reportType;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
     @Enumerated(EnumType.STRING)
