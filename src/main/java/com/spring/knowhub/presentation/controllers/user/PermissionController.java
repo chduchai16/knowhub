@@ -2,6 +2,7 @@ package com.spring.knowhub.presentation.controllers.user;
 
 import java.util.List;
 
+import com.spring.knowhub.application.commands.user.permission.CreatePermissionCommand;
 import com.spring.knowhub.application.commands.user.permission.DeletePermissionCommand;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.knowhub.application.buses.CommandBus;
 import com.spring.knowhub.application.buses.QueryBus;
-import com.spring.knowhub.application.commands.user.permission.CreatePermissionCommand;
 import com.spring.knowhub.application.commands.user.permission.UpdatePermissionCommand;
 import com.spring.knowhub.application.queries.user.permission.GetAllPermissionQuery;
 import com.spring.knowhub.application.queries.user.permission.GetPermissionByIdQuery;

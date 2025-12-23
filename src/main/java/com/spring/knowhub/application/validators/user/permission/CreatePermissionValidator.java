@@ -2,7 +2,6 @@ package com.spring.knowhub.application.validators.user.permission;
 
 import com.spring.knowhub.application.commands.user.permission.CreatePermissionCommand;
 import com.spring.knowhub.application.exceptions.user.permission.CreatePermissionException;
-import com.spring.knowhub.domain.exceptions.user.permission.InvalidPermissionException;
 
 public class CreatePermissionValidator {
 
