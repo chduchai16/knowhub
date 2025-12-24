@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterCommand implements Command<Void> {
+public class RegisterCommand implements Command<Long> {
     private String username;
     private String email;
     private String password;

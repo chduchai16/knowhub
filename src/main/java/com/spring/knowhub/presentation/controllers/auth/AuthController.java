@@ -53,12 +53,12 @@ public class AuthController {
                 request.getEmail(),
                 request.getPassword()
         );
-        commandBus.execute(command) ;
+        Long userId = commandBus.execute(command) ;
         return ResponseEntity.ok(
                 new ApiResponse<>(
                         "SUCCESS",
                         "Đăng ký thành công",
-                        null
+                        userId
                 )
         );
     }

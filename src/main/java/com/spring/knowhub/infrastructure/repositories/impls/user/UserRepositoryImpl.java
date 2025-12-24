@@ -1,5 +1,6 @@
 package com.spring.knowhub.infrastructure.repositories.impls.user;
 
+import com.spring.knowhub.domain.exceptions.user.user.DuplicateUserException;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
 import com.spring.knowhub.infrastructure.entities.user.UserEntity;
@@ -28,11 +29,22 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> save(User user) {
         log.info("Đang lưu user: {}", user.getUsername());
         try {
+            if(userJpaRepository.existsByUsername(user.getUsername())) {
+                log.warn("Username đã tồn tại: {}", user.getUsername());
+                throw DuplicateUserException.usernameAlreadyExists(user.getUsername()) ;
+            }
+            if(userJpaRepository.existsByEmail(user.getEmail())) {
+                log.warn("Email đã tồn tại: {}", user.getEmail());
+                throw DuplicateUserException.emailAlreadyExists( user.getEmail()) ;
+            }
             UserEntity entity = userMapper.fromDomainToEntity(user);
             UserEntity savedEntity = userJpaRepository.save(entity);
             User savedUser = userMapper.fromEntityToDomain(savedEntity);
             log.info("User đã lưu thành công với ID: {}", savedUser.getId());
             return Optional.of(savedUser);
+        } catch(DuplicateUserException ex) {
+            log.error("Lỗi trùng lặp khi lưu user: {}", user.getUsername(), ex);
+            throw ex ;
         } catch (DataIntegrityViolationException ex) {
             log.error("Vi phạm ràng buộc database khi lưu user: {}", user.getUsername(), ex);
             throw new UserRepositoryException("Vi phạm ràng buộc database: " + ex.getMostSpecificCause().getMessage(), ex);
