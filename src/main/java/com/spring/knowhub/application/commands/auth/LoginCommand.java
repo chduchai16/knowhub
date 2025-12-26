@@ -13,3 +13,5 @@ public class LoginCommand implements Command<String> {
     private String password;
     private Boolean rememberMe;
 }
+
+/// test comment
