@@ -14,4 +14,3 @@ public class LoginCommand implements Command<String> {
     private Boolean rememberMe;
 }
 
-/// test comment
