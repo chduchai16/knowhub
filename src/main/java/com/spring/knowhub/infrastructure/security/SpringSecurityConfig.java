@@ -18,6 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SpringSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     private String admin = "ADMIN";
     private String user = "USER";
@@ -32,7 +34,9 @@ public class SpringSecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         // auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/auth/login/**").permitAll()
+                        .requestMatchers(HttpMethod.POST , "/api/auth/register/**").permitAll()
+                        .requestMatchers(HttpMethod.GET , "/api/auth/profile").authenticated()
                         // permission
                         .requestMatchers(HttpMethod.GET , "/api/permissions/**").hasRole(admin)
                         .requestMatchers(HttpMethod.POST , "/api/permissions/**").hasRole(admin)
@@ -50,6 +54,10 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.DELETE , "/api/users/**").hasRole(admin)
 
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .addFilterBefore(
                         jwtAuthenticationFilter,
