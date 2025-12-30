@@ -4,6 +4,7 @@ import com.spring.knowhub.application.validators.user.permission.CreatePermissio
 import com.spring.knowhub.domain.exceptions.user.permission.DuplicatePermissionException;
 import com.spring.knowhub.domain.models.user.Permission;
 import com.spring.knowhub.infrastructure.exceptions.user.user.UserRepositoryException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import com.spring.knowhub.application.buses.CommandHandler;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class CreatePermissionCommandHandler implements CommandHandler<CreatePermissionCommand, Long> {
 
     private final PermissionRepository permissionRepository;

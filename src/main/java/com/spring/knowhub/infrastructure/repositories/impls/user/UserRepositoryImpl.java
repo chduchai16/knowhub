@@ -3,11 +3,13 @@ package com.spring.knowhub.infrastructure.repositories.impls.user;
 import com.spring.knowhub.domain.exceptions.user.user.DuplicateUserException;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
+import com.spring.knowhub.domain.specifications.Specification;
 import com.spring.knowhub.infrastructure.entities.user.UserEntity;
 import com.spring.knowhub.infrastructure.exceptions.user.user.UserMapperException;
 import com.spring.knowhub.infrastructure.exceptions.user.user.UserRepositoryException;
 import com.spring.knowhub.infrastructure.mappers.user.UserMapper;
 import com.spring.knowhub.infrastructure.repositories.jpas.user.JpaUserRepository;
+import com.spring.knowhub.infrastructure.repositories.specifications.user.UserJpaSpecificationAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -115,14 +117,15 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Page<User> findUsersPaged(Pageable pageable) {
-        log.debug(
+    public Page<User> findUsersPaged(Specification<User> specification ,Pageable pageable) {
+        log.info(
                 "Lấy danh sách user phân trang: page={}, size={}",
                 pageable.getPageNumber(),
                 pageable.getPageSize()
         );
         try {
-            Page<UserEntity> entityPage = userJpaRepository.findAll(pageable);
+            org.springframework.data.jpa.domain.Specification<UserEntity> jpaSpec = UserJpaSpecificationAdapter.toJpaSpecification(specification) ;
+            Page<UserEntity> entityPage = userJpaRepository.findAll(jpaSpec , pageable);
             return entityPage.map(userMapper::fromEntityToDomain);
         } catch (UserMapperException ex) {
             log.error("Lỗi mapping khi lấy danh sách user phân trang", ex);

@@ -5,11 +5,13 @@ import com.spring.knowhub.application.validators.user.user.DeleteUserValidator;
 import com.spring.knowhub.domain.exceptions.user.user.UserNotFoundException;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class DeleteUserCommandHandler
         implements CommandHandler<DeleteUserCommand, Long> {
 

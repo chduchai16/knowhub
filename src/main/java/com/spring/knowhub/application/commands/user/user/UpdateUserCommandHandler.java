@@ -6,6 +6,7 @@ import com.spring.knowhub.application.validators.user.user.UpdateUserValidator;
 import com.spring.knowhub.domain.exceptions.user.user.UserNotFoundException;
 import com.spring.knowhub.domain.models.user.Role;
 import com.spring.knowhub.domain.repositories.user.RoleRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.spring.knowhub.domain.models.user.User;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class UpdateUserCommandHandler implements CommandHandler<UpdateUserCommand, Long> {
 
     private final UserRepository userRepository;
@@ -47,8 +49,7 @@ public class UpdateUserCommandHandler implements CommandHandler<UpdateUserComman
             user.setAvatarUrl(command.getAvatarUrl());
         }
         if (command.getRoleId() != null) {
-            Role role = roleRepository.findById(command.getRoleId())
-                    .orElseThrow(() -> new RuntimeException("Role not found with ID: " + command.getRoleId()));
+            Role role = roleRepository.findById(command.getRoleId()).orElseThrow(() -> new RuntimeException("Không tìm thấy role với id: " + command.getRoleId()));
             user.setRole(role);
         }
     }

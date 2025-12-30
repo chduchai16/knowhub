@@ -6,11 +6,13 @@ import com.spring.knowhub.domain.models.user.Role;
 import com.spring.knowhub.domain.repositories.user.PermissionRepository;
 import com.spring.knowhub.domain.repositories.user.RoleRepository;
 import com.spring.knowhub.infrastructure.exceptions.user.role.RoleRepositoryException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class UpdateRoleCommandHandler implements CommandHandler<UpdateRoleCommand , Long> {
 
     private final RoleRepository roleRepository ;

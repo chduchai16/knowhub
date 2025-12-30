@@ -4,11 +4,13 @@ import com.spring.knowhub.application.buses.CommandHandler;
 import com.spring.knowhub.application.validators.user.permission.DeletePermissionValidator;
 import com.spring.knowhub.domain.exceptions.user.permission.PermissionNotFoundException;
 import com.spring.knowhub.domain.repositories.user.PermissionRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class DeletePermissionCommandHandler implements CommandHandler<DeletePermissionCommand, Long> {
 
     private final PermissionRepository permissionRepository;

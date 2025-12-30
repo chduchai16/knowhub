@@ -8,6 +8,7 @@ import com.spring.knowhub.application.commands.user.user.UpdateUserCommand;
 import com.spring.knowhub.application.queries.user.user.GetUserByIdQuery;
 import com.spring.knowhub.application.queries.user.user.GetUserByUsernameQuery;
 import com.spring.knowhub.application.queries.user.user.GetUsersPagedQuery;
+import com.spring.knowhub.domain.enums.UserStatus;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.presentation.mappers.user.UserResponseMapper;
 import com.spring.knowhub.presentation.requests.user.CreateUserRequest;
@@ -19,6 +20,7 @@ import com.spring.knowhub.presentation.response.user.UserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,14 +84,25 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<?>> getUsers(Pageable pageable) {
-        log.info(
-                "GET /api/users?page={}&size={}",
-                pageable.getPageNumber(),
-                pageable.getPageSize()
+    public ResponseEntity<ApiResponse<?>> getUsers(
+            @RequestParam(defaultValue = "0") int page ,
+            @RequestParam(defaultValue = "10") int limit ,
+            @RequestParam(required = false) String keyword ,
+            @RequestParam (required = false) Long roleId ,
+            @RequestParam(required = false)UserStatus userStatus
+    ) {
+        log.info("GET /api/users - page={}, limit={}, keyword={}, roleId={}, userStatus={}", page, limit, keyword, roleId, userStatus);
+
+        PageRequest pageable = PageRequest.of(page, limit);
+
+        GetUsersPagedQuery query = new GetUsersPagedQuery(
+                pageable,
+                keyword,
+                roleId,
+                userStatus
         );
 
-        Page<User> users = queryBus.execute(new GetUsersPagedQuery(pageable));
+        Page<User> users = queryBus.execute(query);
 
         PaginatedResponse<UserResponse> paginatedResponse = new PaginatedResponse<>(
                 users.getContent().stream().map(userResponseMapper::fromUserToUserResponse).toList(),

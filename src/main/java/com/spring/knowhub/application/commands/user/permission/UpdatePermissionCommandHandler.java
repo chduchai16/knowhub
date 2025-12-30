@@ -7,11 +7,13 @@ import com.spring.knowhub.domain.exceptions.user.permission.PermissionNotFoundEx
 import com.spring.knowhub.domain.models.user.Permission;
 import com.spring.knowhub.domain.repositories.user.PermissionRepository;
 import com.spring.knowhub.infrastructure.exceptions.user.permission.PermissionRepositoryException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class UpdatePermissionCommandHandler implements CommandHandler<UpdatePermissionCommand, Long> {
 
     private final PermissionRepository permissionRepository;

@@ -3,20 +3,27 @@ package com.spring.knowhub.application.queries.user.user;
 import com.spring.knowhub.application.buses.QueryHandler;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
+import com.spring.knowhub.domain.specifications.AlwaysTrueSpecification;
+import com.spring.knowhub.domain.specifications.Specification;
+import com.spring.knowhub.domain.specifications.user.UserHasRoleSpec;
+import com.spring.knowhub.domain.specifications.user.UserSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class GetUsersPagedQueryHandler
-        implements QueryHandler<GetUsersPagedQuery, Page<User>> {
+public class GetUsersPagedQueryHandler implements QueryHandler<GetUsersPagedQuery, Page<User>> {
 
     private final UserRepository userRepository;
 
     @Override
     public Page<User> handle(GetUsersPagedQuery query) {
-        return userRepository.findUsersPaged(query.getPageable());
+        Specification<User> spec = new AlwaysTrueSpecification<>();
+        spec = spec.and(UserSpecifications.hasRole(query.getRoleId()));
+        spec = spec.and(UserSpecifications.hasStatus(query.getStatus()));
+        spec = spec.and(UserSpecifications.hasKeyword(query.getKeyword()));
+        return userRepository.findUsersPaged(spec ,query.getPageable());
     }
 
     @Override
