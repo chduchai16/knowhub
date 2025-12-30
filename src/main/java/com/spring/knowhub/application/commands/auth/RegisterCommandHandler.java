@@ -18,6 +18,7 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class RegisterCommandHandler implements CommandHandler<RegisterCommand , Long> {
 
     private final UserRepository userRepository ;
@@ -30,7 +31,6 @@ public class RegisterCommandHandler implements CommandHandler<RegisterCommand , 
     }
 
     @Override
-    @Transactional
     public Long handle(RegisterCommand command) {
         RegisterValidator.validate(command);
         User user = new User() ;

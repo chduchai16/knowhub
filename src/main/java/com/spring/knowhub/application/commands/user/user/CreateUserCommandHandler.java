@@ -4,6 +4,7 @@ import com.spring.knowhub.application.validators.user.user.CreateUserValidator;
 import com.spring.knowhub.domain.exceptions.user.role.RoleNotFoundException;
 import com.spring.knowhub.domain.models.user.Role;
 import com.spring.knowhub.domain.repositories.user.RoleRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class CreateUserCommandHandler implements CommandHandler<CreateUserCommand, Long> {
 
     private final UserRepository userRepository;
