@@ -1,5 +1,6 @@
 package com.spring.knowhub.presentation.requests.user;
 
+import com.spring.knowhub.domain.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,4 +16,6 @@ public class CreateUserRequest {
     private String bio;
     private String avatarUrl;
     private Long roleId;
+    private Gender gender;
+    private String dateOfBirth;
 }

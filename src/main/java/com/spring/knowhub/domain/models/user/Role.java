@@ -1,8 +1,10 @@
 package com.spring.knowhub.domain.models.user;
 
+import com.spring.knowhub.domain.models.BaseModel;
+
 import java.util.Set;
 
-public class Role {
+public class Role extends BaseModel {
     private Long id;
     private String name ;
     private Set<Permission> permissions;

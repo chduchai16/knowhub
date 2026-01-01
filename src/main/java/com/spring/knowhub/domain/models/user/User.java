@@ -1,10 +1,12 @@
 package com.spring.knowhub.domain.models.user;
 
+import com.spring.knowhub.domain.enums.Gender;
 import com.spring.knowhub.domain.enums.UserStatus;
+import com.spring.knowhub.domain.models.BaseModel;
 
-import java.util.Set;
+import java.time.LocalDateTime;
 
-public class User {
+public class User extends BaseModel {
     private Long id ;
     private String username ;
     private String email ;
@@ -14,8 +16,13 @@ public class User {
     private String avatarUrl ;
     private UserStatus status ;
     private Role role ;
+    private Long followerQuantity ;
+    private Long followingQuantity ;
+    private Long postQuantity ;
+    private Gender gender ;
+    private LocalDateTime dateOfBirth ;
 
-    public User(Long id, String username, String email, String password, String fullName, String bio, String avatarUrl, UserStatus status, Role role) {
+    public User(Long id, String username, String email, String password, String fullName, String bio, String avatarUrl, UserStatus status, Role role, Long followerQuantity, Long followingQuantity, Long postQuantity, Gender gender, LocalDateTime dateOfBirth) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -25,6 +32,11 @@ public class User {
         this.avatarUrl = avatarUrl;
         this.status = status;
         this.role = role;
+        this.followerQuantity = followerQuantity;
+        this.followingQuantity = followingQuantity;
+        this.postQuantity = postQuantity;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
     }
 
     public User() {
@@ -100,5 +112,45 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Long getFollowerQuantity() {
+        return followerQuantity;
+    }
+
+    public void setFollowerQuantity(Long followerQuantity) {
+        this.followerQuantity = followerQuantity;
+    }
+
+    public Long getFollowingQuantity() {
+        return followingQuantity;
+    }
+
+    public void setFollowingQuantity(Long followingQuantity) {
+        this.followingQuantity = followingQuantity;
+    }
+
+    public Long getPostQuantity() {
+        return postQuantity;
+    }
+
+    public void setPostQuantity(Long postQuantity) {
+        this.postQuantity = postQuantity;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public LocalDateTime getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDateTime dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }

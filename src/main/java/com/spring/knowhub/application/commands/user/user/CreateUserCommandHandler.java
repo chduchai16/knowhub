@@ -46,7 +46,12 @@ public class CreateUserCommandHandler implements CommandHandler<CreateUserComman
                 command.getBio(),
                 command.getAvatarUrl(),
                 UserStatus.ACTIVE,
-                role
+                role,
+                0L,
+                0L,
+                0L,
+                command.getGender(),
+                command.getDateOfBirth()
         );
         User savedUser = userRepository.save(user).orElseThrow(() -> UserRepositoryException.saveFailed("Không thể lưu user mới"));
         return savedUser.getId();

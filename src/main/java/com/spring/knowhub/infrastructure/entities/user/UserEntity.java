@@ -1,10 +1,13 @@
 package com.spring.knowhub.infrastructure.entities.user;
 
+import com.spring.knowhub.domain.enums.Gender;
 import com.spring.knowhub.infrastructure.entities.BaseEntity;
 import com.spring.knowhub.domain.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -30,6 +33,10 @@ public class UserEntity extends BaseEntity {
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String avatarUrl;
 
+    private Gender gender;
+
+    private LocalDateTime dateOfBirth;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserStatus status = UserStatus.ACTIVE;
@@ -37,6 +44,10 @@ public class UserEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private RoleEntity role;
+
+    private Long followerQuantity = 0L;
+    private Long followingQuantity = 0L;
+    private Long postQuantity = 0L;
 
 }
 

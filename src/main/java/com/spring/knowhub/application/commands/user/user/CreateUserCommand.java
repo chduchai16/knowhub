@@ -1,8 +1,11 @@
 package com.spring.knowhub.application.commands.user.user;
 
 import com.spring.knowhub.application.buses.Command;
+import com.spring.knowhub.domain.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
@@ -14,4 +17,6 @@ public class CreateUserCommand implements Command<Long> {
     private String bio;
     private String avatarUrl;
     private Long roleId ;
+    private Gender gender ;
+    private LocalDateTime dateOfBirth ;
 }

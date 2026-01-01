@@ -16,4 +16,8 @@ public class UserHasStatusSpec implements Specification<User> {
     public boolean isSatisfiedBy(User user) {
         return user.getStatus() == status;
     }
+
+    public UserStatus getStatus() {
+        return status;
+    }
 }
