@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -13,4 +14,6 @@ public class RoleResponse {
     private Long id ;
     private String name ;
     private Set<String> permissionNames ;
+    private LocalDateTime createdAt ;
+    private LocalDateTime updatedAt ;
 }

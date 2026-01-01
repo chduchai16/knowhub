@@ -1,6 +1,8 @@
 package com.spring.knowhub.domain.models.user;
 
-public class Permission {
+import com.spring.knowhub.domain.models.BaseModel;
+
+public class Permission extends BaseModel {
     private Long id ;
     private String code ;
 

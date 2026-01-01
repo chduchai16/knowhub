@@ -1,5 +1,6 @@
 package com.spring.knowhub.infrastructure.security.jwt;
 
+import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.security.TokenProvider;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,14 +19,15 @@ public class JwtTokenProvider implements TokenProvider {
     private final String secretKey = "Y2h1ZHVjaGFpc2luaG5nYXltdW9pY2hpbnRoYW5nbW90bmFtaGFpbmdoaW5raG9uZ3RyYW1sZWJvbg==" ;
 
     @Override
-    public String generate(String username , Long roleId , Boolean rememberMe) {
+    public String generate(User user, Boolean rememberMe) {
         long expirationMillis = rememberMe ? 7L * 24 * 60 * 60 * 1000  : 3L * 60 * 60 * 1000;  // 7 ngày hoặc 3 giờ
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role_id", roleId);
+        claims.put("roleId", user.getRole().getId());
+        claims.put("userId", user.getId());
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(username)
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)

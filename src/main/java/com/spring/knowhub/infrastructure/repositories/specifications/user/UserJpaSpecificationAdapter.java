@@ -48,6 +48,11 @@ public final class UserJpaSpecificationAdapter {
             return (root, query, cb) -> cb.equal(root.get("status"), UserStatus.ACTIVE);
         }
 
+        if(spec instanceof UserHasStatusSpec) {
+            UserHasStatusSpec statusSpec = (UserHasStatusSpec) spec;
+            return (root, query, cb) -> cb.equal(root.get("status"), statusSpec.getStatus());
+        }
+
         // USER HAS ROLE
         if (spec instanceof UserHasRoleSpec roleSpec) {
             return (root, query, cb) -> cb.equal(root.get("role").get("id"), roleSpec.getRoleId());

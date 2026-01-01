@@ -48,7 +48,9 @@ public class UserController {
                 request.getFullName(),
                 request.getBio(),
                 request.getAvatarUrl(),
-                request.getRoleId()
+                request.getRoleId(),
+                request.getGender(),
+                request.getDateOfBirth() != null ?  java.time.LocalDateTime.parse(request.getDateOfBirth()) : null
         ));
 
         return ResponseEntity.status(HttpStatus.CREATED)

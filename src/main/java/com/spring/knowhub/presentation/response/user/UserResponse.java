@@ -1,8 +1,11 @@
 package com.spring.knowhub.presentation.response.user;
 
+import com.spring.knowhub.domain.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -17,4 +20,11 @@ public class UserResponse {
     private String status ;
     private Long roleId ;
     private String roleName ;
+    private Long followerQuantity ;
+    private Long followingQuantity ;
+    private Long postQuantity ;
+    private Gender gender;
+    private LocalDateTime dateOfBirth ;
+    private LocalDateTime createdAt ;
+    private LocalDateTime updatedAt ;
 }

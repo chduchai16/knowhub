@@ -31,6 +31,6 @@ public class LoginCommandHandler implements CommandHandler<LoginCommand , String
         if(!passwordEncoder.matches(command.getPassword() , user.getPassword())){
             throw InvalidLoginException.authenticationFailed();
         }
-        return tokenProvider.generate(user.getUsername() , user.getRole().getId() ,command.getRememberMe()) ;
+        return tokenProvider.generate(user,command.getRememberMe()) ;
     }
 }
