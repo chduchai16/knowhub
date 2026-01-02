@@ -50,7 +50,7 @@ public class UserController {
                 request.getAvatarUrl(),
                 request.getRoleId(),
                 request.getGender(),
-                request.getDateOfBirth() != null ?  java.time.LocalDateTime.parse(request.getDateOfBirth()) : null
+                request.getDateOfBirth() != null ?  java.time.LocalDate.parse(request.getDateOfBirth()) : null
         ));
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -128,14 +128,16 @@ public class UserController {
             @RequestBody UpdateUserRequest request
     ) {
 
-        log.info("PUT /api/users/{}", request.getUserId());
+        log.info("PUT /api/users/{}", request.getId());
 
         Long userId = commandBus.execute(new UpdateUserCommand(
-                request.getUserId(),
+                request.getId(),
                 request.getFullName(),
                 request.getBio(),
                 request.getAvatarUrl() ,
-                request.getRoleId()
+                request.getRoleId() ,
+                request.getGender(),
+                request.getDateOfBirth() != null ? request.getDateOfBirth() : null
         ));
 
         return ResponseEntity.ok(new ApiResponse<>(

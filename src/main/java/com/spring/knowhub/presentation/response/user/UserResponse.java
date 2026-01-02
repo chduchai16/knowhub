@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -24,7 +25,7 @@ public class UserResponse {
     private Long followingQuantity ;
     private Long postQuantity ;
     private Gender gender;
-    private LocalDateTime dateOfBirth ;
+    private LocalDate dateOfBirth ;
     private LocalDateTime createdAt ;
     private LocalDateTime updatedAt ;
 }

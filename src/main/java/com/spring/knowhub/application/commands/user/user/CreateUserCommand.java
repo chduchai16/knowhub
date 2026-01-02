@@ -5,7 +5,7 @@ import com.spring.knowhub.domain.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
@@ -18,5 +18,5 @@ public class CreateUserCommand implements Command<Long> {
     private String avatarUrl;
     private Long roleId ;
     private Gender gender ;
-    private LocalDateTime dateOfBirth ;
+    private LocalDate dateOfBirth ;
 }

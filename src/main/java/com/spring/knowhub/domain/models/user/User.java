@@ -4,7 +4,7 @@ import com.spring.knowhub.domain.enums.Gender;
 import com.spring.knowhub.domain.enums.UserStatus;
 import com.spring.knowhub.domain.models.BaseModel;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class User extends BaseModel {
     private Long id ;
@@ -20,9 +20,9 @@ public class User extends BaseModel {
     private Long followingQuantity ;
     private Long postQuantity ;
     private Gender gender ;
-    private LocalDateTime dateOfBirth ;
+    private LocalDate dateOfBirth ;
 
-    public User(Long id, String username, String email, String password, String fullName, String bio, String avatarUrl, UserStatus status, Role role, Long followerQuantity, Long followingQuantity, Long postQuantity, Gender gender, LocalDateTime dateOfBirth) {
+    public User(Long id, String username, String email, String password, String fullName, String bio, String avatarUrl, UserStatus status, Role role, Long followerQuantity, Long followingQuantity, Long postQuantity, Gender gender, LocalDate dateOfBirth) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -146,11 +146,11 @@ public class User extends BaseModel {
         this.gender = gender;
     }
 
-    public LocalDateTime getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDateTime dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 }
