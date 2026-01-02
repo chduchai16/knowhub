@@ -9,4 +9,5 @@ import lombok.Data;
 public class UpdatePermissionCommand implements Command<Long> {
     private Long id;
     private String code;
+    private String description ;
 }
