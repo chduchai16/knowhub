@@ -9,7 +9,7 @@ public class UpdateUserValidator {
         if (command == null) {
             throw UpdateUserException.missingRequiredField("command");
         }
-        if (command.getUserId() == null || command.getUserId() <= 0) {
+        if (command.getId() == null || command.getId() <= 0) {
             throw UpdateUserException.missingRequiredField("userId");
         }
         if (command.getFullName() != null && command.getFullName().trim().isEmpty()) {

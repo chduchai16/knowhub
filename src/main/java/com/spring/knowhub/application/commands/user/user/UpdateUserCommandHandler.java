@@ -25,8 +25,8 @@ public class UpdateUserCommandHandler implements CommandHandler<UpdateUserComman
     @Override
     public Long handle(UpdateUserCommand command) {
         UpdateUserValidator.validate(command);
-        User user = userRepository.findById(command.getUserId())
-                .orElseThrow(() -> UserNotFoundException.byId(command.getUserId()));
+        User user = userRepository.findById(command.getId())
+                .orElseThrow(() -> UserNotFoundException.byId(command.getId()));
 
         applyUpdates(user, command);
         userRepository.save(user);
@@ -47,6 +47,12 @@ public class UpdateUserCommandHandler implements CommandHandler<UpdateUserComman
         }
         if (command.getAvatarUrl() != null) {
             user.setAvatarUrl(command.getAvatarUrl());
+        }
+        if(command.getGender() != null){
+            user.setGender(command.getGender());
+        }
+        if(command.getDateOfBirth() != null){
+            user.setDateOfBirth(command.getDateOfBirth());
         }
         if (command.getRoleId() != null) {
             Role role = roleRepository.findById(command.getRoleId()).orElseThrow(() -> new RuntimeException("Không tìm thấy role với id: " + command.getRoleId()));
