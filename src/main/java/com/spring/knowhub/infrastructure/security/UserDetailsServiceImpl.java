@@ -6,7 +6,7 @@ import com.spring.knowhub.infrastructure.entities.user.UserEntity;
 import com.spring.knowhub.infrastructure.repositories.jpas.user.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,21 +18,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final JpaUserRepository jpaUserRepository ;
+    private final JpaUserRepository jpaUserRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = jpaUserRepository.findByUsername(username).orElseThrow(() -> UserNotFoundException.byUsername(username)) ;
+        UserEntity user = jpaUserRepository.findByUsername(username)
+                .orElseThrow(() -> UserNotFoundException.byUsername(username));
         List<GrantedAuthority> authorities = List.of(() -> "ROLE_" + user.getRole().getName().toUpperCase());
 
-        return new User(
+        return new CustomUserDetails(
+                user.getId(),
                 user.getUsername(),
                 user.getPassword(),
                 user.getStatus() == UserStatus.ACTIVE,
-                true ,
-                true ,
-                true,
-                authorities
-        );
+                authorities);
     }
 }

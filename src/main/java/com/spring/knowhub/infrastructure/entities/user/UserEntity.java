@@ -33,6 +33,9 @@ public class UserEntity extends BaseEntity {
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String avatarUrl;
 
+    @Column(columnDefinition = "NVARCHAR(MAX)")
+    private String backgroundUrl;
+
     private Gender gender;
 
     private LocalDate dateOfBirth;

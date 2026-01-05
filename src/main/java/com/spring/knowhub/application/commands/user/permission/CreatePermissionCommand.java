@@ -8,4 +8,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class CreatePermissionCommand implements Command<Long> {
     private String code ;
+    private String description ;
 }

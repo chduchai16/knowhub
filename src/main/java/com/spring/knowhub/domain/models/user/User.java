@@ -14,6 +14,7 @@ public class User extends BaseModel {
     private String fullName ;
     private String bio ;
     private String avatarUrl ;
+    private String backgroundUrl ;
     private UserStatus status ;
     private Role role ;
     private Long followerQuantity ;
@@ -22,7 +23,7 @@ public class User extends BaseModel {
     private Gender gender ;
     private LocalDate dateOfBirth ;
 
-    public User(Long id, String username, String email, String password, String fullName, String bio, String avatarUrl, UserStatus status, Role role, Long followerQuantity, Long followingQuantity, Long postQuantity, Gender gender, LocalDate dateOfBirth) {
+    public User(Long id, String username, String email, String password, String fullName, String bio, String avatarUrl, String backgroundUrl, UserStatus status, Role role, Long followerQuantity, Long followingQuantity, Long postQuantity, Gender gender, LocalDate dateOfBirth) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -30,6 +31,7 @@ public class User extends BaseModel {
         this.fullName = fullName;
         this.bio = bio;
         this.avatarUrl = avatarUrl;
+        this.backgroundUrl = backgroundUrl;
         this.status = status;
         this.role = role;
         this.followerQuantity = followerQuantity;
@@ -152,5 +154,13 @@ public class User extends BaseModel {
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getBackgroundUrl() {
+        return backgroundUrl;
+    }
+
+    public void setBackgroundUrl(String backgroundUrl) {
+        this.backgroundUrl = backgroundUrl;
     }
 }

@@ -53,6 +53,10 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.PUT , "/api/users/**").hasAnyRole(admin, user)
                         .requestMatchers(HttpMethod.DELETE , "/api/users/**").hasRole(admin)
 
+                        // media
+                        .requestMatchers(HttpMethod.POST , "/api/medias/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE , "/api/medias/**").authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

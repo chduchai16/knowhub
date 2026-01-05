@@ -73,7 +73,7 @@ public class PermissionController {
         log.info("POST /api/permissions - code={}", request.getCode());
 
         Long id = commandBus.execute(
-                new CreatePermissionCommand(request.getCode())
+                new CreatePermissionCommand(request.getCode() , request.getDescription())
         );
 
         return ResponseEntity.ok(new ApiResponse<>(
@@ -83,15 +83,14 @@ public class PermissionController {
         ));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping()
     public ResponseEntity<ApiResponse<?>> updatePermission(
-            @PathVariable Long id,
             @RequestBody UpdatePermissionRequest request
     ) {
-        log.info("PUT /api/permissions/{}", id);
+        log.info("PUT /api/permissions/{}", request.getId());
 
         Long updatedId = commandBus.execute(
-                new UpdatePermissionCommand(id, request.getCode())
+                new UpdatePermissionCommand(request.getId(), request.getCode() , request.getDescription())
         );
 
         return ResponseEntity.ok(new ApiResponse<>(

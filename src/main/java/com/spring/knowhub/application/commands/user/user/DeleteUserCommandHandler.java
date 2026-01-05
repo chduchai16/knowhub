@@ -12,8 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Transactional
-public class DeleteUserCommandHandler
-        implements CommandHandler<DeleteUserCommand, Long> {
+public class DeleteUserCommandHandler implements CommandHandler<DeleteUserCommand, Long> {
 
     private final UserRepository userRepository;
 

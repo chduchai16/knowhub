@@ -8,4 +8,5 @@ import lombok.Data;
 public class UpdatePermissionRequest {
     private Long id ;
     private String code ;
+    private String description ;
 }

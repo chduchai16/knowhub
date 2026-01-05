@@ -15,6 +15,7 @@ public class CreateUserRequest {
     private String fullName;
     private String bio;
     private String avatarUrl;
+    private String backgroundUrl;
     private Long roleId;
     private Gender gender;
     private String dateOfBirth;
