@@ -48,6 +48,7 @@ public class UserController {
                 request.getFullName(),
                 request.getBio(),
                 request.getAvatarUrl(),
+                request.getBackgroundUrl(),
                 request.getRoleId(),
                 request.getGender(),
                 request.getDateOfBirth() != null ?  java.time.LocalDate.parse(request.getDateOfBirth()) : null
@@ -135,6 +136,7 @@ public class UserController {
                 request.getFullName(),
                 request.getBio(),
                 request.getAvatarUrl() ,
+                request.getBackgroundUrl() ,
                 request.getRoleId() ,
                 request.getGender(),
                 request.getDateOfBirth() != null ? request.getDateOfBirth() : null

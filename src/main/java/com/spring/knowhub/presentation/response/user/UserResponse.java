@@ -18,6 +18,7 @@ public class UserResponse {
     private String fullName ;
     private String bio ;
     private String avatarUrl ;
+    private String backgroundUrl ;
     private String status ;
     private Long roleId ;
     private String roleName ;

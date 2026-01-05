@@ -45,6 +45,7 @@ public class CreateUserCommandHandler implements CommandHandler<CreateUserComman
                 command.getFullName(),
                 command.getBio(),
                 command.getAvatarUrl(),
+                command.getBackgroundUrl(),
                 UserStatus.ACTIVE,
                 role,
                 0L,
