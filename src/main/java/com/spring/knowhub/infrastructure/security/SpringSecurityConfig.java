@@ -57,6 +57,12 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.POST , "/api/medias/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE , "/api/medias/**").authenticated()
 
+                        // tags
+                        .requestMatchers(HttpMethod.GET , "/api/tags/**").authenticated()
+                        .requestMatchers(HttpMethod.POST , "/api/tags/**").hasRole(admin)
+                        .requestMatchers(HttpMethod.PUT , "/api/tags/**").hasRole(admin)
+                        .requestMatchers(HttpMethod.DELETE , "/api/tags/**").hasRole(admin)
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

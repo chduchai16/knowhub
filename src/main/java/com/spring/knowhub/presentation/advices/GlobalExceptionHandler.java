@@ -1,11 +1,14 @@
 package com.spring.knowhub.presentation.advices;
 
 import com.spring.knowhub.application.exceptions.auth.AuthApplicationException;
+import com.spring.knowhub.application.exceptions.post.tag.TagApplicationException;
 import com.spring.knowhub.application.exceptions.user.permission.PermissionApplicationException;
 import com.spring.knowhub.application.exceptions.user.role.RoleApplicationException;
 import com.spring.knowhub.application.exceptions.user.user.UserApplicationException;
+import com.spring.knowhub.domain.exceptions.post.tag.TagDomainException;
 import com.spring.knowhub.domain.exceptions.user.role.RoleDomainException;
 import com.spring.knowhub.domain.exceptions.user.user.UserDomainException;
+import com.spring.knowhub.infrastructure.exceptions.post.tag.TagInfrastructureException;
 import com.spring.knowhub.infrastructure.exceptions.user.permission.PermissionInfrastructureException;
 import com.spring.knowhub.infrastructure.exceptions.user.role.RoleInfrastructureException;
 import com.spring.knowhub.infrastructure.exceptions.user.user.UserInfrastructureException;
@@ -97,6 +100,34 @@ public class GlobalExceptionHandler {
         log.error("Lỗi authentication tầng application: {} [{}]", ex.getMessage(), ex.getErrorCode());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiResponse<>(ex.getErrorCode(), "Lỗi xác thực: " + ex.getMessage(), null));
+    }
+
+    // tag
+    @ExceptionHandler(TagDomainException.class)
+    public ResponseEntity<ApiResponse<?>> handleTagDomainException(TagDomainException ex) {
+        log.error("Lỗi nghiệp vụ tag tầng domain: {} [{}]", ex.getMessage(), ex.getErrorCode());
+        return ResponseEntity.badRequest()
+                .body(
+                        new ApiResponse<>(
+                                ex.getErrorCode(),
+                                "Lỗi nghiệp vụ tag tầng domain: " + ex.getMessage(),
+                                null
+                        )
+                );
+    }
+
+    @ExceptionHandler(TagInfrastructureException.class)
+    public ResponseEntity<ApiResponse<?>> handleTagInfrastructureException(TagInfrastructureException ex){
+        log.error("Lỗi repository tag tầng hạ tầng: {} [{}]", ex.getMessage(), ex.getErrorCode(), ex.getCause());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse<>(ex.getErrorCode(), "Lỗi nghiệp vụ tag tầng infrastructure: " + ex.getMessage(), null));
+    }
+
+    @ExceptionHandler(TagApplicationException.class)
+    public ResponseEntity<ApiResponse<?>> handleTagApplicationException(TagApplicationException ex){
+        log.error("Lỗi tag tầng application: {} [{}]", ex.getMessage(), ex.getErrorCode());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse<>(ex.getErrorCode(), "Lỗi nghiệp vụ tag tầng application: " + ex.getMessage(), null));
     }
 
     // chung
