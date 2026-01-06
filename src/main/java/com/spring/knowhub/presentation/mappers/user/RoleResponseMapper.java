@@ -1,10 +1,8 @@
 package com.spring.knowhub.presentation.mappers.user;
 
-import com.spring.knowhub.domain.exceptions.user.role.RoleNotFoundException;
 import com.spring.knowhub.domain.models.user.Permission;
 import com.spring.knowhub.domain.models.user.Role;
 import com.spring.knowhub.infrastructure.configurations.ModelMapperConfiguration;
-import com.spring.knowhub.infrastructure.exceptions.user.role.RoleMapperException;
 import com.spring.knowhub.presentation.exceptions.user.RoleResponseMappingException;
 import com.spring.knowhub.presentation.response.user.RoleResponse;
 import lombok.RequiredArgsConstructor;

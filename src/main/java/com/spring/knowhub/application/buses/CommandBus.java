@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -12,10 +13,14 @@ public class CommandBus {
 
     @SuppressWarnings("unchecked")
     public <R> R execute(Object command) {
-        return (R) handlers.stream()
+        Optional<CommandHandler<?, ?>> handler = handlers.stream()
                 .filter(h -> h.supports(command))
-                .findFirst()
-                .map(h -> ((CommandHandler<Object, R>) h).handle(command))
-                .orElseThrow(() -> new IllegalStateException("Không có command cho: " + command.getClass()));
+                .findFirst();
+
+        if (handler.isEmpty()) {
+            throw new IllegalStateException("Không có command cho: " + command.getClass());
+        }
+
+        return (R) ((CommandHandler<Object, R>) handler.get()).handle(command);
     }
 }
