@@ -2,8 +2,8 @@ package com.spring.knowhub.application.commands.media;
 
 import com.spring.knowhub.application.buses.CommandHandler;
 import com.spring.knowhub.application.validators.media.CreateMediaValidator;
-import com.spring.knowhub.domain.enums.MediaStatus;
-import com.spring.knowhub.domain.enums.MediaType;
+import com.spring.knowhub.domain.enums.media.MediaStatus;
+import com.spring.knowhub.domain.enums.media.MediaType;
 import com.spring.knowhub.domain.exceptions.media.InvalidMediaException;
 import com.spring.knowhub.domain.models.media.Media;
 import com.spring.knowhub.domain.repositories.media.MediaRepository;

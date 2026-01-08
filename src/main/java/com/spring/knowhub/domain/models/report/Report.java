@@ -1,7 +1,7 @@
 package com.spring.knowhub.domain.models.report;
 
-import com.spring.knowhub.domain.enums.ReportStatus;
-import com.spring.knowhub.domain.enums.ReportType;
+import com.spring.knowhub.domain.enums.report.ReportStatus;
+import com.spring.knowhub.domain.enums.report.ReportType;
 import com.spring.knowhub.domain.models.comment.Comment;
 import com.spring.knowhub.domain.models.post.Post;
 import com.spring.knowhub.domain.models.user.User;

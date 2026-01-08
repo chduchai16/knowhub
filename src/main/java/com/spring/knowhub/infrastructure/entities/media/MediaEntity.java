@@ -1,8 +1,8 @@
 package com.spring.knowhub.infrastructure.entities.media;
 
-import com.spring.knowhub.domain.enums.MediaStatus;
-import com.spring.knowhub.domain.enums.MediaType;
-import com.spring.knowhub.domain.enums.OwnerType;
+import com.spring.knowhub.domain.enums.media.MediaStatus;
+import com.spring.knowhub.domain.enums.media.MediaType;
+import com.spring.knowhub.domain.enums.media.OwnerType;
 import com.spring.knowhub.infrastructure.entities.BaseEntity;
 import jakarta.persistence.*;
 

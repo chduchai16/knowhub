@@ -1,6 +1,6 @@
 package com.spring.knowhub.application.queries.user.user;
 
-import com.spring.knowhub.domain.enums.UserStatus;
+import com.spring.knowhub.domain.enums.user.UserStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

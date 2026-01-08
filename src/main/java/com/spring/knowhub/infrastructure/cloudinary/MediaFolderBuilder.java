@@ -1,6 +1,6 @@
 package com.spring.knowhub.infrastructure.cloudinary;
 
-import com.spring.knowhub.domain.enums.MediaFolder;
+import com.spring.knowhub.domain.enums.media.MediaFolder;
 
 public class MediaFolderBuilder {
     public static String build(

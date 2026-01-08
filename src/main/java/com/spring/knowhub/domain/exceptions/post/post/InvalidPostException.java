@@ -22,6 +22,10 @@ public class InvalidPostException extends PostDomainException{
         return new InvalidPostException("Nội dung bài viết vượt quá độ dài tối đa cho phép: " + maxLength + " ký tự.");
     }
 
+    public static InvalidPostException privacyInvalid () {
+        return new InvalidPostException("Cài đặt quyền truy cập của bài viết không hợp lệ.");
+    }
+
     public static InvalidPostException emptyContent() {
         return new InvalidPostException("Nội dung bài viết không được để trống.");
     }

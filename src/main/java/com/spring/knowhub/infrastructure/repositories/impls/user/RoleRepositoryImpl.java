@@ -1,15 +1,11 @@
 package com.spring.knowhub.infrastructure.repositories.impls.user;
 
 import com.spring.knowhub.domain.exceptions.user.role.RoleNotFoundException;
-import com.spring.knowhub.domain.models.user.Permission;
 import com.spring.knowhub.domain.models.user.Role;
 import com.spring.knowhub.domain.repositories.user.RoleRepository;
-import com.spring.knowhub.infrastructure.entities.user.PermissionEntity;
 import com.spring.knowhub.infrastructure.entities.user.RoleEntity;
-import com.spring.knowhub.infrastructure.exceptions.user.permission.PermissionMapperException;
 import com.spring.knowhub.infrastructure.exceptions.user.role.RoleMapperException;
 import com.spring.knowhub.infrastructure.exceptions.user.role.RoleRepositoryException;
-import com.spring.knowhub.infrastructure.mappers.user.PermissionMapper;
 import com.spring.knowhub.infrastructure.mappers.user.RoleMapper;
 import com.spring.knowhub.infrastructure.repositories.jpas.user.JpaRoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +24,6 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     private final JpaRoleRepository jpaRoleRepository;
     private final RoleMapper roleMapper;
-    private final PermissionMapper permissionMapper ;
 
     @Override
     public Optional<Role> save(Role role) {

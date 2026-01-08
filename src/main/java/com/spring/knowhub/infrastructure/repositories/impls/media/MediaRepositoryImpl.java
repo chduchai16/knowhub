@@ -68,6 +68,23 @@ public class MediaRepositoryImpl implements MediaRepository {
     }
 
     @Override
+    public List<Media> findAllById(List<Long> ids) {
+        log.info("Tìm kiếm danh sách Media theo IDs: {}", ids);
+        try {
+            List<MediaEntity> entities = jpaMediaRepository.findAllById(ids) ;
+            List<Media> mediaList = entities.stream().map(mediaMapper :: fromEntityToDomain).toList() ;
+            log.info("Tìm kiếm danh sách Media thành công theo IDs: {}", ids);
+            return mediaList ;
+        } catch (MediaMapperException ex) {
+            log.error("Lỗi mapping khi tìm kiếm danh sách Media theo IDs: {}", ids, ex);
+            throw ex ;
+        } catch(Exception ex) {
+            log.error("Lỗi khi tìm kiếm danh sách Media theo IDs: {}", ids, ex);
+            throw MediaRepositoryException.findFailed(ex.getMessage()) ;
+        }
+    }
+
+    @Override
     public Page<Media> findPagedMedia(Pageable pageable) {
         log.info("Bắt đầu tìm kiếm trang Media: page = {}, size = {}", pageable.getPageNumber(), pageable.getPageSize());
         try {

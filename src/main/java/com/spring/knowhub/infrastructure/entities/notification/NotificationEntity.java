@@ -1,7 +1,7 @@
 package com.spring.knowhub.infrastructure.entities.notification;
 
 import com.spring.knowhub.infrastructure.entities.BaseEntity;
-import com.spring.knowhub.domain.enums.NotificationType;
+import com.spring.knowhub.domain.enums.notification.NotificationType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -44,6 +45,24 @@ public class TagRepositoryImpl implements TagRepository {
         }
     }
 
+    @Override
+    public List<Tag> findByIds(List<Long> ids) {
+        log.info("Tìm kiếm Tags với IDs: {}", ids);
+        try {
+            List<TagEntity> tagEntities = jpaTagRepository.findAllById(ids);
+            List<Tag> tags = tagEntities.stream()
+                    .map(tagMapper::fromEntityToDomain)
+                    .toList();
+            log.info("Tìm thấy {} Tags với IDs", tags.size());
+            return tags ;
+        } catch(TagMapperException ex) {
+            log.error("Lỗi mapping khi tìm Tags với IDs: {}", ids, ex);
+            throw ex ;
+        } catch (Exception ex) {
+            log.error("Lỗi khi tìm Tags với IDs: {}", ids, ex);
+            throw TagRepositoryException.findFailed(ex.getMessage()) ;
+        }
+    }
 
     @Override
     public Page<Tag> findTagsPaged(Pageable pageable) {

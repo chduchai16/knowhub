@@ -6,7 +6,7 @@ import com.spring.knowhub.application.commands.media.CreateMediaCommand;
 import com.spring.knowhub.application.commands.media.CreateMediasCommand;
 import com.spring.knowhub.application.commands.user.user.UpdateUserCommand;
 import com.spring.knowhub.application.queries.user.user.GetUserByIdQuery;
-import com.spring.knowhub.domain.enums.MediaFolder;
+import com.spring.knowhub.domain.enums.media.MediaFolder;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.infrastructure.cloudinary.CloudinaryService;
 import com.spring.knowhub.infrastructure.cloudinary.CloudinaryUploadResponse;

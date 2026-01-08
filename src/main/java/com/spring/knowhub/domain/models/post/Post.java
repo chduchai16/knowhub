@@ -1,27 +1,33 @@
 package com.spring.knowhub.domain.models.post;
 
-import com.spring.knowhub.domain.enums.Privacy;
+import com.spring.knowhub.domain.enums.post.PostStatus;
+import com.spring.knowhub.domain.enums.post.Privacy;
+import com.spring.knowhub.domain.models.media.Media;
 import com.spring.knowhub.domain.models.user.User;
 
 import java.util.List;
 
 public class Post {
-    private Long id ;
-    private User user ;
-    private String content ;
-    private Privacy privacy ;
-    private  Boolean isDeleted ;
-    private List<PostMedia> media ;
+    private Long id;
+    private User user;
+    private String content;
+    private Privacy privacy;
+    private List<Media> media;
+    private PostStatus status;
+    private List<PostTag> postTags;
 
-    public Post(){}
+    public Post() {
+    }
 
-    public Post(Long id, User user, String content, Privacy privacy, Boolean isDeleted, List<PostMedia> media) {
+    public Post(Long id, User user, String content, Privacy privacy, PostStatus status, List<Media> media,
+            List<PostTag> postTags) {
         this.id = id;
         this.user = user;
         this.content = content;
         this.privacy = privacy;
-        this.isDeleted = isDeleted;
         this.media = media;
+        this.status = status;
+        this.postTags = postTags;
     }
 
     public Long getId() {
@@ -56,19 +62,27 @@ public class Post {
         this.privacy = privacy;
     }
 
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
-    }
-
-    public List<PostMedia> getMedia() {
+    public List<Media> getMedia() {
         return media;
     }
 
-    public void setMedia(List<PostMedia> media) {
+    public void setMedia(List<Media> media) {
         this.media = media;
+    }
+
+    public PostStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PostStatus status) {
+        this.status = status;
+    }
+
+    public List<PostTag> getPostTags() {
+        return postTags;
+    }
+
+    public void setPostTags(List<PostTag> postTags) {
+        this.postTags = postTags;
     }
 }

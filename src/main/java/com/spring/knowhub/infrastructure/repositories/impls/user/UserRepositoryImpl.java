@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -90,6 +91,23 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (Exception ex) {
             log.error("Lỗi khi thực hiện tìm kiếm user theo username: {}", username, ex);
             throw UserRepositoryException.findFailed("Lỗi khi tìm user theo username: " + username);
+        }
+    }
+
+    @Override
+    public List<User> findByIds(List<Long> ids) {
+        log.debug("Tìm user theo danh sách ID: {}", ids);
+        try {
+            List<UserEntity> entities = userJpaRepository.findAllById(ids) ;
+            List<User> users = entities.stream().map(userMapper :: fromEntityToDomain).toList() ;
+            log.info("Tìm thấy {} user theo danh sách ID", users.size());
+            return users ;
+        } catch (UserMapperException ex) {
+            log.error("Lỗi mapping khi tìm user theo danh sách ID: {}", ids, ex);
+            throw ex;
+        } catch(Exception ex) {
+            log.error("Lỗi khi thực hiện tìm kiếm user theo danh sách ID: {}", ids, ex);
+            throw UserRepositoryException.findFailed("Lỗi khi tìm user theo danh sách ID: " + ids);
         }
     }
 
