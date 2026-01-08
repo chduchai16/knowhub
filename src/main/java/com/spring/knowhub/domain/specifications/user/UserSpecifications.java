@@ -1,6 +1,6 @@
 package com.spring.knowhub.domain.specifications.user;
 
-import com.spring.knowhub.domain.enums.UserStatus;
+import com.spring.knowhub.domain.enums.user.UserStatus;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.specifications.AlwaysTrueSpecification;
 import com.spring.knowhub.domain.specifications.Specification;

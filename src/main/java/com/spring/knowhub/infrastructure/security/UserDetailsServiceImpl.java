@@ -1,6 +1,6 @@
 package com.spring.knowhub.infrastructure.security;
 
-import com.spring.knowhub.domain.enums.UserStatus;
+import com.spring.knowhub.domain.enums.user.UserStatus;
 import com.spring.knowhub.domain.exceptions.user.user.UserNotFoundException;
 import com.spring.knowhub.infrastructure.entities.user.UserEntity;
 import com.spring.knowhub.infrastructure.repositories.jpas.user.JpaUserRepository;

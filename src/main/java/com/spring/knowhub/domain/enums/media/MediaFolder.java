@@ -1,4 +1,4 @@
-package com.spring.knowhub.domain.enums;
+package com.spring.knowhub.domain.enums.media;
 
 public enum MediaFolder {
     POST("posts"),

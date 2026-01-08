@@ -1,14 +1,14 @@
-package com.spring.knowhub.domain.enums;
+package com.spring.knowhub.domain.enums.media;
 
-public enum MediaType {
-    IMAGE,
-    VIDEO ,
-    FILE ;
+public enum OwnerType {
+    POST,
+    USER,
+    COMMENT ;
 
     public static boolean contains(String value) {
         if (value == null) return false;
 
-        for (MediaType type : values()) {
+        for (OwnerType type : values()) {
             if (type.name().equals(value)) {
                 return true;
             }
@@ -16,4 +16,3 @@ public enum MediaType {
         return false;
     }
 }
-

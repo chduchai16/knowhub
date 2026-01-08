@@ -1,8 +1,8 @@
 package com.spring.knowhub.infrastructure.entities.user;
 
-import com.spring.knowhub.domain.enums.Gender;
+import com.spring.knowhub.domain.enums.user.Gender;
 import com.spring.knowhub.infrastructure.entities.BaseEntity;
-import com.spring.knowhub.domain.enums.UserStatus;
+import com.spring.knowhub.domain.enums.user.UserStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

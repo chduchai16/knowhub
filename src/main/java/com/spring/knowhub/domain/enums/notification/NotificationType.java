@@ -1,4 +1,4 @@
-package com.spring.knowhub.domain.enums;
+package com.spring.knowhub.domain.enums.notification;
 
 public enum NotificationType {
     LIKE,

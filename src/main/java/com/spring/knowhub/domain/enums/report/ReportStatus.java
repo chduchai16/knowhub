@@ -1,4 +1,4 @@
-package com.spring.knowhub.domain.enums;
+package com.spring.knowhub.domain.enums.report;
 
 public enum ReportStatus {
     PENDING,

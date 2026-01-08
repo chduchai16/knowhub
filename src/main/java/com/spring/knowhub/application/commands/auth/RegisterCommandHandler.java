@@ -3,7 +3,6 @@ package com.spring.knowhub.application.commands.auth;
 import com.spring.knowhub.application.buses.CommandHandler;
 import com.spring.knowhub.application.validators.auth.RegisterValidator;
 import com.spring.knowhub.domain.exceptions.user.role.RoleNotFoundException;
-import com.spring.knowhub.domain.exceptions.user.user.DuplicateUserException;
 import com.spring.knowhub.domain.models.user.Role;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.user.RoleRepository;

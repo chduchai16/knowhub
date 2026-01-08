@@ -1,8 +1,9 @@
 package com.spring.knowhub.infrastructure.entities.post;
 
+import com.spring.knowhub.domain.enums.post.PostStatus;
 import com.spring.knowhub.infrastructure.entities.BaseEntity;
 import com.spring.knowhub.infrastructure.entities.user.UserEntity;
-import com.spring.knowhub.domain.enums.Privacy;
+import com.spring.knowhub.domain.enums.post.Privacy;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +17,6 @@ import java.util.List;
 @Data
 public class PostEntity extends BaseEntity {
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
@@ -28,11 +28,10 @@ public class PostEntity extends BaseEntity {
     @Column(nullable = false)
     private Privacy privacy = Privacy.PUBLIC;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Boolean isDeleted = false;
+    private PostStatus status;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostMediaEntity> media = new ArrayList<>();
-
+    private List<PostTagEntity> postTags = new ArrayList<>();
 }
-

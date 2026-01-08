@@ -1,8 +1,8 @@
 package com.spring.knowhub.domain.models.media;
 
-import com.spring.knowhub.domain.enums.MediaStatus;
-import com.spring.knowhub.domain.enums.MediaType;
-import com.spring.knowhub.domain.enums.OwnerType;
+import com.spring.knowhub.domain.enums.media.MediaStatus;
+import com.spring.knowhub.domain.enums.media.MediaType;
+import com.spring.knowhub.domain.enums.media.OwnerType;
 import com.spring.knowhub.domain.models.BaseModel;
 
 public class Media extends BaseModel {

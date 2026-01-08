@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface MediaRepository {
     Media save (Media media) ;
     List<Media> saveAll (List<Media> mediaList) ;
+    List<Media> findAllById(List<Long> ids) ;
     Page<Media> findPagedMedia(Pageable pageable) ;
     Optional<Media> findMediaById(Long id) ;
     Media updateMedia(Media media) ;

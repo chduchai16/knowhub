@@ -1,7 +1,7 @@
 package com.spring.knowhub.domain.models.user;
 
-import com.spring.knowhub.domain.enums.Gender;
-import com.spring.knowhub.domain.enums.UserStatus;
+import com.spring.knowhub.domain.enums.user.Gender;
+import com.spring.knowhub.domain.enums.user.UserStatus;
 import com.spring.knowhub.domain.models.BaseModel;
 
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package com.spring.knowhub.domain.enums;
+package com.spring.knowhub.domain.enums.user;
 
 public enum UserStatus {
     DELETED, // xóa

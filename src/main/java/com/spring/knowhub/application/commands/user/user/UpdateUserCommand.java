@@ -1,7 +1,7 @@
 package com.spring.knowhub.application.commands.user.user;
 
 import com.spring.knowhub.application.buses.Command;
-import com.spring.knowhub.domain.enums.Gender;
+import com.spring.knowhub.domain.enums.user.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import java.time.LocalDate;

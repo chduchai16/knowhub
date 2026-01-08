@@ -1,6 +1,6 @@
 package com.spring.knowhub.presentation.response.user;
 
-import com.spring.knowhub.domain.enums.Gender;
+import com.spring.knowhub.domain.enums.user.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

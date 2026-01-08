@@ -28,7 +28,8 @@ public class TagController {
         @GetMapping
         public ResponseEntity<ApiResponse<?>> getPagedTags(
                         @RequestParam(defaultValue = "0") int page,
-                        @RequestParam(defaultValue = "10") int limit) {
+                        @RequestParam(defaultValue = "10") int limit
+        ) {
                 log.info("GET /api/tags - page={}, limit={}", page, limit);
 
                 PageRequest pageable = PageRequest.of(page, limit);
@@ -45,7 +46,8 @@ public class TagController {
 
         @GetMapping("/{id}")
         public ResponseEntity<ApiResponse<?>> getTagById(
-                        @PathVariable Long id) {
+                @PathVariable Long id
+        ) {
                 log.info("GET /api/tags/{}", id);
 
                 GetTagByIdQuery query = new GetTagByIdQuery(id);

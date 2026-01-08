@@ -1,6 +1,6 @@
 package com.spring.knowhub.domain.models.notification;
 
-import com.spring.knowhub.domain.enums.NotificationType;
+import com.spring.knowhub.domain.enums.notification.NotificationType;
 
 public class Notification {
     private Long id ;

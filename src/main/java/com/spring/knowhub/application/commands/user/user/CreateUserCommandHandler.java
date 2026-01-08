@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.spring.knowhub.application.buses.CommandHandler;
-import com.spring.knowhub.domain.enums.UserStatus;
+import com.spring.knowhub.domain.enums.user.UserStatus;
 import com.spring.knowhub.domain.exceptions.user.user.DuplicateUserException;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
