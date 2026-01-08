@@ -16,9 +16,6 @@ public class PostMediaEntity extends BaseEntity {
     @JoinColumn(name = "post_id", nullable = false)
     private PostEntity post;
     
-    @Column(name = "post_id", insertable = false, updatable = false)
-    private Long postId;
-
     @Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String url;
 
