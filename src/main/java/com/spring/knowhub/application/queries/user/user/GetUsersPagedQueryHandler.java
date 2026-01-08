@@ -5,7 +5,6 @@ import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
 import com.spring.knowhub.domain.specifications.AlwaysTrueSpecification;
 import com.spring.knowhub.domain.specifications.Specification;
-import com.spring.knowhub.domain.specifications.user.UserHasRoleSpec;
 import com.spring.knowhub.domain.specifications.user.UserSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

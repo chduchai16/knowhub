@@ -1,7 +1,6 @@
 package com.spring.knowhub.application.commands.user.permission;
 
 import com.spring.knowhub.application.buses.CommandHandler;
-import com.spring.knowhub.application.exceptions.user.permission.UpdatePermissionException;
 import com.spring.knowhub.application.validators.user.permission.UpdatePermissionValidator;
 import com.spring.knowhub.domain.exceptions.user.permission.PermissionNotFoundException;
 import com.spring.knowhub.domain.models.user.Permission;

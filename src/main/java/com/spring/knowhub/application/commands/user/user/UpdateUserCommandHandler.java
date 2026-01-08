@@ -7,7 +7,6 @@ import com.spring.knowhub.domain.exceptions.user.user.UserNotFoundException;
 import com.spring.knowhub.domain.models.user.Role;
 import com.spring.knowhub.domain.repositories.user.RoleRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
@@ -20,7 +19,6 @@ public class UpdateUserCommandHandler implements CommandHandler<UpdateUserComman
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository ;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Long handle(UpdateUserCommand command) {
