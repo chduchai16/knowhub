@@ -30,4 +30,8 @@ public class InvalidPostException extends PostDomainException{
         return new InvalidPostException("Nội dung bài viết không được để trống.");
     }
 
+    public static InvalidPostException invalidStatus(String status) {
+        return new InvalidPostException("Trạng thái bài viết không hợp lệ: " + status);
+    }
+
 }

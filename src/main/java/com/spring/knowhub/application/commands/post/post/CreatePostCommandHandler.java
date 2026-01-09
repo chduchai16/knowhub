@@ -16,6 +16,7 @@ import com.spring.knowhub.domain.repositories.post.PostRepository;
 import com.spring.knowhub.domain.repositories.post.TagRepository;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
 import com.spring.knowhub.infrastructure.exceptions.post.post.PostRepositoryException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class CreatePostCommandHandler implements CommandHandler<CreatePostCommand, Long> {
 
     private final PostRepository postRepository;
@@ -42,7 +44,9 @@ public class CreatePostCommandHandler implements CommandHandler<CreatePostComman
                 .orElseThrow(() -> UserNotFoundException.byId(command.getUserId()));
         List<Tag> tags = tagRepository.findByIds(command.getTagIds());
         List<Media> medias = mediaRepository.findAllById(command.getMediaIds());
-        if (!Privacy.contains(command.getPrivacy())) {
+
+        String privacyUpper = command.getPrivacy().toUpperCase();
+        if (!Privacy.contains(privacyUpper)) {
             throw InvalidPostException.privacyInvalid();
         }
 
@@ -50,8 +54,8 @@ public class CreatePostCommandHandler implements CommandHandler<CreatePostComman
                 null,
                 user,
                 command.getContent(),
-                Privacy.valueOf(command.getPrivacy()),
-                command.getStatus(),
+                Privacy.valueOf(command.getPrivacy().toUpperCase()),
+                PostStatus.valueOf(command.getStatus().toUpperCase()),
                 medias,
                 new java.util.ArrayList<>());
 
@@ -60,7 +64,8 @@ public class CreatePostCommandHandler implements CommandHandler<CreatePostComman
             post.getPostTags().add(postTag);
         });
 
-        Post savedPost = postRepository.save(post).orElseThrow(() -> PostRepositoryException.saveFailed("Không thể tạo bài viết"));
+        Post savedPost = postRepository.save(post)
+                .orElseThrow(() -> PostRepositoryException.saveFailed("Không thể tạo bài viết"));
         return savedPost.getId();
     }
 }

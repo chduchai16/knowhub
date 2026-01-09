@@ -63,6 +63,12 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.PUT , "/api/tags/**").hasRole(admin)
                         .requestMatchers(HttpMethod.DELETE , "/api/tags/**").hasRole(admin)
 
+                        // posts
+                        .requestMatchers(HttpMethod.GET , "/api/posts/**").authenticated()
+                        .requestMatchers(HttpMethod.POST , "/api/posts/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT , "/api/posts/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE , "/api/posts/**").authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

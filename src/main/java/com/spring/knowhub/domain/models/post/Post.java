@@ -19,8 +19,7 @@ public class Post {
     public Post() {
     }
 
-    public Post(Long id, User user, String content, Privacy privacy, PostStatus status, List<Media> media,
-            List<PostTag> postTags) {
+    public Post(Long id, User user, String content, Privacy privacy, PostStatus status, List<Media> media, List<PostTag> postTags) {
         this.id = id;
         this.user = user;
         this.content = content;

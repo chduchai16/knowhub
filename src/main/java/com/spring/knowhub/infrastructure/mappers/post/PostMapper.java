@@ -2,6 +2,7 @@ package com.spring.knowhub.infrastructure.mappers.post;
 
 import com.spring.knowhub.domain.models.post.Post;
 import com.spring.knowhub.infrastructure.entities.post.PostEntity;
+import com.spring.knowhub.infrastructure.entities.post.PostTagEntity;
 import com.spring.knowhub.infrastructure.exceptions.post.post.PostMapperException;
 import com.spring.knowhub.infrastructure.mappers.user.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ public class PostMapper {
 
     private final ModelMapper modelMapper;
     private final UserMapper userMapper;
+    private final TagMapper tagMapper;
     private TypeMap<Post, PostEntity> fromDomainToEntityTypeMap;
     private TypeMap<PostEntity, Post> fromEntityToDomainTypeMap;
 
@@ -28,6 +30,7 @@ public class PostMapper {
                 fromDomainToEntityTypeMap.getMappings().clear();
                 fromDomainToEntityTypeMap.addMappings(mapper -> {
                     mapper.skip(PostEntity::setUser);
+                    mapper.skip(PostEntity::setPostTags);
                 });
                 fromDomainToEntityTypeMap.implicitMappings();
             }
@@ -38,6 +41,17 @@ public class PostMapper {
             if (post.getUser() != null) {
                 postEntity.setUser(userMapper.fromDomainToEntity(post.getUser()));
             }
+
+            // map postTags
+            if (post.getPostTags() != null && !post.getPostTags().isEmpty()) {
+                post.getPostTags().forEach(postTag -> {
+                    PostTagEntity postTagEntity = new PostTagEntity();
+                    postTagEntity.setPost(postEntity);
+                    postTagEntity.setTag(tagMapper.fromDomainToEntity(postTag.getTag()));
+                    postEntity.getPostTags().add(postTagEntity);
+                });
+            }
+
             return postEntity;
         } catch (Exception ex) {
             throw PostMapperException.fromDomainToEntityFailed(ex.getMessage());
@@ -54,6 +68,7 @@ public class PostMapper {
                 fromEntityToDomainTypeMap.getMappings().clear();
                 fromEntityToDomainTypeMap.addMappings(mapper -> {
                     mapper.skip(Post::setUser);
+                    mapper.skip(Post::setPostTags);
                 });
                 fromEntityToDomainTypeMap.implicitMappings();
             }
@@ -64,6 +79,21 @@ public class PostMapper {
             if (postEntity.getUser() != null) {
                 post.setUser(userMapper.fromEntityToDomain(postEntity.getUser()));
             }
+
+            // map postTags
+            if (postEntity.getPostTags() != null && !postEntity.getPostTags().isEmpty()) {
+                post.setPostTags(
+                        postEntity.getPostTags().stream()
+                                .map(postTagEntity -> {
+                                    com.spring.knowhub.domain.models.post.PostTag postTag = new com.spring.knowhub.domain.models.post.PostTag();
+                                    postTag.setId(postTagEntity.getId());
+                                    postTag.setPost(post);
+                                    postTag.setTag(tagMapper.fromEntityToDomain(postTagEntity.getTag()));
+                                    return postTag;
+                                })
+                                .toList());
+            }
+
             return post;
         } catch (Exception ex) {
             throw PostMapperException.fromEntityToDomainFailed(ex.getMessage());
