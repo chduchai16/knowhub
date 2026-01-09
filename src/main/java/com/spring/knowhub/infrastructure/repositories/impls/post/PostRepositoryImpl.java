@@ -29,8 +29,7 @@ public class PostRepositoryImpl implements PostRepository {
     public Optional<Post> findById(Long id) {
         log.info("Tìm bài viết với ID: {}", id);
         try {
-            Optional<Post> postOptional = jpaPostRepository.findById(id)
-                    .map(postMapper::fromEntityToDomain);
+            Optional<Post> postOptional = jpaPostRepository.findById(id).map(postMapper::fromEntityToDomain);
             if(postOptional.isEmpty()) {
                 throw PostNotFoundException.withId(id);
             }

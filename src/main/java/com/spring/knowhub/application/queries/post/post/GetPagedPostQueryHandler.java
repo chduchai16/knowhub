@@ -24,7 +24,7 @@ public class GetPagedPostQueryHandler implements QueryHandler<GetPagedPostQuery 
     @Override
     public Page<Post> handle(GetPagedPostQuery query) {
         Specification<Post> specification = new AlwaysTrueSpecification<>();
-        specification.and(PostSpecification.hasStatus(query.getStatus())) ;
+        specification.and(PostSpecification.hasStatus(query.getStatus().toUpperCase())) ;
         specification.and(PostSpecification.hasKeyword(query.getKeyword())) ;
         return postRepository.findPostsPaged(specification , query.getPageable());
     }

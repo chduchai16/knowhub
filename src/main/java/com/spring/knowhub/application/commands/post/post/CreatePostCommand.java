@@ -1,7 +1,6 @@
 package com.spring.knowhub.application.commands.post.post;
 
 import com.spring.knowhub.application.buses.Command;
-import com.spring.knowhub.domain.enums.post.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,5 +14,5 @@ public class CreatePostCommand implements Command<Long> {
     private String privacy ;
     private List<Long> mediaIds ;
     private List<Long> tagIds ;
-    private PostStatus status ;
+    private String status ;
 }

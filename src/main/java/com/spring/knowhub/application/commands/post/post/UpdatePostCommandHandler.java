@@ -17,6 +17,7 @@ import com.spring.knowhub.domain.repositories.post.PostRepository;
 import com.spring.knowhub.domain.repositories.post.TagRepository;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
 import com.spring.knowhub.infrastructure.exceptions.post.post.PostRepositoryException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class UpdatePostCommandHandler implements CommandHandler<UpdatePostCommand , Long> {
 
     private final PostRepository postRepository;
@@ -54,9 +56,9 @@ public class UpdatePostCommandHandler implements CommandHandler<UpdatePostComman
         });
 
         existingPost.setContent(command.getContent());
-        existingPost.setPrivacy(Privacy.valueOf(command.getPrivacy()));
+        existingPost.setPrivacy(Privacy.valueOf(command.getPrivacy().toUpperCase()));
         existingPost.setMedia(medias);
-        existingPost.setStatus(PostStatus.valueOf(command.getStatus()));
+        existingPost.setStatus(PostStatus.valueOf(command.getStatus().toUpperCase()));
         existingPost.setUser(existingUser);
         Post savedPost = postRepository.save(existingPost).orElseThrow(() -> PostRepositoryException.saveFailed("Không thể cập nhật bài viết"));
         return savedPost.getId();
