@@ -5,9 +5,15 @@ import com.spring.knowhub.domain.enums.media.MediaType;
 import com.spring.knowhub.domain.enums.media.OwnerType;
 import com.spring.knowhub.infrastructure.entities.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "media")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MediaEntity extends BaseEntity {
 
     private String publicId ; // cloudinary public _ id

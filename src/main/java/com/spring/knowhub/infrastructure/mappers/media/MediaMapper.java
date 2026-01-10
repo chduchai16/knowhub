@@ -1,10 +1,10 @@
 package com.spring.knowhub.infrastructure.mappers.media;
 
 import com.spring.knowhub.domain.models.media.Media;
+import com.spring.knowhub.infrastructure.configurations.ModelMapperConfiguration;
 import com.spring.knowhub.infrastructure.entities.media.MediaEntity;
 import com.spring.knowhub.infrastructure.exceptions.media.MediaMapperException;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
 
@@ -12,42 +12,38 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MediaMapper {
 
-    private final ModelMapper modelMapper ;
-    private TypeMap<MediaEntity , Media> fromEntityToDomainTypeMap ;
-    private TypeMap<Media , MediaEntity> fromDomainToEntityTypeMap ;
-
-    public Media fromEntityToDomain(MediaEntity entity) {
-        try {
-            if (entity == null) {
-                throw MediaMapperException.fromEntityToDomainFailed("Đối tượng MediaEntity truyền vào là null");
-            }
-            if(fromEntityToDomainTypeMap == null) {
-                fromEntityToDomainTypeMap = modelMapper.createTypeMap(MediaEntity.class , Media.class) ;
-                fromEntityToDomainTypeMap.implicitMappings();
-            }
-            return fromEntityToDomainTypeMap.map(entity);
-        } catch (MediaMapperException ex) {
-            throw ex;
-        } catch (Exception e) {
-            throw MediaMapperException.fromEntityToDomainFailed(e.getMessage());
-        }
-    }
+    private final ModelMapperConfiguration modelMapper;
+    private TypeMap<Media, MediaEntity> fromDomainToEntityTypeMap;
+    private TypeMap<MediaEntity, Media> fromEntityToDomainTypeMap;
 
     public MediaEntity fromDomainToEntity(Media media) {
+        if (media == null) {
+            throw MediaMapperException.fromDomainToEntityFailed("Đối tượng Media là null");
+        }
         try {
-            if (media == null) {
-                throw MediaMapperException.fromDomainToEntityFailed("Đối tượng Media truyền vào là null");
-            }
-            if(fromDomainToEntityTypeMap == null) {
-                fromDomainToEntityTypeMap = modelMapper.createTypeMap(Media.class , MediaEntity.class) ;
+            if (fromDomainToEntityTypeMap == null) {
+                fromDomainToEntityTypeMap = modelMapper.modelMapper().createTypeMap(Media.class, MediaEntity.class);
                 fromDomainToEntityTypeMap.implicitMappings();
             }
-            return fromDomainToEntityTypeMap.map(media);
-        } catch (MediaMapperException ex) {
-            throw ex;
+            MediaEntity entity = fromDomainToEntityTypeMap.map(media);
+            return entity;
         } catch (Exception e) {
             throw MediaMapperException.fromDomainToEntityFailed(e.getMessage());
         }
+    }
 
+    public Media fromEntityToDomain(MediaEntity entity) {
+        if (entity == null) {
+            throw MediaMapperException.fromEntityToDomainFailed("Đối tượng MediaEntity là null");
+        }
+        try {
+            if (fromEntityToDomainTypeMap == null) {
+                fromEntityToDomainTypeMap = modelMapper.modelMapper().createTypeMap(MediaEntity.class, Media.class);
+                fromEntityToDomainTypeMap.implicitMappings();
+            }
+            return fromEntityToDomainTypeMap.map(entity);
+        } catch (Exception e) {
+            throw MediaMapperException.fromEntityToDomainFailed(e.getMessage());
+        }
     }
 }

@@ -22,8 +22,8 @@ import java.util.Optional;
 @Slf4j
 public class MediaRepositoryImpl implements MediaRepository {
 
-    private final JpaMediaRepository jpaMediaRepository ;
-    private final MediaMapper mediaMapper ;
+    private final JpaMediaRepository jpaMediaRepository;
+    private final MediaMapper mediaMapper;
 
     @Override
     public Media save(Media media) {
@@ -33,16 +33,16 @@ public class MediaRepositoryImpl implements MediaRepository {
             MediaEntity savedEntity = jpaMediaRepository.save(entity);
             Media savedMedia = mediaMapper.fromEntityToDomain(savedEntity);
             log.info("Lưu Media thành công với ID: {}", savedMedia.getId());
-            return savedMedia ;
+            return savedMedia;
         } catch (DataIntegrityViolationException ex) {
             log.error("Vi phạm ràng buộc dữ liệu khi lưu Media: {}", media, ex);
-            throw ex ;
+            throw ex;
         } catch (MediaMapperException ex) {
             log.error("Lỗi mapping khi lưu Media: {}", media, ex);
-            throw ex ;
-        }catch (Exception ex) {
+            throw ex;
+        } catch (Exception ex) {
             log.error("Lỗi khi lưu Media: {}", media, ex);
-            throw MediaRepositoryException.saveFailed(ex.getMessage()) ;
+            throw MediaRepositoryException.saveFailed(ex.getMessage());
         }
     }
 
@@ -50,17 +50,17 @@ public class MediaRepositoryImpl implements MediaRepository {
     public List<Media> saveAll(List<Media> mediaList) {
         log.info("Bắt đầu lưu danh sách Media: Số lượng = {}", mediaList.size());
         try {
-            List<MediaEntity> entityList = mediaList.stream().map(mediaMapper :: fromDomainToEntity).toList() ;
-            List<MediaEntity> savedEntityList = jpaMediaRepository.saveAll(entityList) ;
-            List<Media> savedMediaList = savedEntityList.stream().map(mediaMapper :: fromEntityToDomain).toList() ;
+            List<MediaEntity> entityList = mediaList.stream().map(mediaMapper::fromDomainToEntity).toList();
+            List<MediaEntity> savedEntityList = jpaMediaRepository.saveAll(entityList);
+            List<Media> savedMediaList = savedEntityList.stream().map(mediaMapper::fromEntityToDomain).toList();
             log.info("Lưu danh sách Media thành công: Số lượng = {}", savedMediaList.size());
-            return savedMediaList ;
+            return savedMediaList;
         } catch (DataIntegrityViolationException ex) {
             log.error("Vi phạm ràng buộc dữ liệu khi lưu danh sách Media", ex);
-            throw ex ;
+            throw ex;
         } catch (MediaMapperException ex) {
             log.error("Lỗi mapping khi lưu danh sách Media", ex);
-            throw ex ;
+            throw ex;
         } catch (Exception ex) {
             log.error("Lỗi khi lưu danh sách Media", ex);
             throw MediaRepositoryException.saveAllFailed(ex.getMessage());
@@ -71,33 +71,42 @@ public class MediaRepositoryImpl implements MediaRepository {
     public List<Media> findAllById(List<Long> ids) {
         log.info("Tìm kiếm danh sách Media theo IDs: {}", ids);
         try {
-            List<MediaEntity> entities = jpaMediaRepository.findAllById(ids) ;
-            List<Media> mediaList = entities.stream().map(mediaMapper :: fromEntityToDomain).toList() ;
+            List<MediaEntity> entities = jpaMediaRepository.findAllById(ids);
+            log.info("DEBUG: Found {} entities", entities.size());
+            if (!entities.isEmpty()) {
+                log.info("DEBUG: First entity data: {}", entities.get(0));
+            }
+            List<Media> mediaList = entities.stream().map(mediaMapper::fromEntityToDomain).toList();
+            log.info("DEBUG: After mapping, first media: {}", mediaList.isEmpty() ? "EMPTY" : mediaList.get(0));
             log.info("Tìm kiếm danh sách Media thành công theo IDs: {}", ids);
-            return mediaList ;
+            return mediaList;
         } catch (MediaMapperException ex) {
             log.error("Lỗi mapping khi tìm kiếm danh sách Media theo IDs: {}", ids, ex);
-            throw ex ;
-        } catch(Exception ex) {
+            throw ex;
+        } catch (Exception ex) {
             log.error("Lỗi khi tìm kiếm danh sách Media theo IDs: {}", ids, ex);
-            throw MediaRepositoryException.findFailed(ex.getMessage()) ;
+            throw MediaRepositoryException.findFailed(ex.getMessage());
         }
     }
 
     @Override
     public Page<Media> findPagedMedia(Pageable pageable) {
-        log.info("Bắt đầu tìm kiếm trang Media: page = {}, size = {}", pageable.getPageNumber(), pageable.getPageSize());
+        log.info("Bắt đầu tìm kiếm trang Media: page = {}, size = {}", pageable.getPageNumber(),
+                pageable.getPageSize());
         try {
-            Page<MediaEntity> entityPage = jpaMediaRepository.findAll(pageable) ;
-            Page<Media> mediaPage = entityPage.map(mediaMapper :: fromEntityToDomain) ;
-            log.info("Tìm kiếm trang Media thành công: page = {}, size = {}", pageable.getPageNumber(), pageable.getPageSize());
-            return mediaPage ;
+            Page<MediaEntity> entityPage = jpaMediaRepository.findAll(pageable);
+            Page<Media> mediaPage = entityPage.map(mediaMapper::fromEntityToDomain);
+            log.info("Tìm kiếm trang Media thành công: page = {}, size = {}", pageable.getPageNumber(),
+                    pageable.getPageSize());
+            return mediaPage;
         } catch (MediaMapperException ex) {
-            log.error("Lỗi mapping khi tìm kiếm trang Media: page = {}, size = {}", pageable.getPageNumber(), pageable.getPageSize(), ex);
-            throw ex ;
-        }catch (Exception ex) {
-            log.error("Lỗi khi tìm kiếm trang Media: page = {}, size = {}", pageable.getPageNumber(), pageable.getPageSize(), ex);
-            throw MediaRepositoryException.findFailed(ex.getMessage()) ;
+            log.error("Lỗi mapping khi tìm kiếm trang Media: page = {}, size = {}", pageable.getPageNumber(),
+                    pageable.getPageSize(), ex);
+            throw ex;
+        } catch (Exception ex) {
+            log.error("Lỗi khi tìm kiếm trang Media: page = {}, size = {}", pageable.getPageNumber(),
+                    pageable.getPageSize(), ex);
+            throw MediaRepositoryException.findFailed(ex.getMessage());
         }
     }
 
@@ -105,15 +114,15 @@ public class MediaRepositoryImpl implements MediaRepository {
     public Optional<Media> findMediaById(Long id) {
         try {
             MediaEntity entity = jpaMediaRepository.findById(id)
-                    .orElseThrow(() -> MediaRepositoryException.findFailed("Không tìm thấy Media với ID: " + id)) ;
-            Media media = mediaMapper.fromEntityToDomain(entity) ;
-            return Optional.of(media) ;
+                    .orElseThrow(() -> MediaRepositoryException.findFailed("Không tìm thấy Media với ID: " + id));
+            Media media = mediaMapper.fromEntityToDomain(entity);
+            return Optional.of(media);
         } catch (MediaMapperException ex) {
             log.error("Lỗi mapping khi tìm kiếm Media theo ID: {}", id, ex);
-            throw ex ;
-        }catch (Exception ex) {
+            throw ex;
+        } catch (Exception ex) {
             log.error("Lỗi khi tìm kiếm Media theo ID: {}", id, ex);
-            throw MediaRepositoryException.findFailed(ex.getMessage()) ;
+            throw MediaRepositoryException.findFailed(ex.getMessage());
         }
     }
 
@@ -124,16 +133,16 @@ public class MediaRepositoryImpl implements MediaRepository {
             MediaEntity updatedEntity = jpaMediaRepository.save(entity);
             Media updatedMedia = mediaMapper.fromEntityToDomain(updatedEntity);
             log.info("Cập nhật Media thành công với ID: {}", updatedMedia.getId());
-            return updatedMedia ;
+            return updatedMedia;
         } catch (DataIntegrityViolationException ex) {
             log.error("Vi phạm ràng buộc dữ liệu khi cập nhật Media: {}", media, ex);
-            throw ex ;
-        } catch (MediaMapperException ex){
+            throw ex;
+        } catch (MediaMapperException ex) {
             log.error("Lỗi mapping khi cập nhật Media: {}", media, ex);
-            throw ex ;
-        }catch (Exception ex) {
-             log.error("Lỗi khi cập nhật Media: {}", media, ex);
-             throw MediaRepositoryException.updateFailed(ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            log.error("Lỗi khi cập nhật Media: {}", media, ex);
+            throw MediaRepositoryException.updateFailed(ex.getMessage());
         }
     }
 
@@ -144,17 +153,17 @@ public class MediaRepositoryImpl implements MediaRepository {
             log.info("Xóa Media thành công với ID: {}", id);
         } catch (Exception ex) {
             log.error("Lỗi khi xóa Media theo ID: {}", id, ex);
-            throw MediaRepositoryException.deleteFailed(ex.getMessage()) ;
+            throw MediaRepositoryException.deleteFailed(ex.getMessage());
         }
     }
 
     @Override
     public Boolean existsByUrl(String url) {
         try {
-            return jpaMediaRepository.existsByUrl(url) ;
+            return jpaMediaRepository.existsByUrl(url);
         } catch (Exception ex) {
             log.error("Lỗi khi kiểm tra tồn tại Media theo URL: {}", url, ex);
-            throw MediaRepositoryException.findFailed(ex.getMessage()) ;
+            throw MediaRepositoryException.findFailed(ex.getMessage());
         }
     }
 }
