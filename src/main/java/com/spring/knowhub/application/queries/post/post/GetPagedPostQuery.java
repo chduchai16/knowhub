@@ -12,5 +12,6 @@ import org.springframework.data.domain.Pageable;
 public class GetPagedPostQuery implements Query <Page<Post>> {
     private String keyword ;
     private String status ;
+    private String username ;
     private Pageable pageable ;
 }

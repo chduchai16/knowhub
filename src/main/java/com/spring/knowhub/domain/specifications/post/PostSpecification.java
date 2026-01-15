@@ -18,4 +18,10 @@ public class PostSpecification {
                 ? new AlwaysTrueSpecification<>()
                 : new PostHasContentSpec(keyword);
     }
+
+    public static Specification<Post> hasUserName (String userName) {
+        return (userName == null || userName.isBlank())
+                ? new AlwaysTrueSpecification<>()
+                : new PostHasUserNameSpec(userName);
+    }
 }
