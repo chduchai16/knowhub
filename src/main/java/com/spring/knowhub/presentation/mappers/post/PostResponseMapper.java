@@ -28,7 +28,7 @@ public class PostResponseMapper {
                 fromPostToPostResponseTypeMap = modelMapper.modelMapper().createTypeMap(Post.class, PostResponse.class);
                 fromPostToPostResponseTypeMap.addMappings(mapper -> {
                     mapper.skip(PostResponse::setUserId);
-                    mapper.skip(PostResponse::setUserName);
+                    mapper.skip(PostResponse::setUsername);
                     mapper.skip(PostResponse::setTags);
                     mapper.skip(PostResponse::setMedias);
                 });
@@ -40,7 +40,7 @@ public class PostResponseMapper {
             // map user
             if (post.getUser() != null) {
                 response.setUserId(post.getUser().getId());
-                response.setUserName(post.getUser().getUsername());
+                response.setUsername(post.getUser().getUsername());
             }
 
             // map post tags
@@ -60,7 +60,9 @@ public class PostResponseMapper {
                                 .map(media -> new MediaResponse(
                                         media.getId(),
                                         media.getUrl(),
-                                        media.getType() != null ? media.getType().name() : null))
+                                        media.getType() != null ? media.getType() : null,
+                                        media.getOwnerType() != null ? media.getOwnerType() : null)
+                                )
                                 .collect(Collectors.toList()));
             }
             return response;

@@ -5,7 +5,10 @@ import com.spring.knowhub.domain.enums.post.Privacy;
 import com.spring.knowhub.domain.models.media.Media;
 import com.spring.knowhub.domain.models.user.User;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Post {
     private Long id;
@@ -14,12 +17,13 @@ public class Post {
     private Privacy privacy;
     private List<Media> media;
     private PostStatus status;
-    private List<PostTag> postTags;
+    private Set<PostTag> postTags = new HashSet<>() ;
 
     public Post() {
     }
 
-    public Post(Long id, User user, String content, Privacy privacy, PostStatus status, List<Media> media, List<PostTag> postTags) {
+    public Post(Long id, User user, String content, Privacy privacy, PostStatus status, List<Media> media,
+            Set<PostTag> postTags) {
         this.id = id;
         this.user = user;
         this.content = content;
@@ -77,11 +81,11 @@ public class Post {
         this.status = status;
     }
 
-    public List<PostTag> getPostTags() {
+    public Set<PostTag> getPostTags() {
         return postTags;
     }
 
-    public void setPostTags(List<PostTag> postTags) {
+    public void setPostTags(Set<PostTag> postTags) {
         this.postTags = postTags;
     }
 }

@@ -1,6 +1,7 @@
 package com.spring.knowhub.domain.repositories.media;
 
 import com.spring.knowhub.domain.models.media.Media;
+import com.spring.knowhub.domain.specifications.Specification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,4 +17,5 @@ public interface MediaRepository {
     Media updateMedia(Media media) ;
     void deleteMediaById(Long id) ;
     Boolean existsByUrl(String url) ;
+    List<Media> findAllByOwnerIdAndOwnerType(Specification<Media> spec ) ;
 }

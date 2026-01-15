@@ -40,12 +40,13 @@ public class PostController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "50") int limit,
             @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String username,
             @RequestParam(defaultValue =  "published") String status
         ) {
             log.info("GET /api/posts - page={}, limit={}", page, limit);
             PageRequest pageable = PageRequest.of(page, limit);
             Page<Post> postsPage = queryBus.execute(
-                new GetPagedPostQuery(keyword, status, pageable)
+                new GetPagedPostQuery(keyword, status, username , pageable)
             );
             Page<PostResponse> postResponses = postsPage.map(postResponseMapper::fromPostToPostResponse);
 
@@ -114,10 +115,10 @@ public class PostController {
         @PutMapping
         public ResponseEntity<ApiResponse<?>> updatePost(
             @RequestBody UpdatePostRequest request,
-            Authentication authentication
+            @AuthenticationPrincipal CustomUserDetails userDetails
         ) {
-            log.info("PUT /api/posts - id={}, userId={}", request.getId(), authentication.getName());
-            Long userId = Long.parseLong(authentication.getName());
+            log.info("PUT /api/posts - id={}, userId={}", request.getId(), userDetails.getUsername());
+            Long userId = userDetails.getUserId();
             Long postId = commandBus.execute(
                 new UpdatePostCommand(
                     request.getId(),

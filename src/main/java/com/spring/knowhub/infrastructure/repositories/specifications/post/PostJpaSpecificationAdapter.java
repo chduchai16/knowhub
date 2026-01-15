@@ -7,6 +7,7 @@ import com.spring.knowhub.domain.specifications.NotSpecification;
 import com.spring.knowhub.domain.specifications.OrSpecification;
 import com.spring.knowhub.domain.specifications.post.PostHasContentSpec;
 import com.spring.knowhub.domain.specifications.post.PostHasStatusSpec;
+import com.spring.knowhub.domain.specifications.post.PostHasUserNameSpec;
 import com.spring.knowhub.infrastructure.entities.post.PostEntity;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
@@ -53,6 +54,12 @@ public class PostJpaSpecificationAdapter {
         if(spec instanceof PostHasStatusSpec) {
             PostHasStatusSpec statusSpec = (PostHasStatusSpec) spec;
             return (root, query, cb) -> cb.equal(root.get("status"), statusSpec.getStatus());
+        }
+
+        // user name
+        if(spec instanceof PostHasUserNameSpec) {
+            PostHasUserNameSpec userNameSpec = (PostHasUserNameSpec) spec;
+            return (root, query, cb) -> cb.equal(root.get("user").get("username"), userNameSpec.getUserName());
         }
 
         throw new IllegalArgumentException("Không thể chuyển đổi Specification: " + spec.getClass().getName());

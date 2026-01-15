@@ -9,7 +9,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -33,5 +35,5 @@ public class PostEntity extends BaseEntity {
     private PostStatus status;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostTagEntity> postTags = new ArrayList<>();
+    private Set<PostTagEntity> postTags = new HashSet<>();
 }

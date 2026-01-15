@@ -2,16 +2,19 @@ package com.spring.knowhub.infrastructure.repositories.impls.media;
 
 import com.spring.knowhub.domain.models.media.Media;
 import com.spring.knowhub.domain.repositories.media.MediaRepository;
+import com.spring.knowhub.domain.specifications.Specification;
 import com.spring.knowhub.infrastructure.entities.media.MediaEntity;
 import com.spring.knowhub.infrastructure.exceptions.media.MediaMapperException;
 import com.spring.knowhub.infrastructure.exceptions.media.MediaRepositoryException;
 import com.spring.knowhub.infrastructure.mappers.media.MediaMapper;
 import com.spring.knowhub.infrastructure.repositories.jpas.media.JpaMediaRepository;
+import com.spring.knowhub.infrastructure.repositories.specifications.media.MediaJpaSpecificationAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -72,12 +75,7 @@ public class MediaRepositoryImpl implements MediaRepository {
         log.info("Tìm kiếm danh sách Media theo IDs: {}", ids);
         try {
             List<MediaEntity> entities = jpaMediaRepository.findAllById(ids);
-            log.info("DEBUG: Found {} entities", entities.size());
-            if (!entities.isEmpty()) {
-                log.info("DEBUG: First entity data: {}", entities.get(0));
-            }
             List<Media> mediaList = entities.stream().map(mediaMapper::fromEntityToDomain).toList();
-            log.info("DEBUG: After mapping, first media: {}", mediaList.isEmpty() ? "EMPTY" : mediaList.get(0));
             log.info("Tìm kiếm danh sách Media thành công theo IDs: {}", ids);
             return mediaList;
         } catch (MediaMapperException ex) {
@@ -163,6 +161,21 @@ public class MediaRepositoryImpl implements MediaRepository {
             return jpaMediaRepository.existsByUrl(url);
         } catch (Exception ex) {
             log.error("Lỗi khi kiểm tra tồn tại Media theo URL: {}", url, ex);
+            throw MediaRepositoryException.findFailed(ex.getMessage());
+        }
+    }
+
+    @Override
+    public List<Media> findAllByOwnerIdAndOwnerType(Specification<Media> spec) {
+        log.info("Tìm kiếm Media theo OwnerId và OwnerType");
+        try {
+            org.springframework.data.jpa.domain.Specification<MediaEntity> jpaSpec = MediaJpaSpecificationAdapter
+                    .toJpaSpecification(spec);
+            return jpaMediaRepository.findAll(jpaSpec).stream()
+                    .map(mediaMapper::fromEntityToDomain)
+                    .toList();
+        } catch (Exception ex) {
+            log.error("Lỗi khi tìm kiếm Media theo OwnerId và OwnerType", ex);
             throw MediaRepositoryException.findFailed(ex.getMessage());
         }
     }
