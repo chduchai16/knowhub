@@ -7,6 +7,7 @@ import com.spring.knowhub.application.commands.user.user.DeleteUserCommand;
 import com.spring.knowhub.application.commands.user.user.UpdateUserCommand;
 import com.spring.knowhub.application.queries.user.user.GetUserByIdQuery;
 import com.spring.knowhub.application.queries.user.user.GetUserByUsernameQuery;
+import com.spring.knowhub.application.queries.user.user.GetUsersByNameQuery;
 import com.spring.knowhub.application.queries.user.user.GetUsersPagedQuery;
 import com.spring.knowhub.domain.enums.user.UserStatus;
 import com.spring.knowhub.domain.models.user.User;
@@ -24,6 +25,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Slf4j
@@ -82,6 +85,30 @@ public class UserController {
                 "SUCCESS",
                 "Lấy user thành công",
                 userResponse
+        ));
+    }
+
+    @GetMapping("/search/{name}")
+    public ResponseEntity<ApiResponse<?>> getUsersByName(
+            @PathVariable String name
+    ) {
+        log.info("GET /api/users/search/{}", name);
+        PageRequest page = PageRequest.of(0, 10);
+        List<User> users = queryBus.execute(
+                new GetUsersByNameQuery(
+                        name ,
+                        page
+                )
+        ) ;
+
+        List<UserResponse> userResponses = users.stream()
+                .map(userResponseMapper::fromUserToUserResponse)
+                .toList() ;
+
+        return ResponseEntity.ok(new ApiResponse<>(
+                "SUCCESS",
+                "Chức năng tìm kiếm theo tên chưa được triển khai",
+                userResponses
         ));
     }
 

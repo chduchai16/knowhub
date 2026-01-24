@@ -74,6 +74,17 @@ public final class UserJpaSpecificationAdapter {
                     cb.like(cb.lower(root.get("fullName")), likePattern)
             );
         }
+
+        // has name
+
+        if(spec instanceof UserHasNameSpec nameSpec) {
+            String name = nameSpec.getName();
+            String likePattern = "%" + name.toLowerCase() + "%";
+            return (root, query, cb) -> cb.or(
+                    cb.like(cb.lower(root.get("fullName")), likePattern),
+                    cb.like(cb.lower(root.get("username")), likePattern)
+            );
+        }
         throw new IllegalArgumentException("Không thể chuyển đổi Specification: " + spec.getClass().getName());
     }
 }
