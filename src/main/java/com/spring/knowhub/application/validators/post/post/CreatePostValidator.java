@@ -29,6 +29,13 @@ public class CreatePostValidator {
         if(command.getContent() != null && command.getContent().length() > PostConstants.MAX_CONTENT_LENGTH) {
             throw InvalidPostException.contentTooLong(PostConstants.MAX_CONTENT_LENGTH) ;
         }
+        if (command.getMediaIds() == null) {
+            command.setMediaIds(new ArrayList<>());
+        }
+
+        if (command.getTagIds() == null) {
+            command.setTagIds(new ArrayList<>());
+        }
         if(command.getMediaIds() != null && command.getMediaIds().size() > PostConstants.MAX_MEDIA_PER_POST) {
             throw InvalidPostException.mediaLimitExceeded(PostConstants.MAX_MEDIA_PER_POST) ;
         }
