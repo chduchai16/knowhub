@@ -1,10 +1,5 @@
 package com.spring.knowhub.application.queries.post.post;
 
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Component;
-
 import com.spring.knowhub.application.buses.QueryHandler;
 import com.spring.knowhub.domain.enums.media.OwnerType;
 import com.spring.knowhub.domain.models.media.Media;
@@ -16,28 +11,30 @@ import com.spring.knowhub.domain.specifications.Specification;
 import com.spring.knowhub.domain.specifications.media.MediaHasOwnerIdSpec;
 import com.spring.knowhub.domain.specifications.media.MediaHasOwnerTypeSpec;
 import com.spring.knowhub.domain.specifications.post.PostSpecification;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Component;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Component
-@RequiredArgsConstructor
-public class GetPagedPostQueryHandler implements QueryHandler<GetPagedPostQuery , Page<Post>> {
+@AllArgsConstructor
+public class GetNewFeedsQueryHandler implements QueryHandler<GetNewFeedsQuery , Page<Post>> {
 
-    private final PostRepository postRepository;
+    private final PostRepository postRepository ;
     private final MediaRepository mediaRepository ;
 
     @Override
     public boolean supports(Object query) {
-        return query instanceof GetPagedPostQuery ;
+        return query instanceof GetNewFeedsQuery ;
     }
 
     @Override
-    public Page<Post> handle(GetPagedPostQuery query) {
+    public Page<Post> handle(GetNewFeedsQuery query) {
         Specification<Post> specification = new AlwaysTrueSpecification<>();
-        specification = specification.and(PostSpecification.hasStatus(query.getStatus().toUpperCase())) ;
-        specification = specification.and(PostSpecification.hasUserName(query.getUsername())) ;
-        specification = specification.and(PostSpecification.hasKeyword(query.getKeyword())) ;
+        specification = specification.and(PostSpecification.hasStatus("PUBLISHED")) ;
         Page<Post> pagedPost = postRepository.findPostsPaged(specification , query.getPageable());
+
         pagedPost.getContent().forEach(post -> {
             Specification<Media> mediaSpecification = new AlwaysTrueSpecification<>();
             mediaSpecification = mediaSpecification.and(new MediaHasOwnerIdSpec(post.getId())) ;

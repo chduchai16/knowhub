@@ -2,6 +2,7 @@ package com.spring.knowhub.domain.models.post;
 
 import com.spring.knowhub.domain.enums.post.PostStatus;
 import com.spring.knowhub.domain.enums.post.Privacy;
+import com.spring.knowhub.domain.models.BaseModel;
 import com.spring.knowhub.domain.models.media.Media;
 import com.spring.knowhub.domain.models.user.User;
 
@@ -10,7 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Post {
+public class Post extends BaseModel {
     private Long id;
     private User user;
     private String content;

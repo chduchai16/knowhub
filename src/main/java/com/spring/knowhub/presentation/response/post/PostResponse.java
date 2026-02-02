@@ -15,6 +15,7 @@ import java.util.List;
 public class PostResponse {
     private Long id;
     private Long userId;
+    private String userAvatarUrl ;
     private String username;
     private String content;
     private Privacy privacy;

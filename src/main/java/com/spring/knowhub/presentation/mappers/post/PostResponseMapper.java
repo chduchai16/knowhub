@@ -29,6 +29,7 @@ public class PostResponseMapper {
                 fromPostToPostResponseTypeMap.addMappings(mapper -> {
                     mapper.skip(PostResponse::setUserId);
                     mapper.skip(PostResponse::setUsername);
+                    mapper.skip(PostResponse::setUserAvatarUrl);
                     mapper.skip(PostResponse::setTags);
                     mapper.skip(PostResponse::setMedias);
                 });
@@ -41,6 +42,7 @@ public class PostResponseMapper {
             if (post.getUser() != null) {
                 response.setUserId(post.getUser().getId());
                 response.setUsername(post.getUser().getUsername());
+                response.setUserAvatarUrl(post.getUser().getAvatarUrl());
             }
 
             // map post tags
