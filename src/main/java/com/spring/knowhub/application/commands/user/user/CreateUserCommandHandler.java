@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class CreateUserCommandHandler implements CommandHandler<CreateUserCommand, Long> {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository ;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -35,7 +35,8 @@ public class CreateUserCommandHandler implements CommandHandler<CreateUserComman
         if (userRepository.existsByEmail(command.getEmail())) {
             throw DuplicateUserException.emailAlreadyExists(command.getEmail());
         }
-        Role role = roleRepository.findById(command.getRoleId()).orElseThrow(() -> RoleNotFoundException.byId(command.getRoleId()));
+        Role role = roleRepository.findById(command.getRoleId())
+                .orElseThrow(() -> RoleNotFoundException.byId(command.getRoleId()));
         String hashedPassword = passwordEncoder.encode(command.getPassword());
         User user = new User(
                 null,
@@ -48,13 +49,10 @@ public class CreateUserCommandHandler implements CommandHandler<CreateUserComman
                 command.getBackgroundUrl(),
                 UserStatus.ACTIVE,
                 role,
-                0L,
-                0L,
-                0L,
                 command.getGender(),
-                command.getDateOfBirth()
-        );
-        User savedUser = userRepository.save(user).orElseThrow(() -> UserRepositoryException.saveFailed("Không thể lưu user mới"));
+                command.getDateOfBirth());
+        User savedUser = userRepository.save(user)
+                .orElseThrow(() -> UserRepositoryException.saveFailed("Không thể lưu user mới"));
         return savedUser.getId();
     }
 

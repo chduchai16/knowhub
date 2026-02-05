@@ -15,4 +15,6 @@ public interface PostRepository {
     Optional<Post> save(Post post);
 
     void deleteById(Long id);
+
+    long countByUserId(Long userId);
 }

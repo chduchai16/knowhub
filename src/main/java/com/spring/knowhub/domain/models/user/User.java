@@ -7,23 +7,21 @@ import com.spring.knowhub.domain.models.BaseModel;
 import java.time.LocalDate;
 
 public class User extends BaseModel {
-    private Long id ;
-    private String username ;
-    private String email ;
-    private String password ;
-    private String fullName ;
-    private String bio ;
-    private String avatarUrl ;
-    private String backgroundUrl ;
-    private UserStatus status ;
-    private Role role ;
-    private Long followerQuantity ;
-    private Long followingQuantity ;
-    private Long postQuantity ;
-    private Gender gender ;
-    private LocalDate dateOfBirth ;
+    private Long id;
+    private String username;
+    private String email;
+    private String password;
+    private String fullName;
+    private String bio;
+    private String avatarUrl;
+    private String backgroundUrl;
+    private UserStatus status;
+    private Role role;
+    private Gender gender;
+    private LocalDate dateOfBirth;
 
-    public User(Long id, String username, String email, String password, String fullName, String bio, String avatarUrl, String backgroundUrl, UserStatus status, Role role, Long followerQuantity, Long followingQuantity, Long postQuantity, Gender gender, LocalDate dateOfBirth) {
+    public User(Long id, String username, String email, String password, String fullName, String bio, String avatarUrl,
+            String backgroundUrl, UserStatus status, Role role, Gender gender, LocalDate dateOfBirth) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -34,9 +32,6 @@ public class User extends BaseModel {
         this.backgroundUrl = backgroundUrl;
         this.status = status;
         this.role = role;
-        this.followerQuantity = followerQuantity;
-        this.followingQuantity = followingQuantity;
-        this.postQuantity = postQuantity;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
     }
@@ -114,30 +109,6 @@ public class User extends BaseModel {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public Long getFollowerQuantity() {
-        return followerQuantity;
-    }
-
-    public void setFollowerQuantity(Long followerQuantity) {
-        this.followerQuantity = followerQuantity;
-    }
-
-    public Long getFollowingQuantity() {
-        return followingQuantity;
-    }
-
-    public void setFollowingQuantity(Long followingQuantity) {
-        this.followingQuantity = followingQuantity;
-    }
-
-    public Long getPostQuantity() {
-        return postQuantity;
-    }
-
-    public void setPostQuantity(Long postQuantity) {
-        this.postQuantity = postQuantity;
     }
 
     public Gender getGender() {

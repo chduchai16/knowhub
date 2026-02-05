@@ -18,4 +18,6 @@ public interface JpaPostRepository extends JpaRepository<PostEntity, Long>, JpaS
             "LEFT JOIN FETCH p.user " +
             "WHERE p.id = :id")
     Optional<PostEntity> findByIdWithTags(@Param("id") Long id);
+
+    long countByUserId(Long userId);
 }
