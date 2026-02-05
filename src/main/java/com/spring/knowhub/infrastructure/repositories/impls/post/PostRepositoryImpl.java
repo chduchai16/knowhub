@@ -104,7 +104,7 @@ public class PostRepositoryImpl implements PostRepository {
                     });
                 }
 
-                savedEntity = managedEntity; 
+                savedEntity = managedEntity;
             } else {
                 PostEntity postEntity = postMapper.fromDomainToEntity(post);
                 savedEntity = jpaPostRepository.save(postEntity);
@@ -132,5 +132,10 @@ public class PostRepositoryImpl implements PostRepository {
             log.error("Lỗi khi xóa bài viết với ID: {}. Chi tiết: {}", id, ex.getMessage());
             throw PostRepositoryException.deleteFailed(ex.getMessage());
         }
+    }
+
+    @Override
+    public long countByUserId(Long userId) {
+        return jpaPostRepository.countByUserId(userId);
     }
 }

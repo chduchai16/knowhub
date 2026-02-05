@@ -48,9 +48,4 @@ public class UserEntity extends BaseEntity {
     @JoinColumn(name = "role_id")
     private RoleEntity role;
 
-    private Long followerQuantity = 0L;
-    private Long followingQuantity = 0L;
-    private Long postQuantity = 0L;
-
 }
-

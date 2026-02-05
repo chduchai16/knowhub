@@ -7,6 +7,9 @@ import java.util.Optional;
 public interface UserFollowRepository {
     Optional<UserFollow> save(UserFollow userFollow);
     void deleteById(Long id);
-    Optional<UserFollow> findByFollowerIdAndFollowingId(Long followerId, Long followingId);
-
+    // đếm số lượng người mà userId đang follow
+    long countByFollowerId(Long followerId);
+    // đếm số lượng người đang follow userId
+    long countByUserId(Long userId);
+    Optional<UserFollow> findByUserNameAndFollowerName(String userName, String followerName);
 }
