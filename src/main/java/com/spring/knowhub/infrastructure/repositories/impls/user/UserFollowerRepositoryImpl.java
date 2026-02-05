@@ -81,4 +81,9 @@ public class UserFollowerRepositoryImpl implements UserFollowRepository {
             throw UserFollowRepositoryException.findFailed(e.getMessage());
         }
     }
+
+    @Override
+    public boolean existsByUserIdAndFollowerId(Long userId, Long followerId) {
+        return jpaUserFollowerRepository.existsByUserIdAndFollowerId(userId, followerId);
+    }
 }
