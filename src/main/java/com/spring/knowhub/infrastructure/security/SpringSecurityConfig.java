@@ -48,10 +48,12 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.PUT , "/api/roles/**").hasRole(admin)
                         .requestMatchers(HttpMethod.DELETE , "/api/roles/**").hasRole(admin)
                         // user
-                        .requestMatchers(HttpMethod.GET , "/api/users/**").hasAnyRole(admin, user)
-                        .requestMatchers(HttpMethod.POST , "/api/users/**").hasRole(admin)
-                        .requestMatchers(HttpMethod.PUT , "/api/users/**").hasAnyRole(admin, user)
-                        .requestMatchers(HttpMethod.DELETE , "/api/users/**").hasRole(admin)
+                        .requestMatchers(HttpMethod.POST , "/api/users/follow/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE , "/api/users/unfollow/**").authenticated()
+                        .requestMatchers(HttpMethod.GET , "/api/users/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST , "/api/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT , "/api/users/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.DELETE , "/api/users/**").hasRole("ADMIN")
 
                         // media
                         .requestMatchers(HttpMethod.POST , "/api/medias/**").authenticated()

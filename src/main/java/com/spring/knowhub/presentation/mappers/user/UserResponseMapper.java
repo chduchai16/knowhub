@@ -8,6 +8,9 @@ import com.spring.knowhub.presentation.exceptions.user.UserResponseMappingExcept
 import com.spring.knowhub.presentation.response.user.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.TypeMap;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.spring.knowhub.infrastructure.security.CustomUserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -42,6 +45,15 @@ public class UserResponseMapper {
             response.setFollowerQuantity(userFollowRepository.countByUserId(user.getId()));
             response.setFollowingQuantity(userFollowRepository.countByFollowerId(user.getId()));
             response.setPostQuantity(postRepository.countByUserId(user.getId()));
+
+            // check follow
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails userDetails) {
+                Long currentUserId = userDetails.getUserId();
+                response.setIsFollowing(userFollowRepository.existsByUserIdAndFollowerId(user.getId(), currentUserId));
+            } else {
+                response.setIsFollowing(false);
+            }
 
             return response;
         } catch (Exception exception) {

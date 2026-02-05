@@ -176,12 +176,12 @@ public class UserController {
                                 userId));
         }
 
-        @PostMapping("/{id}/follow")
+        @PostMapping("/follow/{id}")
         public ResponseEntity<ApiResponse<?>> followUser(
                         @PathVariable Long id,
                         @AuthenticationPrincipal CustomUserDetails userDetails
         ) {
-                log.info("POST /api/users/{}/follow - followerId={}", id, userDetails.getUserId());
+                log.info("POST /api/users/follow/{} - followerId={}", id, userDetails.getUserId());
 
                 CreateUserFollowCommand command = new CreateUserFollowCommand();
                 command.setUserId(id);
@@ -196,12 +196,12 @@ public class UserController {
                 ));
         }
 
-        @DeleteMapping("/{id}/follow")
+        @DeleteMapping("/unfollow/{id}")
         public ResponseEntity<ApiResponse<?>> unfollowUser(
                         @PathVariable Long id,
                         @AuthenticationPrincipal CustomUserDetails userDetails
         ) {
-                log.info("DELETE /api/users/{}/follow - followerId={}", id, userDetails.getUserId());
+                log.info("DELETE /api/users/follow/{} - followerId={}", id, userDetails.getUserId());
 
                 User targetUser = queryBus.execute(new GetUserByIdQuery(id));
 

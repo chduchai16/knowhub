@@ -12,21 +12,22 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResponse {
-    private Long id ;
-    private String username ;
-    private String email ;
-    private String fullName ;
-    private String bio ;
-    private String avatarUrl ;
-    private String backgroundUrl ;
-    private String status ;
-    private Long roleId ;
-    private String roleName ;
-    private Long followerQuantity ;
-    private Long followingQuantity ;
-    private Long postQuantity ;
+    private Long id;
+    private String username;
+    private String email;
+    private String fullName;
+    private String bio;
+    private String avatarUrl;
+    private String backgroundUrl;
+    private String status;
+    private Long roleId;
+    private String roleName;
+    private Long followerQuantity;
+    private Long followingQuantity;
+    private Long postQuantity;
+    private Boolean isFollowing;
     private Gender gender;
-    private LocalDate dateOfBirth ;
-    private LocalDateTime createdAt ;
-    private LocalDateTime updatedAt ;
+    private LocalDate dateOfBirth;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

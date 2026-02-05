@@ -12,4 +12,6 @@ public interface JpaUserFollowerRepository extends JpaRepository<UserFollowerEnt
     long countByUserId(Long userId);
 
     Optional<UserFollowerEntity> findByUserUsernameAndFollowerUsername(String username, String followerUsername);
+
+    boolean existsByUserIdAndFollowerId(Long userId, Long followerId);
 }
