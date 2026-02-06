@@ -66,10 +66,12 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.DELETE , "/api/tags/**").hasRole(admin)
 
                         // posts
-                        .requestMatchers(HttpMethod.GET , "/api/posts/**").authenticated()
-                        .requestMatchers(HttpMethod.POST , "/api/posts/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT , "/api/posts/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE , "/api/posts/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/posts/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/posts/*/likes").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/posts/likes/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/posts/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/posts/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/posts/**").authenticated()
 
                         .anyRequest().authenticated()
                 )

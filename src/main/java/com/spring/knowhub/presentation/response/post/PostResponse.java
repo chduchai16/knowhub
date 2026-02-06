@@ -15,13 +15,16 @@ import java.util.List;
 public class PostResponse {
     private Long id;
     private Long userId;
-    private String userAvatarUrl ;
+    private String userAvatarUrl;
     private String username;
     private String content;
     private Privacy privacy;
     private PostStatus status;
     private List<TagResponse> tags;
     private List<MediaResponse> medias;
+    private Long likeQuantity;
+    private Boolean isLiked;
+    private Long postLikeId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

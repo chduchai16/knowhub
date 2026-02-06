@@ -18,7 +18,10 @@ public class Post extends BaseModel {
     private Privacy privacy;
     private List<Media> media;
     private PostStatus status;
-    private Set<PostTag> postTags = new HashSet<>() ;
+    private Set<PostTag> postTags = new HashSet<>();
+    private Long likeQuantity;
+    private Boolean isLiked;
+    private Long postLikeId;
 
     public Post() {
     }
@@ -88,5 +91,29 @@ public class Post extends BaseModel {
 
     public void setPostTags(Set<PostTag> postTags) {
         this.postTags = postTags;
+    }
+
+    public Long getLikeQuantity() {
+        return likeQuantity;
+    }
+
+    public void setLikeQuantity(Long likeQuantity) {
+        this.likeQuantity = likeQuantity;
+    }
+
+    public Boolean getIsLiked() {
+        return isLiked;
+    }
+
+    public void setIsLiked(Boolean isLiked) {
+        this.isLiked = isLiked;
+    }
+
+    public Long getPostLikeId() {
+        return postLikeId;
+    }
+
+    public void setPostLikeId(Long postLikeId) {
+        this.postLikeId = postLikeId;
     }
 }
