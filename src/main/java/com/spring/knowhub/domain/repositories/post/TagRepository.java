@@ -9,10 +9,16 @@ import java.util.Optional;
 
 public interface TagRepository {
     Optional<Tag> findById(Long id);
+
     List<Tag> findByIds(List<Long> ids);
+
     Page<Tag> findTagsPaged(Pageable pageable);
+
     void deleteById(Long id);
-    Optional<Tag> save(Tag tag);
+
+    Tag save(Tag tag);
+
     Optional<Tag> findByName(String name);
+
     Boolean existsByName(String name);
 }

@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.Set;
 
 @Slf4j
 @Repository
@@ -26,14 +25,14 @@ public class RoleRepositoryImpl implements RoleRepository {
     private final RoleMapper roleMapper;
 
     @Override
-    public Optional<Role> save(Role role) {
+    public Role save(Role role) {
         log.info("Bắt đầu lưu vai trò: {}", role.getName());
         try {
             RoleEntity entity = roleMapper.fromDomainToEntity(role);
             RoleEntity savedEntity = jpaRoleRepository.save(entity);
             Role savedRole = roleMapper.fromEntityToDomain(savedEntity);
             log.info("Vai trò đã lưu thành công với ID: {}", savedRole.getId());
-            return Optional.of(savedRole);
+            return savedRole;
         } catch (RoleMapperException ex) {
             log.error("Lỗi mapping khi lưu vai trò: {}", role.getName(), ex);
             throw ex;
@@ -61,7 +60,7 @@ public class RoleRepositoryImpl implements RoleRepository {
             log.error("Lỗi khi xóa vai trò với ID: {}", id, ex);
             throw RoleRepositoryException.deleteFailed(ex.getMessage());
         }
-        return null ;
+        return null;
     }
 
     @Override
@@ -89,11 +88,11 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public Page<Role> findRolesPaged(Pageable pageable , String keyword) {
+    public Page<Role> findRolesPaged(Pageable pageable, String keyword) {
         log.info("Bắt đầu lấy danh sách vai trò phân trang: page={}, size={}",
                 pageable.getPageNumber(), pageable.getPageSize());
         try {
-            Page<RoleEntity> roleEntitiesPage = jpaRoleRepository.search(keyword , pageable );
+            Page<RoleEntity> roleEntitiesPage = jpaRoleRepository.search(keyword, pageable);
             Page<Role> rolesPage = roleEntitiesPage.map(roleMapper::fromEntityToDomain);
             log.info("Lấy danh sách vai trò thành công, tổng: {}", rolesPage.getTotalElements());
             return rolesPage;
@@ -115,7 +114,7 @@ public class RoleRepositoryImpl implements RoleRepository {
             return exists;
         } catch (Exception ex) {
             log.error("Lỗi khi kiểm tra tồn tại vai trò với tên: {}", name, ex);
-            throw RoleRepositoryException.findFailed( "Kiểm tra tồn tại lỗi: " + ex.getMessage());
+            throw RoleRepositoryException.findFailed("Kiểm tra tồn tại lỗi: " + ex.getMessage());
         }
     }
 
@@ -128,9 +127,8 @@ public class RoleRepositoryImpl implements RoleRepository {
             return exists;
         } catch (Exception ex) {
             log.error("Lỗi khi kiểm tra tồn tại vai trò với ID: {}", id, ex);
-            throw RoleRepositoryException.findFailed( "Kiểm tra tồn tại lỗi: " + ex.getMessage());
+            throw RoleRepositoryException.findFailed("Kiểm tra tồn tại lỗi: " + ex.getMessage());
         }
     }
 
 }
-

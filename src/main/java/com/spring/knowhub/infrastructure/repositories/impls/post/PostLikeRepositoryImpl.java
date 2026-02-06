@@ -25,7 +25,7 @@ public class PostLikeRepositoryImpl implements PostLikeRepository {
     private final PostLikeMapper postLikeMapper;
 
     @Override
-    public Optional<PostLike> save(PostLike postLike) {
+    public PostLike save(PostLike postLike) {
         log.info("Lưu hoặc cập nhật PostLike với userId: {} và postId: {}", postLike.getUser().getId(),
                 postLike.getPost().getId());
         try {
@@ -34,7 +34,7 @@ public class PostLikeRepositoryImpl implements PostLikeRepository {
             PostLike savedPostLike = postLikeMapper.fromEntityToDomain(savedEntity);
             log.info("Lưu PostLike thành công với userId: {} và postId: {}", postLike.getUser().getId(),
                     postLike.getPost().getId());
-            return Optional.of(savedPostLike);
+            return savedPostLike;
         } catch (PostLikeMappingException ex) {
             log.error("Lỗi ánh xạ PostLike với userId: {} và postId: {}. Chi tiết: {}", postLike.getUser().getId(),
                     postLike.getPost().getId(), ex.getMessage());

@@ -25,12 +25,12 @@ public class UserFollowerRepositoryImpl implements UserFollowRepository {
     private final UserFollowerMapper userFollowerMapper;
 
     @Override
-    public Optional<UserFollow> save(UserFollow userFollow) {
+    public UserFollow save(UserFollow userFollow) {
         try {
             UserFollowerEntity entity = userFollowerMapper.fromDomainToEntity(userFollow);
             UserFollowerEntity savedEntity = jpaUserFollowerRepository.save(entity);
             UserFollow savedUserFollow = userFollowerMapper.fromEntityToDomain(savedEntity);
-            return Optional.of(savedUserFollow);
+            return savedUserFollow;
         } catch (UserMapperException e) {
             log.error("Lỗi mapping khi lưu user follow: {}", userFollow, e);
             throw e;

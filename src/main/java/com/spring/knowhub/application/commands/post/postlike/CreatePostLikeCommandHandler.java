@@ -12,7 +12,6 @@ import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.post.PostLikeRepository;
 import com.spring.knowhub.domain.repositories.post.PostRepository;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
-import com.spring.knowhub.infrastructure.exceptions.post.postlike.PostLikeRepositoryException;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -45,8 +44,7 @@ public class CreatePostLikeCommandHandler implements CommandHandler<CreatePostLi
                 null,
                 existingPost,
                 existingUser);
-        PostLike savedPostLike = postLikeRepository.save(postLike)
-                .orElseThrow(() -> PostLikeRepositoryException.saveFailed("Lưu thất bại"));
+        PostLike savedPostLike = postLikeRepository.save(postLike);
         return savedPostLike.getId();
     }
 }

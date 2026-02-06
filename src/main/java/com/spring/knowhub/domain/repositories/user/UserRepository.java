@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
-    Optional<User> save(User user);
+    User save(User user);
     void deleteById(Long id);
     Optional<User> findById(Long id);
     Optional<User> findByUsername(String username);
     List<User> findByIds(List<Long> ids);
     Optional<User> findByEmail(String email);
-    Page<User> findUsersPaged(Specification<User> specification ,Pageable pageable);
+    Page<User> findUsersPaged(Specification<User> specification, Pageable pageable);
     Boolean existsByUsername(String username);
     Boolean existsByEmail(String email);
 }

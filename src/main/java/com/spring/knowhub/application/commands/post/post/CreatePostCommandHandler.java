@@ -16,7 +16,6 @@ import com.spring.knowhub.domain.repositories.media.MediaRepository;
 import com.spring.knowhub.domain.repositories.post.PostRepository;
 import com.spring.knowhub.domain.repositories.post.TagRepository;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
-import com.spring.knowhub.infrastructure.exceptions.post.post.PostRepositoryException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -59,23 +58,21 @@ public class CreatePostCommandHandler implements CommandHandler<CreatePostComman
                 Privacy.valueOf(command.getPrivacy().toUpperCase()),
                 PostStatus.valueOf(command.getStatus().toUpperCase()),
                 medias,
-                new HashSet<>()
-        );
+                new HashSet<>());
 
         tags.forEach(tag -> {
             PostTag postTag = new PostTag(null, post, tag);
             post.getPostTags().add(postTag);
         });
 
-        Post savedPost = postRepository.save(post)
-                .orElseThrow(() -> PostRepositoryException.saveFailed("Không thể tạo bài viết"));
+        Post savedPost = postRepository.save(post);
 
         medias.forEach(media -> {
             media.setOwnerType(OwnerType.POST);
             media.setOwnerId(savedPost.getId());
         });
 
-        mediaRepository.saveAll(medias) ;
+        mediaRepository.saveAll(medias);
         return savedPost.getId();
     }
 }

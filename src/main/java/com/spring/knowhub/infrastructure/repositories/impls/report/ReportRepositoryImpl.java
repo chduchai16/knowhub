@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public class ReportRepositoryImpl implements ReportRepository {
     @Override
-    public Optional<Report> save(Report report) {
-        return Optional.empty();
+    public Report save(Report report) {
+        return null;
     }
 
     @Override

@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface UserNotificationRepository {
     Optional<UserNotification> findById(Long id);
     Page<UserNotification> findUserNotificationsPaged(Pageable pageable);
-    Optional<UserNotification> save(UserNotification userNotification);
+    UserNotification save(UserNotification userNotification);
     void deleteById(Long id);
 }

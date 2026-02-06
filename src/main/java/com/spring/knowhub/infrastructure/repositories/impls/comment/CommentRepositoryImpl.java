@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public class CommentRepositoryImpl implements CommentRepository {
     @Override
-    public Optional<Comment> save(Comment comment) {
-        return Optional.empty();
+    public Comment save(Comment comment) {
+        return null;
     }
 
     @Override

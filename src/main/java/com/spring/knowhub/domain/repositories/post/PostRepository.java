@@ -9,12 +9,8 @@ import java.util.Optional;
 
 public interface PostRepository {
     Optional<Post> findById(Long id);
-
     Page<Post> findPostsPaged(Specification<Post> specification, Pageable pageable);
-
-    Optional<Post> save(Post post);
-
+    Post save(Post post);
     void deleteById(Long id);
-
     long countByUserId(Long userId);
 }

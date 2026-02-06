@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface PermissionRepository {
-    Optional<Permission> save(Permission permission);
+    Permission save(Permission permission);
     void deleteById(Long id);
     Optional<Permission> findById(Long id);
     Set<Permission> findByIds(Set<Long> ids);

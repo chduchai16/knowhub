@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public class NotificationRepositoryImpl implements NotificationRepository {
     @Override
-    public Optional<Notification> save(Notification notification) {
-        return Optional.empty();
+    public Notification save(Notification notification) {
+        return null;
     }
 
     @Override

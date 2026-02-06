@@ -22,23 +22,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PermissionRepositoryImpl implements PermissionRepository {
     private final JpaPermissionRepository jpaPermissionRepository;
-    private final PermissionMapper permissionMapper ;
+    private final PermissionMapper permissionMapper;
 
     @Override
-    public Optional<Permission> save(Permission permission) {
+    public Permission save(Permission permission) {
         log.info("Bắt đầu lưu quyền: {}", permission.getCode());
         try {
             PermissionEntity entity = permissionMapper.fromDomainToEntity(permission);
             PermissionEntity savedEntity = jpaPermissionRepository.save(entity);
             Permission savedPermission = permissionMapper.fromEntityToDomain(savedEntity);
             log.info("Quyền đã lưu thành công với ID: {}", savedPermission.getId());
-            return Optional.of(savedPermission);
-        }
-        catch (PermissionMapperException e) {
+            return savedPermission;
+        } catch (PermissionMapperException e) {
             log.error("Lỗi mapping khi lưu quyền: {}", permission.getCode(), e);
             throw e;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("Lỗi khi thực hiện lưu quyền: {}", permission.getCode(), e);
             throw PermissionRepositoryException.saveFailed("Lỗi khi lưu quyền: " + permission.getCode());
         }
@@ -48,18 +46,16 @@ public class PermissionRepositoryImpl implements PermissionRepository {
     public void deleteById(Long id) {
         log.info("Bắt đầu xóa quyền với ID: {}", id);
         try {
-            Optional <Permission> permissionOpt = findById(id);
+            Optional<Permission> permissionOpt = findById(id);
             if (permissionOpt.isEmpty()) {
                 throw PermissionNotFoundException.permissionNotFoundById(id);
             }
             jpaPermissionRepository.deleteById(id);
             log.info("Quyền với ID {} đã được xóa thành công", id);
-        }
-        catch (PermissionNotFoundException ex) {
+        } catch (PermissionNotFoundException ex) {
             log.error("Lỗi khi xóa quyền: {}", ex.getMessage(), ex);
             throw ex;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             log.error("Lỗi khi thực hiện xóa quyền với ID {}: {}", id, ex.getMessage(), ex);
             throw PermissionRepositoryException.deleteFailed("Lỗi khi xóa quyền với ID " + id);
         }
@@ -78,11 +74,10 @@ public class PermissionRepositoryImpl implements PermissionRepository {
         } catch (PermissionNotFoundException ex) {
             log.error("Lỗi khi tìm kiếm quyền: {}", ex.getMessage(), ex);
             throw ex;
-        }catch (PermissionMapperException ex) {
+        } catch (PermissionMapperException ex) {
             log.error("Lỗi khi map Permission Entity sang Permission Domain cho ID {}: {}", id, ex.getMessage(), ex);
             throw ex;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             log.error("Lỗi khi thực hiện tìm kiếm quyền với ID {}: {}", id, ex.getMessage(), ex);
             throw PermissionRepositoryException.findFailed("Lỗi khi tìm kiếm quyền với ID " + id);
         }
@@ -96,7 +91,7 @@ public class PermissionRepositoryImpl implements PermissionRepository {
             log.info("Tìm thấy {} quyền", entities.size());
             return entities.stream().map(permissionMapper::fromEntityToDomain).collect(Collectors.toSet());
         } catch (Exception e) {
-            log.error("Lỗi khi thực hiện tìm kiếm quyền với IDs {}: {}", ids,  e.getMessage(), e);
+            log.error("Lỗi khi thực hiện tìm kiếm quyền với IDs {}: {}", ids, e.getMessage(), e);
             throw PermissionRepositoryException.findFailed("Lỗi khi tìm kiếm quyền với IDs " + ids);
         }
     }
@@ -115,7 +110,8 @@ public class PermissionRepositoryImpl implements PermissionRepository {
             log.error("Lỗi khi tìm kiếm quyền: {}", ex.getMessage(), ex);
             throw ex;
         } catch (PermissionMapperException ex) {
-            log.error("Lỗi khi map Permission Entity sang Permission Domain cho code {}: {}", code, ex.getMessage(), ex);
+            log.error("Lỗi khi map Permission Entity sang Permission Domain cho code {}: {}", code, ex.getMessage(),
+                    ex);
             throw ex;
         } catch (Exception ex) {
             log.error("Lỗi khi thực hiện tìm kiếm quyền với code {}: {}", code, ex.getMessage(), ex);

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface BookmarkRepository {
-    Optional<Bookmark> save(Bookmark bookmark);
+    Bookmark save(Bookmark bookmark);
     void deleteById(Long id);
     Optional<Bookmark> findById(Long id);
     Page<Bookmark> findBookmarksPaged(Pageable pageable);

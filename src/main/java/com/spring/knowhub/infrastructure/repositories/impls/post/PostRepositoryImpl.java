@@ -74,7 +74,7 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Optional<Post> save(Post post) {
+    public Post save(Post post) {
         log.info("Lưu bài viết mới hoặc cập nhật bài viết với ID: {}", post.getId());
         try {
             PostEntity savedEntity;
@@ -112,7 +112,7 @@ public class PostRepositoryImpl implements PostRepository {
 
             Post savedPost = postMapper.fromEntityToDomain(savedEntity);
             log.info("Lưu bài viết thành công với ID: {}", savedPost.getId());
-            return Optional.of(savedPost);
+            return savedPost;
         } catch (PostMapperException ex) {
             log.error("Lỗi ánh xạ bài viết khi lưu. Chi tiết: {}", ex.getMessage());
             throw ex;

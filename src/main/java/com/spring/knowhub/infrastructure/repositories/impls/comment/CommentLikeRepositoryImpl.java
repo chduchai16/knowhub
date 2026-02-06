@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public class CommentLikeRepositoryImpl implements CommentLikeRepository {
     @Override
-    public Optional<CommentLike> save(CommentLike commentLike) {
-        return Optional.empty();
+    public CommentLike save(CommentLike commentLike) {
+        return null;
     }
 
     @Override
