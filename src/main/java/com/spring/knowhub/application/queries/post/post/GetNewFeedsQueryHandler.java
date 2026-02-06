@@ -4,44 +4,78 @@ import com.spring.knowhub.application.buses.QueryHandler;
 import com.spring.knowhub.domain.enums.media.OwnerType;
 import com.spring.knowhub.domain.models.media.Media;
 import com.spring.knowhub.domain.models.post.Post;
+import com.spring.knowhub.domain.models.post.PostLike;
 import com.spring.knowhub.domain.repositories.media.MediaRepository;
 import com.spring.knowhub.domain.repositories.post.PostRepository;
+import com.spring.knowhub.domain.repositories.post.PostLikeRepository;
 import com.spring.knowhub.domain.specifications.AlwaysTrueSpecification;
 import com.spring.knowhub.domain.specifications.Specification;
 import com.spring.knowhub.domain.specifications.media.MediaHasOwnerIdSpec;
 import com.spring.knowhub.domain.specifications.media.MediaHasOwnerTypeSpec;
 import com.spring.knowhub.domain.specifications.post.PostSpecification;
+import com.spring.knowhub.infrastructure.security.CustomUserDetails;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
-public class GetNewFeedsQueryHandler implements QueryHandler<GetNewFeedsQuery , Page<Post>> {
+public class GetNewFeedsQueryHandler implements QueryHandler<GetNewFeedsQuery, Page<Post>> {
 
-    private final PostRepository postRepository ;
-    private final MediaRepository mediaRepository ;
+    private final PostRepository postRepository;
+    private final MediaRepository mediaRepository;
+    private final PostLikeRepository postLikeRepository;
 
     @Override
     public boolean supports(Object query) {
-        return query instanceof GetNewFeedsQuery ;
+        return query instanceof GetNewFeedsQuery;
     }
 
     @Override
     public Page<Post> handle(GetNewFeedsQuery query) {
         Specification<Post> specification = new AlwaysTrueSpecification<>();
-        specification = specification.and(PostSpecification.hasStatus("PUBLISHED")) ;
-        Page<Post> pagedPost = postRepository.findPostsPaged(specification , query.getPageable());
+        specification = specification.and(PostSpecification.hasStatus("PUBLISHED"));
+        Page<Post> pagedPost = postRepository.findPostsPaged(specification, query.getPageable());
+
+        // Get current user for follow/like status check
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long currentUserId = (authentication != null
+                && authentication.getPrincipal() instanceof CustomUserDetails userDetails)
+                        ? userDetails.getUserId()
+                        : null;
 
         pagedPost.getContent().forEach(post -> {
+            // Enrich with media
             Specification<Media> mediaSpecification = new AlwaysTrueSpecification<>();
-            mediaSpecification = mediaSpecification.and(new MediaHasOwnerIdSpec(post.getId())) ;
-            mediaSpecification = mediaSpecification.and(new MediaHasOwnerTypeSpec(OwnerType.POST)) ;
-            List<Media> medias = mediaRepository.findAllByOwnerIdAndOwnerType(mediaSpecification) ;
+            mediaSpecification = mediaSpecification.and(new MediaHasOwnerIdSpec(post.getId()));
+            mediaSpecification = mediaSpecification.and(new MediaHasOwnerTypeSpec(OwnerType.POST));
+            List<Media> medias = mediaRepository.findAllByOwnerIdAndOwnerType(mediaSpecification);
             post.setMedia(medias);
+
+            // Enrich with likes
+            enrichPostWithLikes(post, currentUserId);
         });
-        return pagedPost ;
+        return pagedPost;
+    }
+
+    private void enrichPostWithLikes(Post post, Long currentUserId) {
+        post.setLikeQuantity(postLikeRepository.countByPostId(post.getId()));
+
+        if (currentUserId != null) {
+            Optional<PostLike> postLike = postLikeRepository.findByPostIdAndUserId(post.getId(), currentUserId);
+            if (postLike.isPresent()) {
+                post.setIsLiked(true);
+                post.setPostLikeId(postLike.get().getId());
+            } else {
+                post.setIsLiked(false);
+            }
+        } else {
+            post.setIsLiked(false);
+        }
     }
 }

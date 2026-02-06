@@ -15,6 +15,10 @@ public class User extends BaseModel {
     private String bio;
     private String avatarUrl;
     private String backgroundUrl;
+    private Long followerQuantity;
+    private Long followingQuantity;
+    private Long postQuantity;
+    private Boolean isFollowing;
     private UserStatus status;
     private Role role;
     private Gender gender;
@@ -133,5 +137,37 @@ public class User extends BaseModel {
 
     public void setBackgroundUrl(String backgroundUrl) {
         this.backgroundUrl = backgroundUrl;
+    }
+
+    public Long getFollowerQuantity() {
+        return followerQuantity;
+    }
+
+    public void setFollowerQuantity(Long followerQuantity) {
+        this.followerQuantity = followerQuantity;
+    }
+
+    public Long getFollowingQuantity() {
+        return followingQuantity;
+    }
+
+    public void setFollowingQuantity(Long followingQuantity) {
+        this.followingQuantity = followingQuantity;
+    }
+
+    public Long getPostQuantity() {
+        return postQuantity;
+    }
+
+    public void setPostQuantity(Long postQuantity) {
+        this.postQuantity = postQuantity;
+    }
+
+    public Boolean getIsFollowing() {
+        return isFollowing;
+    }
+
+    public void setIsFollowing(Boolean isFollowing) {
+        this.isFollowing = isFollowing;
     }
 }
