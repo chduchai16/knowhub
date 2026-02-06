@@ -3,7 +3,6 @@ package com.spring.knowhub.application.commands.user.permission;
 import com.spring.knowhub.application.validators.user.permission.CreatePermissionValidator;
 import com.spring.knowhub.domain.exceptions.user.permission.DuplicatePermissionException;
 import com.spring.knowhub.domain.models.user.Permission;
-import com.spring.knowhub.infrastructure.exceptions.user.user.UserRepositoryException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -27,11 +26,7 @@ public class CreatePermissionCommandHandler implements CommandHandler<CreatePerm
         }
         Permission permission = new Permission();
         permission.setCode(command.getCode());
-        return permissionRepository.save(permission)
-                .orElseThrow(() ->
-                        UserRepositoryException.saveFailed("Không thể tạo quyền mới")
-                )
-                .getId();
+        return permissionRepository.save(permission).getId();
     }
 
     @Override

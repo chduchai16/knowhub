@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface CommentRepository {
-    Optional<Comment> save(Comment comment);
+    Comment save(Comment comment);
     void deleteById(Long id);
     Optional<Comment> findById(Long id);
     Page<Comment> findCommentsPaged(Pageable pageable);

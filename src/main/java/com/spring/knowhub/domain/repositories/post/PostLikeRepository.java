@@ -6,13 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostLikeRepository {
-    Optional<PostLike> save(PostLike postLike);
-
+    PostLike save(PostLike postLike);
     void deleteById(Long id);
-
     List<PostLike> findPostLikesByPostId(Long postId);
-
     Long countByPostId(Long postId);
-
     Optional<PostLike> findByPostIdAndUserId(Long postId, Long userId);
 }

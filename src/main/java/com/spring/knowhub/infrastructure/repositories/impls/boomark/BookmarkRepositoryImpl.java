@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public class BookmarkRepositoryImpl implements BookmarkRepository {
     @Override
-    public Optional<Bookmark> save(Bookmark bookmark) {
-        return Optional.empty();
+    public Bookmark save(Bookmark bookmark) {
+        return null;
     }
 
     @Override

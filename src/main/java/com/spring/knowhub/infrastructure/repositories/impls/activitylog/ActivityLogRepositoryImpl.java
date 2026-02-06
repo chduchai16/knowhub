@@ -16,15 +16,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ActivityLogRepositoryImpl implements ActivityLogRepository {
 
-    private final JpaActivityLogRepository jpaActivityLogRepository ;
-    private final ActivityLogMapper activityLogMapper ;
+    private final JpaActivityLogRepository jpaActivityLogRepository;
+    private final ActivityLogMapper activityLogMapper;
 
     @Override
-    public Optional<ActivityLog> save(ActivityLog activityLog) {
-        ActivityLogEntity activityLogEntity = activityLogMapper.fromDomainToEntity(activityLog) ;
-        ActivityLogEntity savedEntity = jpaActivityLogRepository.save(activityLogEntity) ;
-        ActivityLog savedActivityLog = activityLogMapper.fromEntityToDomain(savedEntity) ;
-        return Optional.ofNullable(savedActivityLog) ;
+    public ActivityLog save(ActivityLog activityLog) {
+        ActivityLogEntity activityLogEntity = activityLogMapper.fromDomainToEntity(activityLog);
+        ActivityLogEntity savedEntity = jpaActivityLogRepository.save(activityLogEntity);
+        return activityLogMapper.fromEntityToDomain(savedEntity);
     }
 
     @Override

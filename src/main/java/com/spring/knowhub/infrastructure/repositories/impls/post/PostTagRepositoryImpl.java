@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public class PostTagRepositoryImpl implements PostTagRepository {
     @Override
-    public Optional<PostTag> save(PostTag postTag) {
-        return Optional.empty();
+    public PostTag save(PostTag postTag) {
+        return null;
     }
 
     @Override

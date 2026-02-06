@@ -19,8 +19,8 @@ public class UserNotificationRepositoryImpl implements UserNotificationRepositor
     }
 
     @Override
-    public Optional<UserNotification> save(UserNotification userNotification) {
-        return Optional.empty();
+    public UserNotification save(UserNotification userNotification) {
+        return null;
     }
 
     @Override

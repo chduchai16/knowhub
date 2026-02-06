@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface ActivityLogRepository {
-    Optional<ActivityLog> save(ActivityLog activityLog);
+    ActivityLog save(ActivityLog activityLog);
     void deleteById(Long id);
     Optional<ActivityLog> findById(Long id);
     Page<ActivityLog> findActivityLogsPaged(Pageable pageable);

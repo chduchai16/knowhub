@@ -5,7 +5,6 @@ import com.spring.knowhub.application.validators.user.role.UpdateRoleValidator;
 import com.spring.knowhub.domain.models.user.Role;
 import com.spring.knowhub.domain.repositories.user.PermissionRepository;
 import com.spring.knowhub.domain.repositories.user.RoleRepository;
-import com.spring.knowhub.infrastructure.exceptions.user.role.RoleRepositoryException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,10 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Transactional
-public class UpdateRoleCommandHandler implements CommandHandler<UpdateRoleCommand , Long> {
+public class UpdateRoleCommandHandler implements CommandHandler<UpdateRoleCommand, Long> {
 
-    private final RoleRepository roleRepository ;
-    private final PermissionRepository permissionRepository ;
+    private final RoleRepository roleRepository;
+    private final PermissionRepository permissionRepository;
 
     @Override
     public boolean supports(Object command) {
@@ -25,12 +24,11 @@ public class UpdateRoleCommandHandler implements CommandHandler<UpdateRoleComman
 
     @Override
     public Long handle(UpdateRoleCommand command) {
-        UpdateRoleValidator.validate(command) ;
+        UpdateRoleValidator.validate(command);
         Role role = new Role(
                 command.getRoleId(),
                 command.getName(),
-                permissionRepository.findByIds(command.getPermissionIds())
-        );
-        return roleRepository.save(role).orElseThrow(() -> RoleRepositoryException.saveFailed("Không thể cập nhật vai trò")).getId() ;
+                permissionRepository.findByIds(command.getPermissionIds()));
+        return roleRepository.save(role).getId();
     }
 }

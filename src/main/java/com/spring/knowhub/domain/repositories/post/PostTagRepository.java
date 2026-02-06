@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostTagRepository {
-    Optional<PostTag> save(PostTag postTag);
+    PostTag save(PostTag postTag);
+
     void deleteById(Long id);
+
     Optional<PostTag> findById(Long id);
+
     List<PostTag> findTagsByPostId(Long postId);
 }

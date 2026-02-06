@@ -1,6 +1,5 @@
 package com.spring.knowhub.infrastructure.repositories.impls.post;
 
-import com.spring.knowhub.domain.exceptions.post.tag.TagNotFoundException;
 import com.spring.knowhub.domain.models.post.Tag;
 import com.spring.knowhub.domain.repositories.post.TagRepository;
 import com.spring.knowhub.infrastructure.entities.post.TagEntity;
@@ -22,8 +21,8 @@ import java.util.Optional;
 @Slf4j
 public class TagRepositoryImpl implements TagRepository {
 
-    private final JpaTagRepository jpaTagRepository ;
-    private final TagMapper tagMapper ;
+    private final JpaTagRepository jpaTagRepository;
+    private final TagMapper tagMapper;
 
     @Override
     public Optional<Tag> findById(Long id) {
@@ -54,29 +53,30 @@ public class TagRepositoryImpl implements TagRepository {
                     .map(tagMapper::fromEntityToDomain)
                     .toList();
             log.info("Tìm thấy {} Tags với IDs", tags.size());
-            return tags ;
-        } catch(TagMapperException ex) {
+            return tags;
+        } catch (TagMapperException ex) {
             log.error("Lỗi mapping khi tìm Tags với IDs: {}", ids, ex);
-            throw ex ;
+            throw ex;
         } catch (Exception ex) {
             log.error("Lỗi khi tìm Tags với IDs: {}", ids, ex);
-            throw TagRepositoryException.findFailed(ex.getMessage()) ;
+            throw TagRepositoryException.findFailed(ex.getMessage());
         }
     }
 
     @Override
     public Page<Tag> findTagsPaged(Pageable pageable) {
-        log.info("Tìm kiếm Tag phân trang: trang số {}, kích thước trang {}", pageable.getPageNumber(), pageable.getPageSize());
+        log.info("Tìm kiếm Tag phân trang: trang số {}, kích thước trang {}", pageable.getPageNumber(),
+                pageable.getPageSize());
         try {
             Page<Tag> tagPage = jpaTagRepository.findAll(pageable).map(tagMapper::fromEntityToDomain);
             log.info("Tìm thấy {} Tag phân trang", tagPage.getNumberOfElements());
-            return tagPage ;
-        } catch(TagMapperException ex) {
+            return tagPage;
+        } catch (TagMapperException ex) {
             log.error("Lỗi mapping khi tìm Tag phân trang", ex);
-            throw ex ;
-        }catch (Exception ex) {
+            throw ex;
+        } catch (Exception ex) {
             log.error("Lỗi khi tìm Tag phân trang", ex);
-            throw TagRepositoryException.findFailed(ex.getMessage()) ;
+            throw TagRepositoryException.findFailed(ex.getMessage());
         }
     }
 
@@ -87,25 +87,25 @@ public class TagRepositoryImpl implements TagRepository {
             jpaTagRepository.deleteById(id);
         } catch (Exception ex) {
             log.error("Lỗi khi xóa Tag với ID: {}", id, ex);
-            throw TagRepositoryException.deleteFailed(ex.getMessage()) ;
+            throw TagRepositoryException.deleteFailed(ex.getMessage());
         }
     }
 
     @Override
-    public Optional<Tag> save(Tag tag) {
+    public Tag save(Tag tag) {
         log.info("Lưu Tag: {}", tag);
         try {
-            TagEntity tagEntity = tagMapper.fromDomainToEntity(tag) ;
-            TagEntity savedEntity = jpaTagRepository.save(tagEntity) ;
-            Tag savedTag = tagMapper.fromEntityToDomain(savedEntity) ;
+            TagEntity tagEntity = tagMapper.fromDomainToEntity(tag);
+            TagEntity savedEntity = jpaTagRepository.save(tagEntity);
+            Tag savedTag = tagMapper.fromEntityToDomain(savedEntity);
             log.info("Lưu Tag thành công: {}", savedTag);
-            return Optional.of(savedTag) ;
-        } catch(TagMapperException ex) {
+            return savedTag;
+        } catch (TagMapperException ex) {
             log.error("Lỗi mapping khi lưu Tag: {}", tag, ex);
-            throw ex ;
-        }catch (Exception ex) {
+            throw ex;
+        } catch (Exception ex) {
             log.error("Lỗi khi lưu Tag: {}", tag, ex);
-            throw TagRepositoryException.saveFailed(ex.getMessage()) ;
+            throw TagRepositoryException.saveFailed(ex.getMessage());
         }
     }
 
@@ -123,10 +123,10 @@ public class TagRepositoryImpl implements TagRepository {
             return tagOptional;
         } catch (TagMapperException ex) {
             log.error("Lỗi mapping khi tìm Tag với tên: {}", name, ex);
-            throw ex ;
-        }catch (Exception ex) {
+            throw ex;
+        } catch (Exception ex) {
             log.error("Lỗi khi tìm Tag với tên: {}", name, ex);
-            throw TagRepositoryException.findFailed(ex.getMessage()) ;
+            throw TagRepositoryException.findFailed(ex.getMessage());
         }
     }
 
@@ -136,10 +136,10 @@ public class TagRepositoryImpl implements TagRepository {
         try {
             Boolean exists = jpaTagRepository.existsByName(name);
             log.info("Tag với tên '{}' tồn tại: {}", name, exists);
-            return exists ;
+            return exists;
         } catch (Exception ex) {
             log.error("Lỗi khi kiểm tra tồn tại Tag với tên: {}", name, ex);
-            throw TagRepositoryException.findFailed(ex.getMessage()) ;
+            throw TagRepositoryException.findFailed(ex.getMessage());
         }
     }
 }

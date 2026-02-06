@@ -6,7 +6,6 @@ import com.spring.knowhub.domain.exceptions.post.tag.DuplicateTagException;
 import com.spring.knowhub.domain.exceptions.post.tag.TagNotFoundException;
 import com.spring.knowhub.domain.models.post.Tag;
 import com.spring.knowhub.domain.repositories.post.TagRepository;
-import com.spring.knowhub.infrastructure.exceptions.post.tag.TagRepositoryException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,9 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Transactional
-public class UpdateTagCommandHandler implements CommandHandler<UpdateTagCommand , Long> {
+public class UpdateTagCommandHandler implements CommandHandler<UpdateTagCommand, Long> {
 
-    private final TagRepository tagRepository ;
+    private final TagRepository tagRepository;
 
     @Override
     public boolean supports(Object command) {
@@ -36,10 +35,9 @@ public class UpdateTagCommandHandler implements CommandHandler<UpdateTagCommand 
 
         Tag updateTag = new Tag(
                 existingTag.getId(),
-                command.getName()
-        ) ;
+                command.getName());
 
-        Tag savedTag = tagRepository.save(updateTag).orElseThrow(() -> TagRepositoryException.saveFailed("Cập nhật Tag thất bại"));
+        Tag savedTag = tagRepository.save(updateTag);
         return savedTag.getId();
     }
 }

@@ -17,16 +17,13 @@ import com.spring.knowhub.domain.repositories.media.MediaRepository;
 import com.spring.knowhub.domain.repositories.post.PostRepository;
 import com.spring.knowhub.domain.repositories.post.TagRepository;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
-import com.spring.knowhub.infrastructure.exceptions.post.post.PostRepositoryException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -71,8 +68,7 @@ public class UpdatePostCommandHandler implements CommandHandler<UpdatePostComman
         existingPost.setStatus(PostStatus.valueOf(command.getStatus().toUpperCase()));
         existingPost.setUser(existingUser);
         existingPost.setPostTags(newPostTags);
-        Post savedPost = postRepository.save(existingPost)
-                .orElseThrow(() -> PostRepositoryException.saveFailed("Không thể cập nhật bài viết"));
+        Post savedPost = postRepository.save(existingPost);
         medias.forEach(media -> {
             media.setOwnerId(savedPost.getId());
             media.setOwnerType(OwnerType.POST);

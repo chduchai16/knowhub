@@ -29,20 +29,21 @@ public class UserRepositoryImpl implements UserRepository {
     private final UserMapper userMapper;
 
     @Override
-    public Optional<User> save(User user) {
+    public User save(User user) {
         log.info("Đang lưu user: {}", user.getUsername());
         try {
             UserEntity entity = userMapper.fromDomainToEntity(user);
             UserEntity savedEntity = userJpaRepository.save(entity);
             User savedUser = userMapper.fromEntityToDomain(savedEntity);
             log.info("User đã lưu thành công với ID: {}", savedUser.getId());
-            return Optional.of(savedUser);
-        } catch(DuplicateUserException ex) {
+            return savedUser;
+        } catch (DuplicateUserException ex) {
             log.error("Lỗi trùng lặp khi lưu user: {}", user.getUsername(), ex);
-            throw ex ;
+            throw ex;
         } catch (DataIntegrityViolationException ex) {
             log.error("Vi phạm ràng buộc database khi lưu user: {}", user.getUsername(), ex);
-            throw new UserRepositoryException("Vi phạm ràng buộc database: " + ex.getMostSpecificCause().getMessage(), ex);
+            throw new UserRepositoryException("Vi phạm ràng buộc database: " + ex.getMostSpecificCause().getMessage(),
+                    ex);
         } catch (UserMapperException ex) {
             log.error("Lỗi mapping khi lưu user: {}", user.getUsername(), ex);
             throw ex;
@@ -75,8 +76,7 @@ public class UserRepositoryImpl implements UserRepository {
             throw ex;
         } catch (Exception ex) {
             log.error("Lỗi khi thực hiện tìm kiếm user theo ID: {}", id, ex);
-            throw UserRepositoryException.findFailed("Lỗi khi tìm user theo ID: " + id
-            );
+            throw UserRepositoryException.findFailed("Lỗi khi tìm user theo ID: " + id);
         }
     }
 
@@ -98,14 +98,14 @@ public class UserRepositoryImpl implements UserRepository {
     public List<User> findByIds(List<Long> ids) {
         log.debug("Tìm user theo danh sách ID: {}", ids);
         try {
-            List<UserEntity> entities = userJpaRepository.findAllById(ids) ;
-            List<User> users = entities.stream().map(userMapper :: fromEntityToDomain).toList() ;
+            List<UserEntity> entities = userJpaRepository.findAllById(ids);
+            List<User> users = entities.stream().map(userMapper::fromEntityToDomain).toList();
             log.info("Tìm thấy {} user theo danh sách ID", users.size());
-            return users ;
+            return users;
         } catch (UserMapperException ex) {
             log.error("Lỗi mapping khi tìm user theo danh sách ID: {}", ids, ex);
             throw ex;
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             log.error("Lỗi khi thực hiện tìm kiếm user theo danh sách ID: {}", ids, ex);
             throw UserRepositoryException.findFailed("Lỗi khi tìm user theo danh sách ID: " + ids);
         }
@@ -127,15 +127,15 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Page<User> findUsersPaged(Specification<User> specification ,Pageable pageable) {
+    public Page<User> findUsersPaged(Specification<User> specification, Pageable pageable) {
         log.info(
                 "Lấy danh sách user phân trang: page={}, size={}",
                 pageable.getPageNumber(),
-                pageable.getPageSize()
-        );
+                pageable.getPageSize());
         try {
-            org.springframework.data.jpa.domain.Specification<UserEntity> jpaSpec = UserJpaSpecificationAdapter.toJpaSpecification(specification) ;
-            Page<UserEntity> entityPage = userJpaRepository.findAll(jpaSpec , pageable);
+            org.springframework.data.jpa.domain.Specification<UserEntity> jpaSpec = UserJpaSpecificationAdapter
+                    .toJpaSpecification(specification);
+            Page<UserEntity> entityPage = userJpaRepository.findAll(jpaSpec, pageable);
             return entityPage.map(userMapper::fromEntityToDomain);
         } catch (UserMapperException ex) {
             log.error("Lỗi mapping khi lấy danh sách user phân trang", ex);

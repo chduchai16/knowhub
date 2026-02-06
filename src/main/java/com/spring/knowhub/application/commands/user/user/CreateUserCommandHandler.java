@@ -13,8 +13,6 @@ import com.spring.knowhub.domain.enums.user.UserStatus;
 import com.spring.knowhub.domain.exceptions.user.user.DuplicateUserException;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
-import com.spring.knowhub.infrastructure.exceptions.user.user.UserRepositoryException;
-
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -51,8 +49,7 @@ public class CreateUserCommandHandler implements CommandHandler<CreateUserComman
                 role,
                 command.getGender(),
                 command.getDateOfBirth());
-        User savedUser = userRepository.save(user)
-                .orElseThrow(() -> UserRepositoryException.saveFailed("Không thể lưu user mới"));
+        User savedUser = userRepository.save(user);
         return savedUser.getId();
     }
 
