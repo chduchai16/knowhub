@@ -1,17 +1,19 @@
 package com.spring.knowhub.domain.models.comment;
 
+import com.spring.knowhub.domain.models.BaseModel;
 import com.spring.knowhub.domain.models.post.Post;
 import com.spring.knowhub.domain.models.user.User;
 
-public class Comment {
+public class Comment extends BaseModel {
 
     private Long id;
-    private Post post ;
-    private User user ;
+    private Post post;
+    private User user;
     private Comment parent;
-    private String content ;
+    private String content;
 
-    public Comment() {}
+    public Comment() {
+    }
 
     public Comment(Long id, Post post, User user, Comment parent, String content) {
         this.id = id;
