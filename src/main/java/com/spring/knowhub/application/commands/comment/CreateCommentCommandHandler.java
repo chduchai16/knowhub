@@ -5,6 +5,7 @@ import com.spring.knowhub.domain.models.comment.Comment;
 import com.spring.knowhub.domain.models.post.Post;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.comment.CommentRepository;
+import com.spring.knowhub.domain.repositories.post.PostRepository;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ public class CreateCommentCommandHandler implements CommandHandler<CreateComment
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
     @Override
     public boolean supports(Object command) {
@@ -25,8 +27,8 @@ public class CreateCommentCommandHandler implements CommandHandler<CreateComment
     public Comment handle(CreateCommentCommand command) {
         Comment comment = new Comment();
 
-        Post post = new Post();
-        post.setId(command.getPostId());
+        Post post = postRepository.findById(command.getPostId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết"));
         comment.setPost(post);
 
         User user = userRepository.findById(command.getUserId())
@@ -34,8 +36,8 @@ public class CreateCommentCommandHandler implements CommandHandler<CreateComment
         comment.setUser(user);
 
         if (command.getParentId() != null) {
-            Comment parent = new Comment();
-            parent.setId(command.getParentId());
+            Comment parent = commentRepository.findById(command.getParentId())
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy bình luận cha"));
             comment.setParent(parent);
         }
 

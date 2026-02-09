@@ -1,20 +1,26 @@
 package com.spring.knowhub.domain.models.notification;
 
+import com.spring.knowhub.domain.models.BaseModel;
 import com.spring.knowhub.domain.models.user.User;
 
-public class UserNotification {
+import java.time.LocalDateTime;
+
+public class UserNotification extends BaseModel {
     private Long id;
-    private User user ;
-    private Notification notification ;
-    private Boolean isRead ;
+    private User user;
+    private Notification notification;
+    private Boolean isRead;
+    private LocalDateTime readAt;
 
-    public UserNotification() {}
+    public UserNotification() {
+    }
 
-    public UserNotification(Long id, User user, Notification notification, Boolean isRead) {
+    public UserNotification(Long id, User user, Notification notification, Boolean isRead, LocalDateTime readAt) {
         this.id = id;
         this.user = user;
         this.notification = notification;
         this.isRead = isRead;
+        this.readAt = readAt;
     }
 
     public Long getId() {
@@ -41,11 +47,19 @@ public class UserNotification {
         this.notification = notification;
     }
 
-    public Boolean getRead() {
+    public Boolean getIsRead() {
         return isRead;
     }
 
-    public void setRead(Boolean read) {
-        isRead = read;
+    public void setIsRead(Boolean isRead) {
+        this.isRead = isRead;
+    }
+
+    public LocalDateTime getReadAt() {
+        return readAt;
+    }
+
+    public void setReadAt(LocalDateTime readAt) {
+        this.readAt = readAt;
     }
 }

@@ -6,12 +6,13 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.LocalDateTime;
+
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "user_notifications")
 @Data
 public class UserNotificationEntity extends BaseEntity {
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -24,5 +25,6 @@ public class UserNotificationEntity extends BaseEntity {
     @Column(nullable = false)
     private Boolean isRead = false;
 
+    @Column(name = "read_at")
+    private LocalDateTime readAt;
 }
-
