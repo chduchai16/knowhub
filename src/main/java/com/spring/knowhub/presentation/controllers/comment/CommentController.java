@@ -48,7 +48,9 @@ public class CommentController {
                                 new ApiResponse<>(
                                                 "SUCCESS",
                                                 "Tạo bình luận thành công",
-                                                commentResponseMapper.fromCommentToCommentResponse(comment)));
+                                                commentResponseMapper.fromCommentToCommentResponse(comment)
+                        )
+                );
         }
 
         @DeleteMapping("/{id}")
@@ -95,7 +97,7 @@ public class CommentController {
                 return ResponseEntity.ok(
                                 new ApiResponse<>(
                                                 "SUCCESS",
-                                                "Lấy danh sách bình luận thành công cho post id = " + postId,
+                                                "Lấy danh sách bình luận thành công",
                                                 paginatedResponse));
         }
 }

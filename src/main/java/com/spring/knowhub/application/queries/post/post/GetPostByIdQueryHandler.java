@@ -7,6 +7,7 @@ import com.spring.knowhub.domain.exceptions.post.post.PostNotFoundException;
 import com.spring.knowhub.domain.models.media.Media;
 import com.spring.knowhub.domain.models.post.Post;
 import com.spring.knowhub.domain.models.post.PostLike;
+import com.spring.knowhub.domain.repositories.comment.CommentRepository;
 import com.spring.knowhub.domain.repositories.media.MediaRepository;
 import com.spring.knowhub.domain.repositories.post.PostRepository;
 import com.spring.knowhub.domain.repositories.post.PostLikeRepository;
@@ -30,6 +31,7 @@ public class GetPostByIdQueryHandler implements QueryHandler<GetPostByIdQuery, P
     private final PostRepository postRepository;
     private final MediaRepository mediaRepository;
     private final PostLikeRepository postLikeRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     public boolean supports(Object query) {
@@ -47,10 +49,9 @@ public class GetPostByIdQueryHandler implements QueryHandler<GetPostByIdQuery, P
                 .orElseThrow(() -> PostNotFoundException.withId(query.getId()));
         post.setMedia(medias);
 
-        // Enrich with like count
         post.setLikeQuantity(postLikeRepository.countByPostId(post.getId()));
+        post.setCommentQuantity(commentRepository.countByPostId(post.getId()));
 
-        // Check if current user liked it
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails userDetails) {
             Optional<PostLike> postLike = postLikeRepository.findByPostIdAndUserId(post.getId(),

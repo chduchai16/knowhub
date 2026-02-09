@@ -22,13 +22,12 @@ public class CommentMapper {
     private TypeMap<Comment, CommentEntity> fromDomainToEntityTypeMap;
     private TypeMap<CommentEntity, Comment> fromEntityToDomainTypeMap;
 
-
     public Comment fromEntityToDomain(CommentEntity entity) {
-        if (entity == null) return null;
+        if (entity == null)
+            return null;
 
         if (fromEntityToDomainTypeMap == null) {
-            fromEntityToDomainTypeMap =
-                    modelMapper.createTypeMap(CommentEntity.class, Comment.class);
+            fromEntityToDomainTypeMap = modelMapper.createTypeMap(CommentEntity.class, Comment.class);
 
             fromEntityToDomainTypeMap.getMappings().clear();
             fromEntityToDomainTypeMap.addMappings(mapper -> {
@@ -43,15 +42,13 @@ public class CommentMapper {
 
         if (entity.getPost() != null) {
             comment.setPost(
-                    postMapper.fromEntityToDomain(entity.getPost())
-            );
+                    postMapper.fromEntityToDomain(entity.getPost()));
         }
 
         // user
         if (entity.getUser() != null) {
             comment.setUser(
-                    userMapper.fromEntityToDomain(entity.getUser())
-            );
+                    userMapper.fromEntityToDomain(entity.getUser()));
         }
 
         // parent (SHALLOW - chỉ ID)
@@ -64,13 +61,12 @@ public class CommentMapper {
         return comment;
     }
 
-
     public CommentEntity fromDomainToEntity(Comment domain) {
-        if (domain == null) return null;
+        if (domain == null)
+            return null;
 
         if (fromDomainToEntityTypeMap == null) {
-            fromDomainToEntityTypeMap =
-                    modelMapper.createTypeMap(Comment.class, CommentEntity.class);
+            fromDomainToEntityTypeMap = modelMapper.createTypeMap(Comment.class, CommentEntity.class);
 
             fromDomainToEntityTypeMap.getMappings().clear();
             fromDomainToEntityTypeMap.addMappings(mapper -> {

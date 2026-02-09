@@ -5,6 +5,7 @@ import com.spring.knowhub.domain.models.comment.Comment;
 import com.spring.knowhub.domain.models.post.Post;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.comment.CommentRepository;
+import com.spring.knowhub.domain.repositories.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 public class CreateCommentCommandHandler implements CommandHandler<CreateCommentCommand, Comment> {
 
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
     @Override
     public boolean supports(Object command) {
@@ -27,8 +29,8 @@ public class CreateCommentCommandHandler implements CommandHandler<CreateComment
         post.setId(command.getPostId());
         comment.setPost(post);
 
-        User user = new User();
-        user.setId(command.getUserId());
+        User user = userRepository.findById(command.getUserId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
         comment.setUser(user);
 
         if (command.getParentId() != null) {
@@ -39,6 +41,8 @@ public class CreateCommentCommandHandler implements CommandHandler<CreateComment
 
         comment.setContent(command.getContent());
 
-        return commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
+        savedComment.setUser(user);
+        return savedComment;
     }
 }

@@ -38,6 +38,10 @@ public class PostResponseMapper {
 
             PostResponse response = fromPostToPostResponseTypeMap.map(post);
 
+            // map quantities
+            response.setLikeQuantity(post.getLikeQuantity());
+            response.setCommentQuantity(post.getCommentQuantity());
+
             // map user
             if (post.getUser() != null) {
                 response.setUserId(post.getUser().getId());
@@ -63,8 +67,7 @@ public class PostResponseMapper {
                                         media.getId(),
                                         media.getUrl(),
                                         media.getType() != null ? media.getType() : null,
-                                        media.getOwnerType() != null ? media.getOwnerType() : null)
-                                )
+                                        media.getOwnerType() != null ? media.getOwnerType() : null))
                                 .collect(Collectors.toList()));
             }
             return response;

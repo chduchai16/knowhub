@@ -20,6 +20,7 @@ public class Post extends BaseModel {
     private PostStatus status;
     private Set<PostTag> postTags = new HashSet<>();
     private Long likeQuantity;
+    private Long commentQuantity;
     private Boolean isLiked;
     private Long postLikeId;
 
@@ -99,6 +100,14 @@ public class Post extends BaseModel {
 
     public void setLikeQuantity(Long likeQuantity) {
         this.likeQuantity = likeQuantity;
+    }
+
+    public Long getCommentQuantity() {
+        return commentQuantity;
+    }
+
+    public void setCommentQuantity(Long commentQuantity) {
+        this.commentQuantity = commentQuantity;
     }
 
     public Boolean getIsLiked() {

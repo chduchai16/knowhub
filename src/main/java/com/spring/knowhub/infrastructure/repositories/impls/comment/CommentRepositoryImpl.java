@@ -109,4 +109,17 @@ public class CommentRepositoryImpl implements CommentRepository {
             throw CommentRepositoryException.findFailed(ex.getMessage());
         }
     }
+
+    @Override
+    public Long countByPostId(Long postId) {
+        log.info("Đếm số lượng bình luận của bài viết ID: {}", postId);
+        try {
+            Long count = jpaCommentRepository.countByPostId(postId);
+            log.info("Số lượng bình luận của bài viết ID {}: {}", postId, count);
+            return count != null ? count : 0L;
+        } catch (Exception ex) {
+            log.error("Lỗi khi đếm số lượng bình luận cho bài viết ID: {}. Chi tiết: {}", postId, ex.getMessage(), ex);
+            return 0L;
+        }
+    }
 }

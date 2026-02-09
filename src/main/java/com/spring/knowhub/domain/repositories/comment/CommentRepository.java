@@ -12,4 +12,5 @@ public interface CommentRepository {
     Optional<Comment> findById(Long id);
     Page<Comment> findCommentsPaged(Pageable pageable);
     Page<Comment> findByPostIdPaged(Long postId, Pageable pageable);
+    Long countByPostId(Long postId);
 }
