@@ -1,6 +1,7 @@
 package com.spring.knowhub.presentation.mappers.comment;
 
 import com.spring.knowhub.domain.models.comment.Comment;
+import com.spring.knowhub.domain.repositories.comment.CommentRepository;
 import com.spring.knowhub.infrastructure.configurations.ModelMapperConfiguration;
 import com.spring.knowhub.presentation.exceptions.comment.CommentResponseMappingException;
 import com.spring.knowhub.presentation.response.comment.CommentResponse;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CommentResponseMapper {
     private final ModelMapperConfiguration modelMapper;
+    private final CommentRepository commentRepository;
     private TypeMap<Comment, CommentResponse> fromCommentToCommentResponseTypeMap;
 
     public CommentResponse fromCommentToCommentResponse(Comment comment) {
@@ -29,6 +31,7 @@ public class CommentResponseMapper {
                     mapper.skip(CommentResponse::setUserAvatarUrl);
                     mapper.skip(CommentResponse::setPostId);
                     mapper.skip(CommentResponse::setParentId);
+                    mapper.skip(CommentResponse::setReplyQuantity);
                 });
                 fromCommentToCommentResponseTypeMap.implicitMappings();
             }
@@ -50,6 +53,13 @@ public class CommentResponseMapper {
             // map parent
             if (comment.getParent() != null) {
                 response.setParentId(comment.getParent().getId());
+            }
+
+            // map reply quantity (chỉ cho root comment)
+            if (comment.getRootId() == null && comment.getParent() == null) {
+                response.setReplyQuantity(commentRepository.countByRootId(comment.getId()));
+            } else {
+                response.setReplyQuantity(0L);
             }
 
             return response;

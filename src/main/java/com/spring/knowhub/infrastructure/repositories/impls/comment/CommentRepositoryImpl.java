@@ -139,4 +139,17 @@ public class CommentRepositoryImpl implements CommentRepository {
             throw CommentRepositoryException.findFailed(ex.getMessage());
         }
     }
+
+    @Override
+    public Long countByRootId(Long rootId) {
+        log.info("Đếm số lượng reply của comment ID: {}", rootId);
+        try {
+            Long count = jpaCommentRepository.countByRootId(rootId);
+            log.info("Số lượng reply của comment ID {}: {}", rootId, count);
+            return count != null ? count : 0L;
+        } catch (Exception ex) {
+            log.error("Lỗi khi đếm số lượng reply cho comment ID: {}. Chi tiết: {}", rootId, ex.getMessage(), ex);
+            return 0L;
+        }
+    }
 }

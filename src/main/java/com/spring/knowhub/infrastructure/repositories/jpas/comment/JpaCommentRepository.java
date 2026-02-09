@@ -18,4 +18,7 @@ public interface JpaCommentRepository extends JpaRepository<CommentEntity, Long>
 
     @Query("SELECT c FROM CommentEntity c WHERE c.rootId = :rootId ORDER BY c.createdAt ASC")
     Page<CommentEntity> findByRootId(@Param("rootId") Long rootId, Pageable pageable);
+
+    @Query("SELECT COUNT(c) FROM CommentEntity c WHERE c.rootId = :rootId")
+    Long countByRootId(@Param("rootId") Long rootId);
 }
