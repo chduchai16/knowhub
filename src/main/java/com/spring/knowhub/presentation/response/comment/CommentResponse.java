@@ -18,6 +18,7 @@ public class CommentResponse {
     private Long rootId;
     private Long parentId;
     private String content;
+    private Long replyQuantity;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
