@@ -122,4 +122,21 @@ public class CommentRepositoryImpl implements CommentRepository {
             return 0L;
         }
     }
+
+    @Override
+    public Page<Comment> findByRootIdPaged(Long rootId, Pageable pageable) {
+        log.info("Tìm bình luận theo rootId: {} với thông số: {}", rootId, pageable);
+        try {
+            Page<Comment> commentPage = jpaCommentRepository.findByRootId(rootId, pageable)
+                    .map(commentMapper::fromEntityToDomain);
+            log.info("Tìm thấy {} bình luận cho rootId: {}", commentPage.getTotalElements(), rootId);
+            return commentPage;
+        } catch (CommentMapperException ex) {
+            log.error("Lỗi ánh xạ bình luận theo rootId. Chi tiết: {}", ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            log.error("Lỗi khi tìm bình luận theo rootId. Chi tiết: {}", ex.getMessage());
+            throw CommentRepositoryException.findFailed(ex.getMessage());
+        }
+    }
 }

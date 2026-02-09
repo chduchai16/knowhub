@@ -10,9 +10,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JpaCommentRepository extends JpaRepository<CommentEntity, Long> {
-    @Query("SELECT c FROM CommentEntity c WHERE c.post.id = :postId")
+    @Query("SELECT c FROM CommentEntity c WHERE c.post.id = :postId AND c.rootId IS NULL AND c.parent IS NULL")
     Page<CommentEntity> findByPostId(@Param("postId") Long postId, Pageable pageable);
 
     @Query("SELECT COUNT(c) FROM CommentEntity c WHERE c.post.id = :postId")
     Long countByPostId(@Param("postId") Long postId);
+
+    @Query("SELECT c FROM CommentEntity c WHERE c.rootId = :rootId ORDER BY c.createdAt ASC")
+    Page<CommentEntity> findByRootId(@Param("rootId") Long rootId, Pageable pageable);
 }
