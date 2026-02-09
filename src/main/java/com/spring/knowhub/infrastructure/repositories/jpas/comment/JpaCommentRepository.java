@@ -1,9 +1,12 @@
 package com.spring.knowhub.infrastructure.repositories.jpas.comment;
 
 import com.spring.knowhub.infrastructure.entities.comment.CommentEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JpaCommentRepository extends JpaRepository<CommentEntity , Long> {
+public interface JpaCommentRepository extends JpaRepository<CommentEntity, Long> {
+    Page<CommentEntity> findByPostId(Long postId, Pageable pageable);
 }
