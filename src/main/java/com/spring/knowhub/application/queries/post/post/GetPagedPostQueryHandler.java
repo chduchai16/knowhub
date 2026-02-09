@@ -15,6 +15,7 @@ import com.spring.knowhub.application.buses.QueryHandler;
 import com.spring.knowhub.domain.enums.media.OwnerType;
 import com.spring.knowhub.domain.models.media.Media;
 import com.spring.knowhub.domain.models.post.Post;
+import com.spring.knowhub.domain.repositories.comment.CommentRepository;
 import com.spring.knowhub.domain.repositories.media.MediaRepository;
 import com.spring.knowhub.domain.repositories.post.PostRepository;
 import com.spring.knowhub.domain.specifications.AlwaysTrueSpecification;
@@ -32,6 +33,7 @@ public class GetPagedPostQueryHandler implements QueryHandler<GetPagedPostQuery,
     private final PostRepository postRepository;
     private final MediaRepository mediaRepository;
     private final PostLikeRepository postLikeRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     public boolean supports(Object query) {
@@ -62,6 +64,7 @@ public class GetPagedPostQueryHandler implements QueryHandler<GetPagedPostQuery,
             List<Media> medias = mediaRepository.findAllByOwnerIdAndOwnerType(mediaSpecification);
             post.setMedia(medias);
 
+            post.setCommentQuantity(commentRepository.countByPostId(post.getId()));
             enrichPostWithLikes(post, currentUserId);
         });
         return pagedPost;

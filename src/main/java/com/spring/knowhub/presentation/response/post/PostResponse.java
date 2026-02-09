@@ -23,6 +23,7 @@ public class PostResponse {
     private List<TagResponse> tags;
     private List<MediaResponse> medias;
     private Long likeQuantity;
+    private Long commentQuantity;
     private Boolean isLiked;
     private Long postLikeId;
     private LocalDateTime createdAt;

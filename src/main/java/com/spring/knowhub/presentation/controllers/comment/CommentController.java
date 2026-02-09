@@ -5,6 +5,7 @@ import com.spring.knowhub.application.buses.QueryBus;
 import com.spring.knowhub.application.commands.comment.CreateCommentCommand;
 import com.spring.knowhub.application.commands.comment.DeleteCommentCommand;
 import com.spring.knowhub.application.queries.comment.GetCommentsByPostIdQuery;
+import com.spring.knowhub.application.queries.comment.GetCommentsByRootIdQuery;
 import com.spring.knowhub.domain.models.comment.Comment;
 import com.spring.knowhub.infrastructure.security.CustomUserDetails;
 import com.spring.knowhub.presentation.mappers.comment.CommentResponseMapper;
@@ -95,7 +96,37 @@ public class CommentController {
                 return ResponseEntity.ok(
                                 new ApiResponse<>(
                                                 "SUCCESS",
-                                                "Lấy danh sách bình luận thành công cho post id = " + postId,
+                                                "Lấy danh sách bình luận thành công",
+                                                paginatedResponse));
+        }
+
+        @GetMapping("/replies/{rootId}")
+        public ResponseEntity<ApiResponse<?>> getCommentsByRootId(
+                        @PathVariable Long rootId,
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "10") int limit) {
+                log.info("GET /api/comments/replies/{} - page={}, limit={}", rootId, page, limit);
+
+                Page<Comment> commentsPage = queryBus.execute(
+                                new GetCommentsByRootIdQuery(rootId, page, limit));
+
+                Page<CommentResponse> commentResponses = commentsPage
+                                .map(commentResponseMapper::fromCommentToCommentResponse);
+
+                PaginationInfo paginationInfo = new PaginationInfo(
+                                commentResponses.getTotalElements(),
+                                commentResponses.getTotalPages(),
+                                commentResponses.getNumber(),
+                                commentResponses.getSize());
+
+                PaginatedResponse<CommentResponse> paginatedResponse = new PaginatedResponse<>(
+                                commentResponses.getContent(),
+                                paginationInfo);
+
+                return ResponseEntity.ok(
+                                new ApiResponse<>(
+                                                "SUCCESS",
+                                                "Lấy danh sách trả lời thành công",
                                                 paginatedResponse));
         }
 }

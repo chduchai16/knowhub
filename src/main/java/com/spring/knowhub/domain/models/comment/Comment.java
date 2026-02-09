@@ -10,16 +10,18 @@ public class Comment extends BaseModel {
     private Post post;
     private User user;
     private Comment parent;
+    private Long rootId;
     private String content;
 
     public Comment() {
     }
 
-    public Comment(Long id, Post post, User user, Comment parent, String content) {
+    public Comment(Long id, Post post, User user, Comment parent, Long rootId, String content) {
         this.id = id;
         this.post = post;
         this.user = user;
         this.parent = parent;
+        this.rootId = rootId;
         this.content = content;
     }
 
@@ -53,6 +55,14 @@ public class Comment extends BaseModel {
 
     public void setParent(Comment parent) {
         this.parent = parent;
+    }
+
+    public Long getRootId() {
+        return rootId;
+    }
+
+    public void setRootId(Long rootId) {
+        this.rootId = rootId;
     }
 
     public String getContent() {

@@ -109,4 +109,34 @@ public class CommentRepositoryImpl implements CommentRepository {
             throw CommentRepositoryException.findFailed(ex.getMessage());
         }
     }
+
+    @Override
+    public Long countByPostId(Long postId) {
+        log.info("Đếm số lượng bình luận của bài viết ID: {}", postId);
+        try {
+            Long count = jpaCommentRepository.countByPostId(postId);
+            log.info("Số lượng bình luận của bài viết ID {}: {}", postId, count);
+            return count != null ? count : 0L;
+        } catch (Exception ex) {
+            log.error("Lỗi khi đếm số lượng bình luận cho bài viết ID: {}. Chi tiết: {}", postId, ex.getMessage(), ex);
+            return 0L;
+        }
+    }
+
+    @Override
+    public Page<Comment> findByRootIdPaged(Long rootId, Pageable pageable) {
+        log.info("Tìm bình luận theo rootId: {} với thông số: {}", rootId, pageable);
+        try {
+            Page<Comment> commentPage = jpaCommentRepository.findByRootId(rootId, pageable)
+                    .map(commentMapper::fromEntityToDomain);
+            log.info("Tìm thấy {} bình luận cho rootId: {}", commentPage.getTotalElements(), rootId);
+            return commentPage;
+        } catch (CommentMapperException ex) {
+            log.error("Lỗi ánh xạ bình luận theo rootId. Chi tiết: {}", ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            log.error("Lỗi khi tìm bình luận theo rootId. Chi tiết: {}", ex.getMessage());
+            throw CommentRepositoryException.findFailed(ex.getMessage());
+        }
+    }
 }
