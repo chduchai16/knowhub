@@ -1,11 +1,13 @@
 package com.spring.knowhub.application.commands.post.postlike;
 
+import com.spring.knowhub.application.events.NotificationCreatedEvent;
 import com.spring.knowhub.domain.enums.notification.NotificationType;
 import com.spring.knowhub.domain.models.notification.Notification;
 import com.spring.knowhub.domain.models.notification.UserNotification;
 import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.notification.NotificationRepository;
 import com.spring.knowhub.domain.repositories.notification.UserNotificationRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import com.spring.knowhub.application.buses.CommandHandler;
 import com.spring.knowhub.application.validators.post.postlike.CreatePostLikeValidator;
@@ -19,8 +21,6 @@ import com.spring.knowhub.domain.repositories.post.PostRepository;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Collections;
-
 import jakarta.transaction.Transactional;
 
 @Component
@@ -32,6 +32,7 @@ public class CreatePostLikeCommandHandler implements CommandHandler<CreatePostLi
     private final PostLikeRepository postLikeRepository;
     private final NotificationRepository notificationRepository;
     private final UserNotificationRepository userNotificationRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public boolean supports(Object command) {
@@ -63,6 +64,7 @@ public class CreatePostLikeCommandHandler implements CommandHandler<CreatePostLi
             notification.setActor(existingUser);
             notification.setReferenceId(command.getPostId());
             notification.setReferenceType("POST");
+            notification.setPostId(command.getPostId());
             Notification savedNotification = notificationRepository.save(notification);
 
             User receiver = new User();
@@ -73,6 +75,10 @@ public class CreatePostLikeCommandHandler implements CommandHandler<CreatePostLi
             userNotification.setNotification(savedNotification);
             userNotification.setIsRead(false);
             userNotificationRepository.save(userNotification);
+
+            // publish event để gửi realtime qua SSE
+            eventPublisher.publishEvent(new NotificationCreatedEvent(
+                    savedNotification.getId(), existingPost.getUser().getId()));
         }
 
         return savedPostLike.getId();

@@ -1,20 +1,18 @@
-package com.spring.knowhub.presentation.response.notification;
+package com.spring.knowhub.presentation.sse.payload;
 
-import com.spring.knowhub.domain.enums.notification.NotificationType;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class NotificationResponse {
+@NoArgsConstructor
+public class NotificationRealtimePayload {
     private Long id;
-    private NotificationType type;
+    private String type;
     private String title;
     private String content;
 

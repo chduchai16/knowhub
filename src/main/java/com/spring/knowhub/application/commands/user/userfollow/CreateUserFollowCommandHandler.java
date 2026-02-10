@@ -1,10 +1,12 @@
 package com.spring.knowhub.application.commands.user.userfollow;
 
+import com.spring.knowhub.application.events.NotificationCreatedEvent;
 import com.spring.knowhub.domain.enums.notification.NotificationType;
 import com.spring.knowhub.domain.models.notification.Notification;
 import com.spring.knowhub.domain.models.notification.UserNotification;
 import com.spring.knowhub.domain.repositories.notification.NotificationRepository;
 import com.spring.knowhub.domain.repositories.notification.UserNotificationRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import com.spring.knowhub.application.buses.CommandHandler;
@@ -26,6 +28,7 @@ public class CreateUserFollowCommandHandler implements CommandHandler<CreateUser
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
     private final UserNotificationRepository userNotificationRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public boolean supports(Object command) {
@@ -58,6 +61,10 @@ public class CreateUserFollowCommandHandler implements CommandHandler<CreateUser
         userNotification.setNotification(savedNotification);
         userNotification.setIsRead(false);
         userNotificationRepository.save(userNotification);
+
+        // publish event để gửi realtime qua SSE
+        eventPublisher.publishEvent(new NotificationCreatedEvent(
+                savedNotification.getId(), command.getUserId()));
 
         return savedUserFollow.getId();
     }

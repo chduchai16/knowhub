@@ -31,6 +31,17 @@ public class RegisterCommandHandler implements CommandHandler<RegisterCommand, L
     @Override
     public Long handle(RegisterCommand command) {
         RegisterValidator.validate(command);
+
+        // Kiểm tra username đã tồn tại
+        if (userRepository.findByUsername(command.getUsername()).isPresent()) {
+            throw new RuntimeException("Username đã tồn tại: " + command.getUsername());
+        }
+
+        // Kiểm tra email đã tồn tại
+        if (userRepository.findByEmail(command.getEmail()).isPresent()) {
+            throw new RuntimeException("Email đã tồn tại: " + command.getEmail());
+        }
+
         User user = new User();
         user.setUsername(command.getUsername());
         user.setEmail(command.getEmail());

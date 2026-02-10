@@ -1,6 +1,7 @@
 package com.spring.knowhub.application.commands.comment;
 
 import com.spring.knowhub.application.buses.CommandHandler;
+import com.spring.knowhub.application.events.NotificationCreatedEvent;
 import com.spring.knowhub.domain.enums.notification.NotificationType;
 import com.spring.knowhub.domain.models.comment.Comment;
 import com.spring.knowhub.domain.models.notification.Notification;
@@ -14,6 +15,7 @@ import com.spring.knowhub.domain.repositories.post.PostRepository;
 import com.spring.knowhub.domain.repositories.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,6 +28,7 @@ public class CreateCommentCommandHandler implements CommandHandler<CreateComment
     private final PostRepository postRepository;
     private final NotificationRepository notificationRepository;
     private final UserNotificationRepository userNotificationRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public boolean supports(Object command) {
@@ -67,6 +70,7 @@ public class CreateCommentCommandHandler implements CommandHandler<CreateComment
             notification.setActor(user);
             notification.setReferenceId(command.getPostId());
             notification.setReferenceType("POST");
+            notification.setPostId(command.getPostId());
             Notification savedNotification = notificationRepository.save(notification);
 
             User receiver = new User();
@@ -77,6 +81,9 @@ public class CreateCommentCommandHandler implements CommandHandler<CreateComment
             userNotification.setNotification(savedNotification);
             userNotification.setIsRead(false);
             userNotificationRepository.save(userNotification);
+
+            eventPublisher.publishEvent(new NotificationCreatedEvent(
+                    savedNotification.getId(), post.getUser().getId()));
         }
 
         // notification cho chủ comment cha (REPLY)
@@ -88,6 +95,7 @@ public class CreateCommentCommandHandler implements CommandHandler<CreateComment
             notification.setActor(user);
             notification.setReferenceId(savedComment.getId());
             notification.setReferenceType("COMMENT");
+            notification.setPostId(command.getPostId());
             Notification savedNotification = notificationRepository.save(notification);
 
             User receiver = new User();
@@ -98,6 +106,9 @@ public class CreateCommentCommandHandler implements CommandHandler<CreateComment
             userNotification.setNotification(savedNotification);
             userNotification.setIsRead(false);
             userNotificationRepository.save(userNotification);
+
+            eventPublisher.publishEvent(new NotificationCreatedEvent(
+                    savedNotification.getId(), parent.getUser().getId()));
         }
 
         return savedComment;

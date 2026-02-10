@@ -23,6 +23,7 @@ public class NotificationResponseMapper {
                 .content(notification.getContent())
                 .referenceId(notification.getReferenceId())
                 .referenceType(notification.getReferenceType())
+                .postId(notification.getPostId())
                 .isRead(userNotification.getIsRead())
                 .readAt(userNotification.getReadAt())
                 .createdAt(notification.getCreatedAt());

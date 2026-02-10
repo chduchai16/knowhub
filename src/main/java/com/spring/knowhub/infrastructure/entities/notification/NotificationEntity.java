@@ -32,4 +32,7 @@ public class NotificationEntity extends BaseEntity {
 
     @Column(name = "reference_type", length = 50)
     private String referenceType;
+
+    @Column(name = "post_id")
+    private Long postId;
 }
