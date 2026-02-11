@@ -26,6 +26,7 @@ public class CreatePermissionCommandHandler implements CommandHandler<CreatePerm
         }
         Permission permission = new Permission();
         permission.setCode(command.getCode());
+        permission.setDescription(command.getDescription());
         return permissionRepository.save(permission).getId();
     }
 

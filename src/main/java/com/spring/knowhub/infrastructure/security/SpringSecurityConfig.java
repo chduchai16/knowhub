@@ -75,6 +75,7 @@ public class SpringSecurityConfig {
 
                         // reports
                         .requestMatchers(HttpMethod.POST, "/api/reports/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/reports/my-reports/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/reports/**").hasRole(admin)
                         .requestMatchers(HttpMethod.PUT, "/api/reports/**").hasRole(admin)
                         .requestMatchers(HttpMethod.DELETE, "/api/reports/**").hasRole(admin)
@@ -101,7 +102,6 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/notifications/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/notifications/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/notifications/**").authenticated()
-
                         
 
                         .anyRequest().authenticated()

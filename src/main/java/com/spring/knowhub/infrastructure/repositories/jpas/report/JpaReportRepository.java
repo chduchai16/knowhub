@@ -13,4 +13,6 @@ public interface JpaReportRepository extends JpaRepository<ReportEntity, Long> {
     boolean existsByReporterIdAndPostId(Long reporterId, Long postId);
 
     boolean existsByReporterIdAndCommentId(Long reporterId, Long commentId);
+
+    boolean existsByReporterIdAndReportedUserId(Long reporterId, Long reportedUserId);
 }

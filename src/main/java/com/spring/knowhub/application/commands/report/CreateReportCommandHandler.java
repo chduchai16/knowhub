@@ -74,6 +74,20 @@ public class CreateReportCommandHandler implements CommandHandler<CreateReportCo
             }
 
             report.setComment(comment);
+        } else if ("USER".equalsIgnoreCase(command.getReportedEntityType())) {
+            User reportedUser = userRepository.findById(command.getReportedEntityId())
+                    .orElseThrow(() -> UserNotFoundException.byId(command.getReportedEntityId()));
+
+            if (reportedUser.getId().equals(command.getReporterId())) {
+                throw InvalidReportException.cannotReportOwnContent();
+            }
+
+            if (reportRepository.existsByReporterIdAndReportedUserId(command.getReporterId(),
+                    command.getReportedEntityId())) {
+                throw DuplicateReportException.forEntity("USER", command.getReportedEntityId());
+            }
+
+            report.setReportedUser(reportedUser);
         }
 
         Report savedReport = reportRepository.save(report);

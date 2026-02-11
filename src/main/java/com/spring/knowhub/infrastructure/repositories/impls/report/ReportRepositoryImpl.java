@@ -54,4 +54,9 @@ public class ReportRepositoryImpl implements ReportRepository {
     public boolean existsByReporterIdAndCommentId(Long reporterId, Long commentId) {
         return jpaReportRepository.existsByReporterIdAndCommentId(reporterId, commentId);
     }
+
+    @Override
+    public boolean existsByReporterIdAndReportedUserId(Long reporterId, Long reportedUserId) {
+        return jpaReportRepository.existsByReporterIdAndReportedUserId(reporterId, reportedUserId);
+    }
 }

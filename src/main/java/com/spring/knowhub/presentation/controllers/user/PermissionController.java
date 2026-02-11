@@ -1,7 +1,5 @@
 package com.spring.knowhub.presentation.controllers.user;
 
-import java.util.List;
-
 import com.spring.knowhub.application.commands.user.permission.CreatePermissionCommand;
 import com.spring.knowhub.application.commands.user.permission.DeletePermissionCommand;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spring.knowhub.application.buses.CommandBus;
 import com.spring.knowhub.application.buses.QueryBus;
 import com.spring.knowhub.application.commands.user.permission.UpdatePermissionCommand;
-import com.spring.knowhub.application.queries.user.permission.GetAllPermissionQuery;
+import com.spring.knowhub.application.queries.user.permission.GetPagedPermissionsQuery;
 import com.spring.knowhub.application.queries.user.permission.GetPermissionByIdQuery;
 import com.spring.knowhub.domain.models.user.Permission;
+import com.spring.knowhub.presentation.mappers.user.PermissionResponseMapper;
 import com.spring.knowhub.presentation.requests.user.CreatePermissionRequest;
 import com.spring.knowhub.presentation.requests.user.UpdatePermissionRequest;
 import com.spring.knowhub.presentation.response.ApiResponse;
+import com.spring.knowhub.presentation.response.PaginatedResponse;
+import com.spring.knowhub.presentation.response.PaginationInfo;
+import com.spring.knowhub.presentation.response.user.PermissionResponse;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,87 +37,87 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class PermissionController {
 
-    private final QueryBus queryBus;
-    private final CommandBus commandBus;
+        private final QueryBus queryBus;
+        private final CommandBus commandBus;
+        private final PermissionResponseMapper permissionResponseMapper;
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<?>> getAllPermissions() {
-        log.info("GET /api/permissions");
+        @GetMapping
+        public ResponseEntity<ApiResponse<PaginatedResponse<PermissionResponse>>> getAllPermissions(
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "10") int limit) {
+                log.info("GET /api/permissions - page: {}, limit: {}", page, limit);
 
-        List<Permission> permissions =
-                queryBus.execute(new GetAllPermissionQuery());
+                Page<Permission> permissionPage = queryBus.execute(new GetPagedPermissionsQuery(page, limit));
 
-        return ResponseEntity.ok(new ApiResponse<>(
-                "SUCCESS",
-                "Lấy tất cả quyền thành công",
-                permissions
-        ));
-    }
+                PaginatedResponse<PermissionResponse> paginatedResponse = new PaginatedResponse<>(
+                                permissionPage.getContent().stream()
+                                                .map(permissionResponseMapper::fromDomainToResponse)
+                                                .toList(),
+                                new PaginationInfo(
+                                                permissionPage.getTotalElements(),
+                                                permissionPage.getTotalPages(),
+                                                permissionPage.getNumber(),
+                                                permissionPage.getSize()));
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> getPermissionById(
-            @PathVariable Long id
-    ) {
-        log.info("GET /api/permissions/{}", id);
+                return ResponseEntity.ok(new ApiResponse<>(
+                                "SUCCESS",
+                                "Lấy danh sách quyền phân trang thành công",
+                                paginatedResponse));
+        }
 
-        Permission permission =
-                queryBus.execute(new GetPermissionByIdQuery(id));
+        @GetMapping("/{id}")
+        public ResponseEntity<ApiResponse<?>> getPermissionById(
+                        @PathVariable Long id) {
+                log.info("GET /api/permissions/{}", id);
 
-        return ResponseEntity.ok(new ApiResponse<>(
-                "SUCCESS",
-                "Lấy quyền thành công",
-                permission
-        ));
-    }
+                Permission permission = queryBus.execute(new GetPermissionByIdQuery(id));
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<?>> createPermission(
-            @RequestBody CreatePermissionRequest request
-    ) {
-        log.info("POST /api/permissions - code={}", request.getCode());
+                return ResponseEntity.ok(new ApiResponse<>(
+                                "SUCCESS",
+                                "Lấy quyền thành công",
+                                permission));
+        }
 
-        Long id = commandBus.execute(
-                new CreatePermissionCommand(request.getCode() , request.getDescription())
-        );
+        @PostMapping
+        public ResponseEntity<ApiResponse<?>> createPermission(
+                        @RequestBody CreatePermissionRequest request) {
+                log.info("POST /api/permissions - code={}", request.getCode());
 
-        return ResponseEntity.ok(new ApiResponse<>(
-                "SUCCESS",
-                "Tạo quyền thành công",
-                id
-        ));
-    }
+                Long id = commandBus.execute(
+                                new CreatePermissionCommand(request.getCode(), request.getDescription()));
 
-    @PutMapping()
-    public ResponseEntity<ApiResponse<?>> updatePermission(
-            @RequestBody UpdatePermissionRequest request
-    ) {
-        log.info("PUT /api/permissions/{}", request.getId());
+                return ResponseEntity.ok(new ApiResponse<>(
+                                "SUCCESS",
+                                "Tạo quyền thành công",
+                                id));
+        }
 
-        Long updatedId = commandBus.execute(
-                new UpdatePermissionCommand(request.getId(), request.getCode() , request.getDescription())
-        );
+        @PutMapping()
+        public ResponseEntity<ApiResponse<?>> updatePermission(
+                        @RequestBody UpdatePermissionRequest request) {
+                log.info("PUT /api/permissions/{}", request.getId());
 
-        return ResponseEntity.ok(new ApiResponse<>(
-                "SUCCESS",
-                "Cập nhật quyền thành công",
-                updatedId
-        ));
-    }
+                Long updatedId = commandBus.execute(
+                                new UpdatePermissionCommand(request.getId(), request.getCode(),
+                                                request.getDescription()));
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> deletePermission(
-            @PathVariable Long id
-    ) {
-        log.info("DELETE /api/permissions/{}", id);
+                return ResponseEntity.ok(new ApiResponse<>(
+                                "SUCCESS",
+                                "Cập nhật quyền thành công",
+                                updatedId));
+        }
 
-        Long deletedId = commandBus.execute(
-                new DeletePermissionCommand(id)
-        );
+        @DeleteMapping("/{id}")
+        public ResponseEntity<ApiResponse<?>> deletePermission(
+                        @PathVariable Long id) {
+                log.info("DELETE /api/permissions/{}", id);
 
-        return ResponseEntity.ok(new ApiResponse<>(
-                "SUCCESS",
-                "Xóa quyền thành công",
-                deletedId
-        ));
-    }
+                Long deletedId = commandBus.execute(
+                                new DeletePermissionCommand(id));
+
+                return ResponseEntity.ok(new ApiResponse<>(
+                                "SUCCESS",
+                                "Xóa quyền thành công",
+                                deletedId));
+        }
 }

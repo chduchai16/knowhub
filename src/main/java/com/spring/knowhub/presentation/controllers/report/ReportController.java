@@ -50,13 +50,13 @@ public class ReportController {
         @GetMapping("/my-reports")
         public ResponseEntity<ApiResponse<PaginatedResponse<ReportResponse>>> getMyReports(
                         @RequestParam(defaultValue = "0") int page,
-                        @RequestParam(defaultValue = "10") int size,
+                        @RequestParam(defaultValue = "10") int limit,
                         @AuthenticationPrincipal CustomUserDetails userDetails) {
 
                 GetReportsByUserIdQuery query = new GetReportsByUserIdQuery(
                                 userDetails.getUserId(),
                                 page,
-                                size);
+                                limit);
 
                 Page<Report> reportPage = queryBus.execute(query);
                 Page<ReportResponse> responsePage = reportPage.map(reportResponseMapper::fromDomainToResponse);

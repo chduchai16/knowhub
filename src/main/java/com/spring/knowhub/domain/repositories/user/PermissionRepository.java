@@ -8,10 +8,19 @@ import java.util.Set;
 
 public interface PermissionRepository {
     Permission save(Permission permission);
+
     void deleteById(Long id);
+
     Optional<Permission> findById(Long id);
+
     Set<Permission> findByIds(Set<Long> ids);
+
     Optional<Permission> findByCode(String code);
+
     List<Permission> findAll();
+
     Boolean existsByCode(String code);
+
+    org.springframework.data.domain.Page<Permission> getPagedPermissions(
+            org.springframework.data.domain.Pageable pageable);
 }

@@ -43,6 +43,9 @@ public class ReportResponseMapper {
         } else if (report.getComment() != null) {
             response.setReportedEntityType("COMMENT");
             response.setReportedEntityId(report.getComment().getId());
+        } else if (report.getReportedUser() != null) {
+            response.setReportedEntityType("USER");
+            response.setReportedEntityId(report.getReportedUser().getId());
         }
 
         return response;

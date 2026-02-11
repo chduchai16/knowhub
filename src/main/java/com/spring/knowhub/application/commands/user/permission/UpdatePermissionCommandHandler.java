@@ -23,6 +23,7 @@ public class UpdatePermissionCommandHandler implements CommandHandler<UpdatePerm
                 Permission permission = permissionRepository.findById(permissionId)
                                 .orElseThrow(() -> PermissionNotFoundException.permissionNotFoundById(permissionId));
                 permission.setCode(command.getCode());
+                permission.setDescription(command.getDescription());
                 return permissionRepository.save(permission).getId();
         }
 

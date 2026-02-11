@@ -20,4 +20,6 @@ public interface ReportRepository {
     boolean existsByReporterIdAndPostId(Long reporterId, Long postId);
 
     boolean existsByReporterIdAndCommentId(Long reporterId, Long commentId);
+
+    boolean existsByReporterIdAndReportedUserId(Long reporterId, Long reportedUserId);
 }
