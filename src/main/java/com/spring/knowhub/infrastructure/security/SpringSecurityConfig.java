@@ -73,6 +73,37 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/posts/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/posts/**").authenticated()
 
+                        // reports
+                        .requestMatchers(HttpMethod.POST, "/api/reports/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/reports/**").hasRole(admin)
+                        .requestMatchers(HttpMethod.PUT, "/api/reports/**").hasRole(admin)
+                        .requestMatchers(HttpMethod.DELETE, "/api/reports/**").hasRole(admin)
+
+                        // comments
+                        .requestMatchers(HttpMethod.POST, "/api/comments/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/comments/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/comments/**").authenticated()
+
+                        // comment likes
+                        .requestMatchers(HttpMethod.POST, "/api/comments/*/likes").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/comments/likes/**").authenticated()
+
+                        // comment replies
+                        .requestMatchers(HttpMethod.POST, "/api/comments/*/replies").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/comments/replies/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/comments/replies/**").authenticated()
+
+                        // comment reply likes
+                        .requestMatchers(HttpMethod.POST, "/api/comments/replies/*/likes").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/comments/replies/likes/**").authenticated()
+
+                        // notifications
+                        .requestMatchers(HttpMethod.GET, "/api/notifications/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/notifications/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/notifications/**").authenticated()
+
+                        
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

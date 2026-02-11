@@ -1,10 +1,26 @@
 package com.spring.knowhub.domain.enums.report;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum ReportType {
-    SPAM,                       // Nội dung spam
-    HARASSMENT,                 // Quấy rối, xúc phạm
-    INAPPROPRIATE,              // Nội dung không phù hợp
-    MISINFORMATION,             // Thông tin sai lệch
-    COPYRIGHT_VIOLATION,        // Vi phạm bản quyền
-    OTHER                       // Khác
+    SPAM,
+    HARASSMENT,
+    INAPPROPRIATE,
+    MISINFORMATION,
+    COPYRIGHT_VIOLATION,
+    OTHER;
+
+    @JsonCreator
+    public static ReportType fromString(String value) {
+        if (value == null) {
+            return null;
+        }
+        return ReportType.valueOf(value.toUpperCase());
+    }
+
+    @JsonValue
+    public String toValue() {
+        return this.name();
+    }
 }
