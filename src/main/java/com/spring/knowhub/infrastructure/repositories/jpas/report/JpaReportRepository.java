@@ -6,8 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
 @Repository
-public interface JpaReportRepository extends JpaRepository<ReportEntity, Long> {
+public interface JpaReportRepository extends JpaRepository<ReportEntity, Long>, JpaSpecificationExecutor<ReportEntity> {
     Page<ReportEntity> findByReporterId(Long reporterId, Pageable pageable);
 
     boolean existsByReporterIdAndPostId(Long reporterId, Long postId);

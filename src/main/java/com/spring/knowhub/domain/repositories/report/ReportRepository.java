@@ -4,6 +4,7 @@ import com.spring.knowhub.domain.models.report.Report;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.spring.knowhub.domain.specifications.Specification;
 import java.util.Optional;
 
 public interface ReportRepository {
@@ -13,7 +14,7 @@ public interface ReportRepository {
 
     Optional<Report> findById(Long id);
 
-    Page<Report> findReportsPaged(Pageable pageable);
+    Page<Report> findReportsPaged(Specification<Report> specification, Pageable pageable);
 
     Page<Report> findByReporterId(Long reporterId, Pageable pageable);
 

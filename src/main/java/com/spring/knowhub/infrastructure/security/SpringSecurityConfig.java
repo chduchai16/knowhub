@@ -37,16 +37,19 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/api/auth/login/**").permitAll()
                         .requestMatchers(HttpMethod.POST , "/api/auth/register/**").permitAll()
                         .requestMatchers(HttpMethod.GET , "/api/auth/profile").authenticated()
+                        
                         // permission
                         .requestMatchers(HttpMethod.GET , "/api/permissions/**").hasRole(admin)
                         .requestMatchers(HttpMethod.POST , "/api/permissions/**").hasRole(admin)
                         .requestMatchers(HttpMethod.PUT , "/api/permissions/**").hasRole(admin)
                         .requestMatchers(HttpMethod.DELETE , "/api/permissions/**").hasRole(admin)
+
                         //role
                         .requestMatchers(HttpMethod.GET , "/api/roles/**").hasRole(admin)
                         .requestMatchers(HttpMethod.POST , "/api/roles/**").hasRole(admin)
                         .requestMatchers(HttpMethod.PUT , "/api/roles/**").hasRole(admin)
                         .requestMatchers(HttpMethod.DELETE , "/api/roles/**").hasRole(admin)
+
                         // user
                         .requestMatchers(HttpMethod.POST , "/api/users/follow/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE , "/api/users/unfollow/**").authenticated()
@@ -76,6 +79,7 @@ public class SpringSecurityConfig {
                         // reports
                         .requestMatchers(HttpMethod.POST, "/api/reports/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/reports/my-reports/**").authenticated()
+                        .requestMatchers(HttpMethod.GET , "/api/reports**").hasRole(admin)
                         .requestMatchers(HttpMethod.GET, "/api/reports/**").hasRole(admin)
                         .requestMatchers(HttpMethod.PUT, "/api/reports/**").hasRole(admin)
                         .requestMatchers(HttpMethod.DELETE, "/api/reports/**").hasRole(admin)
@@ -101,8 +105,7 @@ public class SpringSecurityConfig {
                         // notifications
                         .requestMatchers(HttpMethod.GET, "/api/notifications/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/notifications/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/notifications/**").authenticated()
-                        
+                        .requestMatchers(HttpMethod.DELETE, "/api/notifications/**").authenticated()      
 
                         .anyRequest().authenticated()
                 )

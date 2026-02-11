@@ -10,6 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.spring.knowhub.domain.specifications.Specification;
+import com.spring.knowhub.infrastructure.repositories.specifications.report.ReportJpaSpecificationAdapter;
+
 import java.util.Optional;
 
 @Repository
@@ -36,8 +39,10 @@ public class ReportRepositoryImpl implements ReportRepository {
     }
 
     @Override
-    public Page<Report> findReportsPaged(Pageable pageable) {
-        return jpaReportRepository.findAll(pageable).map(reportMapper::fromEntityToDomain);
+    public Page<Report> findReportsPaged(Specification<Report> specification, Pageable pageable) {
+        org.springframework.data.jpa.domain.Specification<ReportEntity> jpaSpecification = ReportJpaSpecificationAdapter
+                .toJpaSpecification(specification);
+        return jpaReportRepository.findAll(jpaSpecification, pageable).map(reportMapper::fromEntityToDomain);
     }
 
     @Override
