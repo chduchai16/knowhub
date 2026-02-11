@@ -15,10 +15,10 @@ import java.time.LocalDate;
 @Data
 public class UserEntity extends BaseEntity {
 
-    @Column(unique = true, nullable = false, columnDefinition = "NVARCHAR(MAX)")
+    @Column(unique = true, nullable = false, length = 255, columnDefinition = "NVARCHAR(255)")
     private String username;
 
-    @Column(unique = true, nullable = false, columnDefinition = "NVARCHAR(MAX)")
+    @Column(unique = true, nullable = false, length = 255, columnDefinition = "NVARCHAR(255)")
     private String email;
 
     @Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")

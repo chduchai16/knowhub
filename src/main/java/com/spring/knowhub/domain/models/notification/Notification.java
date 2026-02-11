@@ -9,15 +9,16 @@ public class Notification extends BaseModel {
     private NotificationType type;
     private String title;
     private String content;
-    private User actor; //người thực hiện
+    private User actor; // người thực hiện
     private Long referenceId; // id được thực hiện
-    private String referenceType; 
+    private String referenceType;
+    private Long postId;
 
     public Notification() {
     }
 
     public Notification(Long id, NotificationType type, String title, String content,
-            User actor, Long referenceId, String referenceType) {
+            User actor, Long referenceId, String referenceType, Long postId) {
         this.id = id;
         this.type = type;
         this.title = title;
@@ -25,6 +26,7 @@ public class Notification extends BaseModel {
         this.actor = actor;
         this.referenceId = referenceId;
         this.referenceType = referenceType;
+        this.postId = postId;
     }
 
     public Long getId() {
@@ -81,5 +83,13 @@ public class Notification extends BaseModel {
 
     public void setReferenceType(String referenceType) {
         this.referenceType = referenceType;
+    }
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 }
