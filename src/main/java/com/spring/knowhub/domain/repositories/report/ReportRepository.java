@@ -4,11 +4,23 @@ import com.spring.knowhub.domain.models.report.Report;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.spring.knowhub.domain.specifications.Specification;
 import java.util.Optional;
 
 public interface ReportRepository {
     Report save(Report report);
+
     void deleteById(Long id);
+
     Optional<Report> findById(Long id);
-    Page<Report> findReportsPaged(Pageable pageable);
+
+    Page<Report> findReportsPaged(Specification<Report> specification, Pageable pageable);
+
+    Page<Report> findByReporterId(Long reporterId, Pageable pageable);
+
+    boolean existsByReporterIdAndPostId(Long reporterId, Long postId);
+
+    boolean existsByReporterIdAndCommentId(Long reporterId, Long commentId);
+
+    boolean existsByReporterIdAndReportedUserId(Long reporterId, Long reportedUserId);
 }

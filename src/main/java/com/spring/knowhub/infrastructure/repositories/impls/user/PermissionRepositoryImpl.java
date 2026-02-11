@@ -25,6 +25,13 @@ public class PermissionRepositoryImpl implements PermissionRepository {
     private final PermissionMapper permissionMapper;
 
     @Override
+    public org.springframework.data.domain.Page<Permission> getPagedPermissions(
+            org.springframework.data.domain.Pageable pageable) {
+        return jpaPermissionRepository.findAll(pageable)
+                .map(permissionMapper::fromEntityToDomain);
+    }
+
+    @Override
     public Permission save(Permission permission) {
         log.info("Bắt đầu lưu quyền: {}", permission.getCode());
         try {

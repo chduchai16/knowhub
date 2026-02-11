@@ -16,7 +16,6 @@ import lombok.EqualsAndHashCode;
 @Data
 public class ReportEntity extends BaseEntity {
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reporter_id", nullable = false)
     private UserEntity reporter;
@@ -28,6 +27,10 @@ public class ReportEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private CommentEntity comment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reported_user_id")
+    private UserEntity reportedUser;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -41,4 +44,3 @@ public class ReportEntity extends BaseEntity {
     private ReportStatus status = ReportStatus.PENDING;
 
 }
-

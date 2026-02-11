@@ -2,26 +2,32 @@ package com.spring.knowhub.domain.models.report;
 
 import com.spring.knowhub.domain.enums.report.ReportStatus;
 import com.spring.knowhub.domain.enums.report.ReportType;
+import com.spring.knowhub.domain.models.BaseModel;
 import com.spring.knowhub.domain.models.comment.Comment;
 import com.spring.knowhub.domain.models.post.Post;
 import com.spring.knowhub.domain.models.user.User;
 
-public class Report {
-    private Long id ;
-    private User reporter ;
-    private Post post ;
-    private Comment comment ;
-    private ReportType reportType ;
-    private String description ;
-    private ReportStatus status ;
+public class Report extends BaseModel {
+    private Long id;
+    private User reporter;
+    private Post post;
+    private Comment comment;
+    private User reportedUser;
+    private ReportType reportType;
+    private String description;
+    private ReportStatus status;
 
-    public Report (){}
+    public Report() {
+    }
 
-    public Report(Long id, User reporter, Post post, Comment comment, ReportType reportType, String description, ReportStatus status) {
+    public Report(Long id, User reporter, Post post, Comment comment, User reportedUser, ReportType reportType,
+            String description,
+            ReportStatus status) {
         this.id = id;
         this.reporter = reporter;
         this.post = post;
         this.comment = comment;
+        this.reportedUser = reportedUser;
         this.reportType = reportType;
         this.description = description;
         this.status = status;
@@ -57,6 +63,14 @@ public class Report {
 
     public void setComment(Comment comment) {
         this.comment = comment;
+    }
+
+    public User getReportedUser() {
+        return reportedUser;
+    }
+
+    public void setReportedUser(User reportedUser) {
+        this.reportedUser = reportedUser;
     }
 
     public ReportType getReportType() {
