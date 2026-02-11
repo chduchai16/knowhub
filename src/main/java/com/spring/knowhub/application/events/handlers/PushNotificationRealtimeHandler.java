@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 import com.spring.knowhub.application.events.NotificationCreatedEvent;
 import com.spring.knowhub.domain.exceptions.notification.NotificationNotFoundException;
 import com.spring.knowhub.domain.models.notification.Notification;
+import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.domain.repositories.notification.NotificationRepository;
+import com.spring.knowhub.domain.repositories.user.UserRepository;
 import com.spring.knowhub.presentation.sse.SseConnectionRegistry;
 import com.spring.knowhub.presentation.sse.payload.NotificationRealtimePayload;
 
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PushNotificationRealtimeHandler {
     private final NotificationRepository notificationRepository;
+    private final UserRepository userRepository;
     private final SseConnectionRegistry registry;
 
     @EventListener
@@ -23,14 +26,19 @@ public class PushNotificationRealtimeHandler {
         Notification notification = notificationRepository.findById(event.getNotificationId())
                 .orElseThrow(() -> NotificationNotFoundException.withId(event.getNotificationId()));
 
+        User actor = null;
+        if (notification.getActor() != null && notification.getActor().getId() != null) {
+            actor = userRepository.findById(notification.getActor().getId()).orElse(null);
+        }
+
         NotificationRealtimePayload payload = NotificationRealtimePayload.builder()
                 .id(notification.getId())
                 .type(notification.getType().name())
                 .title(notification.getTitle())
                 .content(notification.getContent())
-                .actorId(notification.getActor() != null ? notification.getActor().getId() : null)
-                .actorUsername(notification.getActor() != null ? notification.getActor().getUsername() : null)
-                .actorAvatarUrl(notification.getActor() != null ? notification.getActor().getAvatarUrl() : null)
+                .actorId(actor != null ? actor.getId() : null)
+                .actorUsername(actor != null ? actor.getUsername() : null)
+                .actorAvatarUrl(actor != null ? actor.getAvatarUrl() : null)
                 .referenceId(notification.getReferenceId())
                 .referenceType(notification.getReferenceType())
                 .postId(notification.getPostId())
