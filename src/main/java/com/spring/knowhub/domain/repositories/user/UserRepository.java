@@ -10,12 +10,22 @@ import java.util.Optional;
 
 public interface UserRepository {
     User save(User user);
+
     void deleteById(Long id);
+
     Optional<User> findById(Long id);
+
     Optional<User> findByUsername(String username);
+
     List<User> findByIds(List<Long> ids);
+
     Optional<User> findByEmail(String email);
+
     Page<User> findUsersPaged(Specification<User> specification, Pageable pageable);
+
     Boolean existsByUsername(String username);
+
     Boolean existsByEmail(String email);
+
+    Boolean existsById(Long id);
 }
