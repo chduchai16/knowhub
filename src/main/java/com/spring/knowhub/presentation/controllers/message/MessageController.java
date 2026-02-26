@@ -6,6 +6,7 @@ import com.spring.knowhub.application.commands.message.CreateMessageCommand;
 import com.spring.knowhub.application.commands.message.DeleteMessageCommand;
 import com.spring.knowhub.application.commands.message.UpdateMessageCommand;
 import com.spring.knowhub.application.queries.message.GetConversationQuery;
+import com.spring.knowhub.application.queries.message.GetInboxQuery;
 import com.spring.knowhub.domain.models.message.Message;
 import com.spring.knowhub.infrastructure.security.CustomUserDetails;
 import com.spring.knowhub.presentation.mappers.message.MessageResponseMapper;
@@ -107,5 +108,36 @@ public class MessageController {
 
                 return ResponseEntity.ok(
                                 new ApiResponse<>("SUCCESS", "Lấy cuộc trò chuyện thành công", paginatedResponse));
+        }
+
+        @GetMapping("/inbox")
+        public ResponseEntity<ApiResponse<?>> getInbox(
+                        @RequestParam(required = false) String search,
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "20") int limit,
+                        @AuthenticationPrincipal CustomUserDetails userDetails) {
+                log.info("GET /api/messages/inbox - userId={}, search='{}'", userDetails.getUserId(), search);
+
+                Page<Message> messagePage = queryBus.execute(new GetInboxQuery(
+                                userDetails.getUserId(),
+                                search,
+                                page,
+                                limit));
+
+                Page<MessageResponse> responsePage = messagePage
+                                .map(messageResponseMapper::fromMessageToMessageResponse);
+
+                PaginationInfo paginationInfo = new PaginationInfo(
+                                responsePage.getTotalElements(),
+                                responsePage.getTotalPages(),
+                                responsePage.getNumber(),
+                                responsePage.getSize());
+
+                PaginatedResponse<MessageResponse> paginatedResponse = new PaginatedResponse<>(
+                                responsePage.getContent(),
+                                paginationInfo);
+
+                return ResponseEntity.ok(
+                                new ApiResponse<>("SUCCESS", "Lấy danh sách inbox thành công", paginatedResponse));
         }
 }

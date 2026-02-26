@@ -10,9 +10,12 @@ import com.spring.knowhub.infrastructure.mappers.message.MessageMapper;
 import com.spring.knowhub.infrastructure.repositories.jpas.message.JpaMessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import com.spring.knowhub.domain.specifications.message.MessageSpecification;
+import com.spring.knowhub.infrastructure.repositories.specifications.message.MessageJpaSpecificationAdapter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +61,29 @@ public class MessageRepositoryImpl implements MessageRepository {
             return messagePage;
         } catch (Exception ex) {
             log.error("Lỗi khi tìm cuộc trò chuyện. Chi tiết: {}", ex.getMessage());
+            throw MessageRepositoryException.findFailed(ex.getMessage());
+        }
+    }
+
+    @Override
+    public Page<Message> findLatestMessagesPerPartner(Long userId, String search, Pageable pageable) {
+        log.info("Tìm danh sách inbox bằng Specification cho người dùng {} - keyword: {}", userId, search);
+        try {
+            com.spring.knowhub.domain.specifications.Specification<Message> domainSpec = MessageSpecification
+                    .isLatestPerPartner(userId);
+
+            if (search != null && !search.isBlank()) {
+                domainSpec = domainSpec.and(MessageSpecification.partnerHasName(search));
+            }
+
+            org.springframework.data.jpa.domain.Specification<MessageEntity> jpaSpec = MessageJpaSpecificationAdapter
+                    .toJpaSpecification(domainSpec);
+
+            Page<MessageEntity> entities = jpaMessageRepository.findAll(jpaSpec, pageable);
+
+            return entities.map(messageMapper::fromEntityToDomain);
+        } catch (Exception ex) {
+            log.error("Lỗi khi tìm danh sách inbox bằng Specification. Chi tiết: {}", ex.getMessage());
             throw MessageRepositoryException.findFailed(ex.getMessage());
         }
     }

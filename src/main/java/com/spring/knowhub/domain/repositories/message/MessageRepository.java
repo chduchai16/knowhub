@@ -11,6 +11,8 @@ public interface MessageRepository {
 
     Page<Message> findMessagesBetweenUsers(Long userId1, Long userId2, Pageable pageable);
 
+    Page<Message> findLatestMessagesPerPartner(Long userId, String search, Pageable pageable);
+
     Message save(Message message);
 
     void deleteById(Long id);
