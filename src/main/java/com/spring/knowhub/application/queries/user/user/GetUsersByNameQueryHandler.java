@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetUsersByNameQueryHandler implements QueryHandler<GetUsersByNameQuery, List<User>> {
 
     private final UserRepository userRepository;

@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
-public class GetTagByIdQueryHandler implements QueryHandler<GetTagByIdQuery , Tag> {
-    private final TagRepository tagRepository ;
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
+public class GetTagByIdQueryHandler implements QueryHandler<GetTagByIdQuery, Tag> {
+    private final TagRepository tagRepository;
+
     @Override
     public boolean supports(Object query) {
         return query instanceof GetTagByIdQuery;
@@ -20,7 +22,8 @@ public class GetTagByIdQueryHandler implements QueryHandler<GetTagByIdQuery , Ta
     @Override
     public Tag handle(GetTagByIdQuery query) {
         GetTagValidator.validate(query);
-        Tag existingTag = tagRepository.findById(query.getId()).orElseThrow(() -> TagNotFoundException.byId(query.getId()));
-        return existingTag ;
+        Tag existingTag = tagRepository.findById(query.getId())
+                .orElseThrow(() -> TagNotFoundException.byId(query.getId()));
+        return existingTag;
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional
 public class MarkAllNotificationsReadCommandHandler implements CommandHandler<MarkAllNotificationsReadCommand, Void> {
 
     private final UserNotificationRepository userNotificationRepository;

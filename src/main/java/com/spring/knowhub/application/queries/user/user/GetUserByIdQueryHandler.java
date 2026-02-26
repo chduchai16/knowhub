@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetUserByIdQueryHandler implements QueryHandler<GetUserByIdQuery, User> {
 
     private final UserRepository userRepository;

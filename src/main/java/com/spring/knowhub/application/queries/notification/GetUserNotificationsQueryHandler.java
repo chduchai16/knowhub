@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetUserNotificationsQueryHandler
         implements QueryHandler<GetUserNotificationsQuery, Page<UserNotification>> {
 

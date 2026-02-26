@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetCommentsByRootIdQueryHandler implements QueryHandler<GetCommentsByRootIdQuery, Page<Comment>> {
 
     private final CommentRepository commentRepository;

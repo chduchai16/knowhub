@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional
 public class DeleteCommentCommandHandler implements CommandHandler<DeleteCommentCommand, Void> {
 
     private final CommentRepository commentRepository;

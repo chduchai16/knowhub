@@ -15,9 +15,7 @@ import com.spring.knowhub.infrastructure.repositories.specifications.message.Mes
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -28,7 +26,6 @@ public class MessageRepositoryImpl implements MessageRepository {
     private final MessageMapper messageMapper;
 
     @Override
-    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public Optional<Message> findById(Long id) {
         log.info("Tìm tin nhắn với ID: {}", id);
         try {

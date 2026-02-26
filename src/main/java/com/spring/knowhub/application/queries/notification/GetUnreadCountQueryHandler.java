@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetUnreadCountQueryHandler implements QueryHandler<GetUnreadCountQuery, Long> {
 
     private final UserNotificationRepository userNotificationRepository;

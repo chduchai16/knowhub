@@ -9,9 +9,10 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class GetTagPagedQueryHandler implements QueryHandler<GetTagPagedQuery , Page<Tag>> {
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
+public class GetTagPagedQueryHandler implements QueryHandler<GetTagPagedQuery, Page<Tag>> {
 
-    private final TagRepository tagRepository ;
+    private final TagRepository tagRepository;
 
     @Override
     public boolean supports(Object query) {
@@ -20,6 +21,6 @@ public class GetTagPagedQueryHandler implements QueryHandler<GetTagPagedQuery , 
 
     @Override
     public Page<Tag> handle(GetTagPagedQuery query) {
-        return tagRepository.findTagsPaged(query.getPageable()) ;
+        return tagRepository.findTagsPaged(query.getPageable());
     }
 }

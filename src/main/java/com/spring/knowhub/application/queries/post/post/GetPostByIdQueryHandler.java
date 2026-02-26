@@ -26,6 +26,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetPostByIdQueryHandler implements QueryHandler<GetPostByIdQuery, Post> {
 
     private final PostRepository postRepository;

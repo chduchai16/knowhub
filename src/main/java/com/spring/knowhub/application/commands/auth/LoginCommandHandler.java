@@ -13,11 +13,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class LoginCommandHandler implements CommandHandler<LoginCommand , String> {
+@org.springframework.transaction.annotation.Transactional
+public class LoginCommandHandler implements CommandHandler<LoginCommand, String> {
 
-    private final UserRepository userRepository ;
-    private final TokenProvider tokenProvider ;
-    private final PasswordEncoder passwordEncoder ;
+    private final UserRepository userRepository;
+    private final TokenProvider tokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public boolean supports(Object command) {
@@ -27,10 +28,11 @@ public class LoginCommandHandler implements CommandHandler<LoginCommand , String
     @Override
     public String handle(LoginCommand command) {
         LoginValidator.validate(command);
-        User user = userRepository.findByUsername(command.getUsername()).orElseThrow(() -> UserNotFoundException.byUsername(command.getUsername())) ;
-        if(!passwordEncoder.matches(command.getPassword() , user.getPassword())){
+        User user = userRepository.findByUsername(command.getUsername())
+                .orElseThrow(() -> UserNotFoundException.byUsername(command.getUsername()));
+        if (!passwordEncoder.matches(command.getPassword(), user.getPassword())) {
             throw InvalidLoginException.authenticationFailed();
         }
-        return tokenProvider.generate(user,command.getRememberMe()) ;
+        return tokenProvider.generate(user, command.getRememberMe());
     }
 }

@@ -11,10 +11,11 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
-public class DeleteUserFollowCommandHandler implements CommandHandler<DeleteUserFollowCommand , Void> {
-    
+@org.springframework.transaction.annotation.Transactional
+public class DeleteUserFollowCommandHandler implements CommandHandler<DeleteUserFollowCommand, Void> {
+
     private final UserFollowRepository userFollowRepository;
-    
+
     @Override
     public boolean supports(Object command) {
         return command instanceof DeleteUserFollowCommand;
@@ -22,7 +23,9 @@ public class DeleteUserFollowCommandHandler implements CommandHandler<DeleteUser
 
     @Override
     public Void handle(DeleteUserFollowCommand command) {
-        UserFollow userFollow = userFollowRepository.findByUserNameAndFollowerName(command.getUserName(), command.getFollowerName()).orElseThrow(() -> UserFollowNotFound.byUserAndFollower(command.getUserName(), command.getFollowerName())) ;
+        UserFollow userFollow = userFollowRepository
+                .findByUserNameAndFollowerName(command.getUserName(), command.getFollowerName()).orElseThrow(
+                        () -> UserFollowNotFound.byUserAndFollower(command.getUserName(), command.getFollowerName()));
         userFollowRepository.deleteById(userFollow.getId());
         return null;
     }

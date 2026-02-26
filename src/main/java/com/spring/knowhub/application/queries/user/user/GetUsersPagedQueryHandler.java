@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetUsersPagedQueryHandler implements QueryHandler<GetUsersPagedQuery, Page<User>> {
 
     private final UserRepository userRepository;

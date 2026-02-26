@@ -10,9 +10,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class GetPagedRoleQueryHandler implements QueryHandler<GetPagedRoleQuery , Page<Role>> {
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
+public class GetPagedRoleQueryHandler implements QueryHandler<GetPagedRoleQuery, Page<Role>> {
 
-    private final RoleRepository roleRepository ;
+    private final RoleRepository roleRepository;
 
     @Override
     public boolean supports(Object query) {
@@ -23,9 +24,9 @@ public class GetPagedRoleQueryHandler implements QueryHandler<GetPagedRoleQuery 
     public Page<Role> handle(GetPagedRoleQuery query) {
         try {
             PageRequest pageRequest = PageRequest.of(query.getPage(), query.getPageSize());
-            return roleRepository.findRolesPaged(pageRequest , query.getKeyword());
-        } catch (Exception ex){
-            throw ex ;
+            return roleRepository.findRolesPaged(pageRequest, query.getKeyword());
+        } catch (Exception ex) {
+            throw ex;
         }
     }
 }

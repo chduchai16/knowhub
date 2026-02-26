@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetPermissionByIdQueryHandler
         implements QueryHandler<GetPermissionByIdQuery, Permission> {
 
@@ -20,9 +21,7 @@ public class GetPermissionByIdQueryHandler
         GetPermissionByIdValidator.validate(query);
 
         return permissionRepository.findById(query.getId())
-                .orElseThrow(() ->
-                        PermissionNotFoundException.permissionNotFoundById(query.getId())
-                );
+                .orElseThrow(() -> PermissionNotFoundException.permissionNotFoundById(query.getId()));
     }
 
     @Override
@@ -30,4 +29,3 @@ public class GetPermissionByIdQueryHandler
         return query instanceof GetPermissionByIdQuery;
     }
 }
-

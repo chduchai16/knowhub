@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetReportsByUserIdQueryHandler implements QueryHandler<GetReportsByUserIdQuery, Page<Report>> {
     private final ReportRepository reportRepository;
 

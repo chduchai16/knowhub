@@ -9,9 +9,10 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional
 public class DeletePostLikeCommandHandler implements CommandHandler<DeletePostLikeCommand, Void> {
 
-    private final PostLikeRepository postLikeRepository ;
+    private final PostLikeRepository postLikeRepository;
 
     @Override
     public boolean supports(Object command) {

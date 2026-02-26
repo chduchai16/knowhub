@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetAllPermissionQueryHandler implements QueryHandler<GetAllPermissionQuery, List<Permission>> {
 
     private final PermissionRepository permissionRepository;
@@ -24,4 +25,3 @@ public class GetAllPermissionQueryHandler implements QueryHandler<GetAllPermissi
         return query instanceof GetAllPermissionQuery;
     }
 }
-
