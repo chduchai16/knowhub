@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetCommentsByPostIdQueryHandler implements QueryHandler<GetCommentsByPostIdQuery, Page<Comment>> {
 
     private final CommentRepository commentRepository;

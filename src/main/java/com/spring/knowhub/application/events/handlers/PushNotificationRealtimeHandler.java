@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class PushNotificationRealtimeHandler {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;

@@ -9,8 +9,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class GetInboxQueryHandler implements QueryHandler<GetInboxQuery, Page<Message>> {
     private final MessageRepository messageRepository;
 

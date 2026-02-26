@@ -17,6 +17,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional
 public class CreateNotificationCommandHandler
         implements CommandHandler<CreateNotificationCommand, List<UserNotification>> {
 

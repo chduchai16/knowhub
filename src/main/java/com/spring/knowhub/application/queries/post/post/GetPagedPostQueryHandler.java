@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetPagedPostQueryHandler implements QueryHandler<GetPagedPostQuery, Page<Post>> {
 
     private final PostRepository postRepository;

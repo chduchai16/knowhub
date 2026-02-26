@@ -28,6 +28,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetNewFeedsQueryHandler implements QueryHandler<GetNewFeedsQuery, Page<Post>> {
 
     private final PostRepository postRepository;

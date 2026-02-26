@@ -13,9 +13,9 @@ import com.spring.knowhub.domain.specifications.AlwaysTrueSpecification;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetPagedReportsQueryHandler implements QueryHandler<GetPagedReportsQuery, Page<Report>> {
     private final ReportRepository reportRepository;
-
 
     @Override
     public Page<Report> handle(GetPagedReportsQuery query) {

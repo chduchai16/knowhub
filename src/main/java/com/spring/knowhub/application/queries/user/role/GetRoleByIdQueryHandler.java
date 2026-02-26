@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class GetRoleByIdQueryHandler implements QueryHandler<GetRoleByIdQuery, Role> {
 
     private final RoleRepository roleRepository;
