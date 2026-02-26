@@ -167,4 +167,15 @@ public class UserRepositoryImpl implements UserRepository {
             throw UserRepositoryException.findFailed("Lỗi khi kiểm tra tồn tại user theo email: " + email);
         }
     }
+
+    @Override
+    public Boolean existsById(Long id) {
+        log.info("Kiểm tra tồn tại user theo ID: {}", id);
+        try {
+            return userJpaRepository.existsById(id);
+        } catch (Exception ex) {
+            log.error("Lỗi khi kiểm tra tồn tại user theo ID: {}", id, ex);
+            throw UserRepositoryException.findFailed("Lỗi khi kiểm tra tồn tại user theo ID: " + id);
+        }
+    }
 }

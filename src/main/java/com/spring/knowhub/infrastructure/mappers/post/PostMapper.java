@@ -91,7 +91,7 @@ public class PostMapper {
                 fromEntityToDomainTypeMap.implicitMappings();
             }
 
-            Post post = fromEntityToDomainTypeMap.map(postEntity);
+            Post post = modelMapper.map(postEntity, Post.class);
 
             /* map user */
             if (postEntity.getUser() != null) {

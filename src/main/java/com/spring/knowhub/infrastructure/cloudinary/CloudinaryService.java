@@ -20,13 +20,14 @@ public class CloudinaryService {
             MultipartFile file,
             String folder) {
         try {
-            Map uploadResult = cloudinary.uploader().upload(
-                    file.getBytes(),
+            Map uploadResult = cloudinary.uploader().uploadLarge(
+                    file.getInputStream(),
                     ObjectUtils.asMap(
                             "folder", folder,
                             "resource_type", "auto",
                             "use_filename", true,
-                            "unique_filename", true));
+                            "unique_filename", true,
+                            "chunk_size", 6000000));
             return new CloudinaryUploadResponse(
                     (String) uploadResult.get("public_id"),
                     (String) uploadResult.get("secure_url"),
@@ -45,13 +46,14 @@ public class CloudinaryService {
             String folder,
             String fileName) {
         try {
-            Map uploadResult = cloudinary.uploader().upload(
-                    file.getBytes(),
+            Map uploadResult = cloudinary.uploader().uploadLarge(
+                    file.getInputStream(),
                     ObjectUtils.asMap(
                             "folder", folder,
                             "public_id", fileName,
                             "overwrite", true,
-                            "resource_type", "auto"));
+                            "resource_type", "auto",
+                            "chunk_size", 6000000));
             return new CloudinaryUploadResponse(
                     (String) uploadResult.get("public_id"),
                     (String) uploadResult.get("secure_url"),

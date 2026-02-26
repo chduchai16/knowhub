@@ -1,0 +1,13 @@
+package com.spring.knowhub.presentation.requests.message.message;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class UpdateMessageRequest {
+    private Long id;
+    private String content;
+}

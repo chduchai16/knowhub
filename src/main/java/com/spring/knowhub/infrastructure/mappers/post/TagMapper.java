@@ -33,7 +33,7 @@ public class TagMapper {
                 fromEntityToDomainTypeMap = modelMapper.createTypeMap(TagEntity.class, Tag.class);
                 fromEntityToDomainTypeMap.implicitMappings();
             }
-            return fromEntityToDomainTypeMap.map(tagEntity);
+            return modelMapper.map(tagEntity, Tag.class);
         } catch (Exception ex) {
             throw TagMapperException.fromEntityToDomainMappingError(ex.getMessage());
         }
