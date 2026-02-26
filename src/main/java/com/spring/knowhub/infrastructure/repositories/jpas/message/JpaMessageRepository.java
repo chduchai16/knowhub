@@ -16,4 +16,10 @@ public interface JpaMessageRepository extends JpaRepository<MessageEntity, Long>
                         "(m.sender.id = :userId2 AND m.receiver.id = :userId1)")
         Page<MessageEntity> findConversation(@Param("userId1") Long userId1, @Param("userId2") Long userId2,
                         Pageable pageable);
+
+        @Query("SELECT m FROM MessageEntity m " +
+                        "LEFT JOIN FETCH m.sender " +
+                        "LEFT JOIN FETCH m.receiver " +
+                        "WHERE m.id = :id")
+        java.util.Optional<MessageEntity> findByIdWithUsers(@Param("id") Long id);
 }

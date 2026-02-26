@@ -65,7 +65,7 @@ public class MessageMapper {
                 fromEntityToDomainTypeMap.implicitMappings();
             }
 
-            Message message = fromEntityToDomainTypeMap.map(entity);
+            Message message = modelMapper.map(entity, Message.class);
 
             if (entity.getSender() != null) {
                 message.setSender(userMapper.fromEntityToDomain(entity.getSender()));

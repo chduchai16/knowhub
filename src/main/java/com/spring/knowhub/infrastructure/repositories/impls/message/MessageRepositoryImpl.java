@@ -25,10 +25,11 @@ public class MessageRepositoryImpl implements MessageRepository {
     private final MessageMapper messageMapper;
 
     @Override
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public Optional<Message> findById(Long id) {
         log.info("Tìm tin nhắn với ID: {}", id);
         try {
-            Optional<Message> messageOptional = jpaMessageRepository.findById(id)
+            Optional<Message> messageOptional = jpaMessageRepository.findByIdWithUsers(id)
                     .map(messageMapper::fromEntityToDomain);
             if (messageOptional.isEmpty()) {
                 throw MessageNotFoundException.withId(id);

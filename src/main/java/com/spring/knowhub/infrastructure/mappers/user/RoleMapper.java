@@ -15,15 +15,15 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class RoleMapper {
 
-    private final ModelMapper modelMapper ;
-    private final PermissionMapper permissionMapper ;
-    private TypeMap<Role , RoleEntity> fromDomainToEntityTypeMap ;
-    private TypeMap<RoleEntity , Role> fromEntityToDomainTypeMap ;
+    private final ModelMapper modelMapper;
+    private final PermissionMapper permissionMapper;
+    private TypeMap<Role, RoleEntity> fromDomainToEntityTypeMap;
+    private TypeMap<RoleEntity, Role> fromEntityToDomainTypeMap;
 
     public Role fromEntityToDomain(RoleEntity roleEntity) {
         try {
             if (roleEntity == null) {
-                throw RoleMapperException.entityToDomainMappingFailed("Đối tượng truyền vào bị null") ;
+                throw RoleMapperException.entityToDomainMappingFailed("Đối tượng truyền vào bị null");
             }
             if (fromEntityToDomainTypeMap == null) {
                 fromEntityToDomainTypeMap = modelMapper.createTypeMap(RoleEntity.class, Role.class);
@@ -34,7 +34,7 @@ public class RoleMapper {
                 fromEntityToDomainTypeMap.implicitMappings();
             }
 
-            Role role = fromEntityToDomainTypeMap.map(roleEntity);
+            Role role = modelMapper.map(roleEntity, Role.class);
 
             // map permissions
             if (roleEntity.getPermissions() != null && !roleEntity.getPermissions().isEmpty()) {
@@ -46,8 +46,8 @@ public class RoleMapper {
             }
 
             return role;
-        } catch(Exception ex) {
-            throw RoleMapperException.entityToDomainMappingFailed(ex.getMessage()) ;
+        } catch (Exception ex) {
+            throw RoleMapperException.entityToDomainMappingFailed(ex.getMessage());
         }
 
     }
@@ -55,7 +55,7 @@ public class RoleMapper {
     public RoleEntity fromDomainToEntity(Role role) {
         try {
             if (role == null) {
-                throw RoleMapperException.domainToEntityMappingFailed("Đối tượng truyền vào bị null") ;
+                throw RoleMapperException.domainToEntityMappingFailed("Đối tượng truyền vào bị null");
             }
             if (fromDomainToEntityTypeMap == null) {
                 fromDomainToEntityTypeMap = modelMapper.createTypeMap(Role.class, RoleEntity.class);
@@ -70,7 +70,8 @@ public class RoleMapper {
 
             // map permissions
             if (role.getPermissions() != null && !role.getPermissions().isEmpty()) {
-                Set<com.spring.knowhub.infrastructure.entities.user.PermissionEntity> permissionEntities = role.getPermissions()
+                Set<com.spring.knowhub.infrastructure.entities.user.PermissionEntity> permissionEntities = role
+                        .getPermissions()
                         .stream()
                         .map(permissionMapper::fromDomainToEntity)
                         .collect(java.util.stream.Collectors.toSet());
