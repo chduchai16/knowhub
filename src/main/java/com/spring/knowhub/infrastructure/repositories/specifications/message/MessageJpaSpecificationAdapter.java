@@ -17,8 +17,6 @@ public final class MessageJpaSpecificationAdapter {
             com.spring.knowhub.domain.specifications.Specification<Message> spec) {
 
         return (root, query, cb) -> {
-            // Eager fetch sender và receiver để tránh LazyInitializationException và tăng
-            // hiệu năng
             if (query != null && query.getResultType() != Long.class) {
                 root.fetch("sender", JoinType.LEFT);
                 root.fetch("receiver", JoinType.LEFT);
@@ -80,13 +78,16 @@ public final class MessageJpaSpecificationAdapter {
                     .as(Long.class);
 
             subquery.select(cb.max(subRoot.get("id")));
-            subquery.where(cb.or(
-                    cb.and(cb.equal(subRoot.get("sender").get("id"), userId),
-                            cb.equal(subRoot.get("receiver").get("id"), partnerId)),
-                    cb.and(cb.equal(subRoot.get("receiver").get("id"), userId),
-                            cb.equal(subRoot.get("sender").get("id"), partnerId))));
+            subquery.where(cb.and(
+                    cb.equal(subRoot.get("isDeleted"), false),
+                    cb.or(
+                            cb.and(cb.equal(subRoot.get("sender").get("id"), userId),
+                                    cb.equal(subRoot.get("receiver").get("id"), partnerId)),
+                            cb.and(cb.equal(subRoot.get("receiver").get("id"), userId),
+                                    cb.equal(subRoot.get("sender").get("id"), partnerId)))));
 
             return cb.and(
+                    cb.equal(root.get("isDeleted"), false),
                     cb.or(cb.equal(root.get("sender").get("id"), userId),
                             cb.equal(root.get("receiver").get("id"), userId)),
                     cb.equal(root.get("id"), subquery));

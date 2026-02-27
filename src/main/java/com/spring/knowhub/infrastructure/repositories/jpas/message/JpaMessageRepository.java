@@ -15,10 +15,17 @@ public interface JpaMessageRepository
                 extends JpaRepository<MessageEntity, Long>, JpaSpecificationExecutor<MessageEntity> {
 
         @Query("SELECT m FROM MessageEntity m WHERE " +
-                        "(m.sender.id = :userId1 AND m.receiver.id = :userId2) OR " +
-                        "(m.sender.id = :userId2 AND m.receiver.id = :userId1)")
+                        "((m.sender.id = :userId1 AND m.receiver.id = :userId2) OR " +
+                        "(m.sender.id = :userId2 AND m.receiver.id = :userId1)) " +
+                        "AND m.isDeleted = false")
         Page<MessageEntity> findConversation(@Param("userId1") Long userId1, @Param("userId2") Long userId2,
                         Pageable pageable);
+
+        @org.springframework.data.jpa.repository.Modifying
+        @Query("UPDATE MessageEntity m SET m.isDeleted = true WHERE " +
+                        "((m.sender.id = :userId1 AND m.receiver.id = :userId2) OR " +
+                        "(m.sender.id = :userId2 AND m.receiver.id = :userId1))")
+        void softDeleteConversation(@Param("userId1") Long userId1, @Param("userId2") Long userId2);
 
         @Query("SELECT m FROM MessageEntity m " +
                         "LEFT JOIN FETCH m.sender " +

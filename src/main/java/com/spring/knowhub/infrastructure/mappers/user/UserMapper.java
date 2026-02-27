@@ -5,6 +5,7 @@ import com.spring.knowhub.domain.models.user.User;
 import com.spring.knowhub.infrastructure.entities.user.RoleEntity;
 import com.spring.knowhub.infrastructure.entities.user.UserEntity;
 import com.spring.knowhub.infrastructure.exceptions.user.user.UserMapperException;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -19,18 +20,21 @@ public class UserMapper {
     private TypeMap<User, UserEntity> fromDomainToEntityTypeMap;
     private TypeMap<UserEntity, User> fromEntityToDomainTypeMap;
 
+    @PostConstruct
+    public void init() {
+        fromDomainToEntityTypeMap = modelMapper.createTypeMap(User.class, UserEntity.class);
+        fromDomainToEntityTypeMap.addMappings(mapper -> mapper.skip(UserEntity::setRole));
+        fromDomainToEntityTypeMap.implicitMappings();
+
+        fromEntityToDomainTypeMap = modelMapper.createTypeMap(UserEntity.class, User.class);
+        fromEntityToDomainTypeMap.addMappings(mapper -> mapper.skip(User::setRole));
+        fromEntityToDomainTypeMap.implicitMappings();
+    }
+
     public UserEntity fromDomainToEntity(User user) {
         try {
             if (user == null) {
                 throw UserMapperException.entityToDomainMappingFailed("Đối tượng truyền vào bị null");
-            }
-
-            if (fromDomainToEntityTypeMap == null) {
-                fromDomainToEntityTypeMap = modelMapper.createTypeMap(User.class, UserEntity.class);
-                fromDomainToEntityTypeMap.addMappings(mapper -> {
-                    mapper.skip(UserEntity::setRole);
-                });
-                fromDomainToEntityTypeMap.implicitMappings();
             }
 
             UserEntity userEntity = fromDomainToEntityTypeMap.map(user);
@@ -59,15 +63,7 @@ public class UserMapper {
                 throw UserMapperException.entityToDomainMappingFailed("Đối tượng truyền vào bị null");
             }
 
-            if (fromEntityToDomainTypeMap == null) {
-                fromEntityToDomainTypeMap = modelMapper.createTypeMap(UserEntity.class, User.class);
-                fromEntityToDomainTypeMap.addMappings(mapper -> {
-                    mapper.skip(User::setRole);
-                });
-                fromEntityToDomainTypeMap.implicitMappings();
-            }
-
-            User user = modelMapper.map(userEntity, User.class);
+            User user = fromEntityToDomainTypeMap.map(userEntity);
 
             if (userEntity.getRole() != null) {
                 try {

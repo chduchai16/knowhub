@@ -14,11 +14,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class MediaJpaSpecificationAdapter {
 
-    private MediaJpaSpecificationAdapter() {}
+    private MediaJpaSpecificationAdapter() {
+    }
 
     public static Specification<MediaEntity> toJpaSpecification(
-            com.spring.knowhub.domain.specifications.Specification<Media> spec
-    ) {
+            com.spring.knowhub.domain.specifications.Specification<Media> spec) {
 
         if (spec instanceof AlwaysTrueSpecification) {
             return (root, query, cb) -> cb.conjunction();
@@ -32,7 +32,7 @@ public class MediaJpaSpecificationAdapter {
             };
         }
 
-        if(spec instanceof OrSpecification<Media> orSpec) {
+        if (spec instanceof OrSpecification<Media> orSpec) {
             return (root, query, cb) -> {
                 Predicate left = toJpaSpecification(orSpec.getLeft()).toPredicate(root, query, cb);
                 Predicate right = toJpaSpecification(orSpec.getRight()).toPredicate(root, query, cb);
@@ -40,29 +40,31 @@ public class MediaJpaSpecificationAdapter {
             };
         }
 
-        if(spec instanceof NotSpecification<Media> notSpec) {
+        if (spec instanceof NotSpecification<Media> notSpec) {
             return (root, query, cb) -> cb.not(
-                    toJpaSpecification(notSpec.getWrapped()).toPredicate(root, query, cb)
-            );
+                    toJpaSpecification(notSpec.getWrapped()).toPredicate(root, query, cb));
         }
 
-        if(spec instanceof MediaHasOwnerIdSpec) {
+        if (spec instanceof MediaHasOwnerIdSpec) {
             MediaHasOwnerIdSpec ownerIdSpec = (MediaHasOwnerIdSpec) spec;
             return (root, query, cb) -> cb.equal(root.get("ownerId"), ownerIdSpec.getOwnerId());
         }
 
-        if(spec instanceof MediaHasOwnerTypeSpec) {
+        if (spec instanceof MediaHasOwnerTypeSpec) {
             MediaHasOwnerTypeSpec ownerTypeSpec = (MediaHasOwnerTypeSpec) spec;
             return (root, query, cb) -> cb.equal(root.get("ownerType"), ownerTypeSpec.getOwnerType());
         }
 
-        if(spec instanceof MediaHasIdSpec) {
+        if (spec instanceof MediaHasIdSpec) {
             MediaHasIdSpec idSpec = (MediaHasIdSpec) spec;
             return (root, query, cb) -> cb.equal(root.get("id"), idSpec.getId());
         }
 
+        if (spec instanceof com.spring.knowhub.domain.specifications.media.MediaHasOwnerIdsSpec ownerIdsSpec) {
+            return (root, query, cb) -> root.get("ownerId").in(ownerIdsSpec.getOwnerIds());
+        }
+
         throw new IllegalArgumentException(
-                "Không thể chuyển đổi Media Specification: " + spec.getClass().getName()
-        );
+                "Không thể chuyển đổi Media Specification: " + spec.getClass().getName());
     }
 }

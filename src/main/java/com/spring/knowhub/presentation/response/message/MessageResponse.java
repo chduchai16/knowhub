@@ -18,6 +18,9 @@ public class MessageResponse {
     private Long receiverId;
     private String receiverName;
     private String receiverAvatarUrl;
+    private Long partnerId;
+    private String partnerName;
+    private String partnerAvatarUrl;
     private String content;
     private List<MediaResponse> medias;
     private Boolean isDeleted;
