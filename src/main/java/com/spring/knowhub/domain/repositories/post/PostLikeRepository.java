@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface PostLikeRepository {
     PostLike save(PostLike postLike);
+
     void deleteById(Long id);
+
     List<PostLike> findPostLikesByPostId(Long postId);
+
     Long countByPostId(Long postId);
+
     Optional<PostLike> findByPostIdAndUserId(Long postId, Long userId);
 }

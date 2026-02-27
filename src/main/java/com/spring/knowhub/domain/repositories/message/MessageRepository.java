@@ -16,4 +16,6 @@ public interface MessageRepository {
     Message save(Message message);
 
     void deleteById(Long id);
+
+    void deleteConversation(Long userId1, Long userId2);
 }

@@ -5,6 +5,7 @@ import com.spring.knowhub.infrastructure.entities.post.PostEntity;
 import com.spring.knowhub.infrastructure.entities.post.PostTagEntity;
 import com.spring.knowhub.infrastructure.exceptions.post.post.PostMapperException;
 import com.spring.knowhub.infrastructure.mappers.user.UserMapper;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -22,27 +23,34 @@ public class PostMapper {
     private TypeMap<Post, PostEntity> fromDomainToEntityTypeMap;
     private TypeMap<PostEntity, Post> fromEntityToDomainTypeMap;
 
+    @PostConstruct
+    public void init() {
+        fromDomainToEntityTypeMap = modelMapper.createTypeMap(Post.class, PostEntity.class);
+        fromDomainToEntityTypeMap.addMappings(mapper -> {
+            mapper.skip(PostEntity::setUser);
+            mapper.skip(PostEntity::setPostTags);
+        });
+        fromDomainToEntityTypeMap.implicitMappings();
+
+        fromEntityToDomainTypeMap = modelMapper.createTypeMap(PostEntity.class, Post.class);
+        fromEntityToDomainTypeMap.addMappings(mapper -> {
+            mapper.skip(Post::setUser);
+            mapper.skip(Post::setPostTags);
+        });
+        fromEntityToDomainTypeMap.implicitMappings();
+    }
+
     public PostEntity fromDomainToEntity(Post post) {
         try {
             if (post == null) {
                 throw PostMapperException.fromDomainToEntityFailed("Đối tượng Post là null");
             }
 
-            if (fromDomainToEntityTypeMap == null) {
-                fromDomainToEntityTypeMap = modelMapper.createTypeMap(Post.class, PostEntity.class);
-                fromDomainToEntityTypeMap.addMappings(mapper -> {
-                    mapper.skip(PostEntity::setUser);
-                    mapper.skip(PostEntity::setPostTags);
-                });
-                fromDomainToEntityTypeMap.implicitMappings();
-            }
-
             PostEntity postEntity = fromDomainToEntityTypeMap.map(post);
 
             /* map user */
             if (post.getUser() != null) {
-                postEntity.setUser(
-                        userMapper.fromDomainToEntity(post.getUser()));
+                postEntity.setUser(userMapper.fromDomainToEntity(post.getUser()));
             }
 
             /* map postTags */
@@ -50,15 +58,13 @@ public class PostMapper {
                 if (postEntity.getPostTags() == null) {
                     postEntity.setPostTags(new HashSet<>());
                 } else {
-                    // Clear old tags to trigger orphanRemoval
                     postEntity.getPostTags().clear();
                 }
 
                 for (var postTag : post.getPostTags()) {
                     PostTagEntity postTagEntity = new PostTagEntity();
                     postTagEntity.setPost(postEntity);
-                    postTagEntity.setTag(
-                            tagMapper.fromDomainToEntity(postTag.getTag()));
+                    postTagEntity.setTag(tagMapper.fromDomainToEntity(postTag.getTag()));
                     postEntity.getPostTags().add(postTagEntity);
                 }
             } else if (postEntity.getPostTags() != null) {
@@ -82,21 +88,11 @@ public class PostMapper {
                 throw PostMapperException.fromEntityToDomainFailed("Thực thể PostEntity là null");
             }
 
-            if (fromEntityToDomainTypeMap == null) {
-                fromEntityToDomainTypeMap = modelMapper.createTypeMap(PostEntity.class, Post.class);
-                fromEntityToDomainTypeMap.addMappings(mapper -> {
-                    mapper.skip(Post::setUser);
-                    mapper.skip(Post::setPostTags);
-                });
-                fromEntityToDomainTypeMap.implicitMappings();
-            }
-
-            Post post = modelMapper.map(postEntity, Post.class);
+            Post post = fromEntityToDomainTypeMap.map(postEntity);
 
             /* map user */
             if (postEntity.getUser() != null) {
-                post.setUser(
-                        userMapper.fromEntityToDomain(postEntity.getUser()));
+                post.setUser(userMapper.fromEntityToDomain(postEntity.getUser()));
             }
 
             /* map postTags */
@@ -105,13 +101,9 @@ public class PostMapper {
                         postEntity.getPostTags().stream()
                                 .map(postTagEntity -> {
                                     com.spring.knowhub.domain.models.post.PostTag postTag = new com.spring.knowhub.domain.models.post.PostTag();
-
                                     postTag.setId(postTagEntity.getId());
                                     postTag.setPost(post);
-                                    postTag.setTag(
-                                            tagMapper.fromEntityToDomain(
-                                                    postTagEntity.getTag()));
-
+                                    postTag.setTag(tagMapper.fromEntityToDomain(postTagEntity.getTag()));
                                     return postTag;
                                 })
                                 .collect(java.util.stream.Collectors.toSet()));

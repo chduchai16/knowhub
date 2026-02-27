@@ -16,8 +16,9 @@ public class PostJpaSpecificationAdapter {
     private PostJpaSpecificationAdapter() {
     }
 
-    public static Specification<PostEntity> toJpaSpecification(com.spring.knowhub.domain.specifications.Specification<Post> spec) {
-        if(spec instanceof AlwaysTrueSpecification) {
+    public static Specification<PostEntity> toJpaSpecification(
+            com.spring.knowhub.domain.specifications.Specification<Post> spec) {
+        if (spec instanceof AlwaysTrueSpecification) {
             return (root, query, cb) -> cb.conjunction();
         }
 
@@ -45,19 +46,19 @@ public class PostJpaSpecificationAdapter {
         }
 
         // lọc bằng content
-        if(spec instanceof PostHasContentSpec) {
+        if (spec instanceof PostHasContentSpec) {
             PostHasContentSpec contentSpec = (PostHasContentSpec) spec;
             return (root, query, cb) -> cb.like(root.get("content"), "%" + contentSpec.getKeyword() + "%");
         }
 
         // status
-        if(spec instanceof PostHasStatusSpec) {
+        if (spec instanceof PostHasStatusSpec) {
             PostHasStatusSpec statusSpec = (PostHasStatusSpec) spec;
             return (root, query, cb) -> cb.equal(root.get("status"), statusSpec.getStatus());
         }
 
         // user name
-        if(spec instanceof PostHasUserNameSpec) {
+        if (spec instanceof PostHasUserNameSpec) {
             PostHasUserNameSpec userNameSpec = (PostHasUserNameSpec) spec;
             return (root, query, cb) -> cb.equal(root.get("user").get("username"), userNameSpec.getUserName());
         }

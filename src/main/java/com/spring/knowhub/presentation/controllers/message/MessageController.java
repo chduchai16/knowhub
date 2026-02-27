@@ -3,6 +3,7 @@ package com.spring.knowhub.presentation.controllers.message;
 import com.spring.knowhub.application.buses.CommandBus;
 import com.spring.knowhub.application.buses.QueryBus;
 import com.spring.knowhub.application.commands.message.CreateMessageCommand;
+import com.spring.knowhub.application.commands.message.DeleteConversationCommand;
 import com.spring.knowhub.application.commands.message.DeleteMessageCommand;
 import com.spring.knowhub.application.commands.message.UpdateMessageCommand;
 import com.spring.knowhub.application.queries.message.GetConversationQuery;
@@ -79,6 +80,20 @@ public class MessageController {
                                 new ApiResponse<>("SUCCESS", "Xóa tin nhắn thành công", null));
         }
 
+        @DeleteMapping("/conversation/{contactId}")
+        public ResponseEntity<ApiResponse<?>> deleteConversation(
+                        @PathVariable Long contactId,
+                        @AuthenticationPrincipal CustomUserDetails userDetails) {
+                log.info("DELETE /api/messages/conversation/{} - userId={}", contactId, userDetails.getUserId());
+
+                commandBus.execute(new DeleteConversationCommand(
+                                userDetails.getUserId(),
+                                contactId));
+
+                return ResponseEntity.ok(
+                                new ApiResponse<>("SUCCESS", "Xóa cuộc hội thoại thành công", null));
+        }
+
         @GetMapping
         public ResponseEntity<ApiResponse<?>> getConversation(
                         @RequestParam Long contactId,
@@ -124,8 +139,9 @@ public class MessageController {
                                 page,
                                 limit));
 
+                Long currentUserId = userDetails.getUserId();
                 Page<MessageResponse> responsePage = messagePage
-                                .map(messageResponseMapper::fromMessageToMessageResponse);
+                                .map(msg -> messageResponseMapper.fromMessageToMessageResponse(msg, currentUserId));
 
                 PaginationInfo paginationInfo = new PaginationInfo(
                                 responsePage.getTotalElements(),

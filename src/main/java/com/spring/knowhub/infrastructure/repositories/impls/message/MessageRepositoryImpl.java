@@ -111,4 +111,15 @@ public class MessageRepositoryImpl implements MessageRepository {
             throw MessageRepositoryException.deleteFailed(ex.getMessage());
         }
     }
+
+    @Override
+    public void deleteConversation(Long userId1, Long userId2) {
+        log.info("Xóa toàn bộ cuộc hội thoại giữa {} và {}", userId1, userId2);
+        try {
+            jpaMessageRepository.softDeleteConversation(userId1, userId2);
+        } catch (Exception ex) {
+            log.error("Lỗi khi xóa cuộc hội thoại. Chi tiết: {}", ex.getMessage());
+            throw MessageRepositoryException.deleteFailed(ex.getMessage());
+        }
+    }
 }

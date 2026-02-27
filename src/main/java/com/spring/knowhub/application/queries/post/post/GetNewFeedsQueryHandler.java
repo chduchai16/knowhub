@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@org.springframework.transaction.annotation.Transactional(readOnly = true)
+@Transactional(readOnly = true)
 public class GetNewFeedsQueryHandler implements QueryHandler<GetNewFeedsQuery, Page<Post>> {
 
     private final PostRepository postRepository;

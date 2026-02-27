@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.knowhub.application.buses.QueryHandler;
 import com.spring.knowhub.domain.enums.media.OwnerType;
@@ -28,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-@org.springframework.transaction.annotation.Transactional(readOnly = true)
+@Transactional(readOnly = true)
 public class GetPagedPostQueryHandler implements QueryHandler<GetPagedPostQuery, Page<Post>> {
 
     private final PostRepository postRepository;
