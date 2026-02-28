@@ -11,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.spring.knowhub.infrastructure.security.jwt.JwtAuthenticationFilter;
+import com.spring.knowhub.infrastructure.security.oauth2.OAuth2SuccessHandler;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +23,7 @@ public class SpringSecurityConfig {
         private final JwtAuthenticationFilter jwtAuthenticationFilter;
         private final CustomAccessDeniedHandler customAccessDeniedHandler;
         private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+        private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
         private String admin = "ADMIN";
         private String user = "USER";
@@ -39,6 +41,7 @@ public class SpringSecurityConfig {
 
                                                 // auth
                                                 .requestMatchers(HttpMethod.POST, "/api/auth/login/**").permitAll()
+                                                .requestMatchers("/oauth2/**").permitAll()
 
                                                 // permission
                                                 .requestMatchers(HttpMethod.GET, "/api/permissions/**").hasRole(admin)
@@ -133,7 +136,8 @@ public class SpringSecurityConfig {
                                                 .accessDeniedHandler(customAccessDeniedHandler))
                                 .addFilterBefore(
                                                 jwtAuthenticationFilter,
-                                                UsernamePasswordAuthenticationFilter.class);
+                                                UsernamePasswordAuthenticationFilter.class)
+                        .oauth2Login(oauth -> oauth.successHandler(oAuth2SuccessHandler));
 
                 return http.build();
         }

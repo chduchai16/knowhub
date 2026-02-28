@@ -24,12 +24,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = jpaUserRepository.findByUsername(username)
                 .orElseThrow(() -> UserNotFoundException.byUsername(username));
-        List<GrantedAuthority> authorities = List.of(() -> "ROLE_" + user.getRole().getName().toUpperCase());
+
+        // OAuth2 user không có role thì gán authority rỗng
+        List<GrantedAuthority> authorities = user.getRole() != null
+                ? List.of(() -> "ROLE_" + user.getRole().getName().toUpperCase())
+                : List.of();
+
+        // OAuth2 user password là "" - vẫn tạo được UserDetails nhưng không thể login bằng form
+        String password = user.getPassword() != null ? user.getPassword() : "";
 
         return new CustomUserDetails(
                 user.getId(),
                 user.getUsername(),
-                user.getPassword(),
+                password,
                 user.getStatus() == UserStatus.ACTIVE,
                 authorities);
     }

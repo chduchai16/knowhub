@@ -23,6 +23,15 @@ public class User extends BaseModel {
     private Role role;
     private Gender gender;
     private LocalDate dateOfBirth;
+    private String provider; // null = local, "GOOGLE" = OAuth2
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
 
     public User(Long id, String username, String email, String password, String fullName, String bio, String avatarUrl,
             String backgroundUrl, UserStatus status, Role role, Gender gender, LocalDate dateOfBirth) {
