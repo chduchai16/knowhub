@@ -10,7 +10,7 @@ Trạng thái: Tạm dừng phát triển.
 
 - Java 17
 - Spring Boot 3.5
-- Spring Security + JWT (JJWT)
+- Spring Security + JWT (JJWT) + OAuth2 Client
 - Spring Data JPA + Hibernate
 - SQL Server
 - Cloudinary (lưu trữ media)
@@ -56,7 +56,12 @@ Mỗi tầng có exception riêng biệt:
 
 ### Xác thực
 - Đăng ký tài khoản
-- Đăng nhập trả về JWT token
+- Đăng nhập bằng username/password, trả về JWT token
+- Đăng nhập bằng Google OAuth2
+- Đăng nhập bằng Facebook OAuth2
+- User OAuth2 lần đầu đăng nhập sẽ tự động tạo tài khoản với role USER mặc định
+- Username tự sinh từ phần trước @ của email, thêm suffix ngẫu nhiên nếu trùng
+- Trường provider lưu nguồn đăng nhập (GOOGLE, FACEBOOK hoặc null nếu đăng ký thủ công)
 
 ### Quản lý người dùng
 - Xem profile người dùng
@@ -162,7 +167,29 @@ Yêu cầu:
 - SQL Server
 - Maven 3.6+
 
-Cấu hình kết nối database, Cloudinary và JWT secret trong `src/main/resources/application.properties`.
+Cấu hình kết nối database, Cloudinary, JWT secret và OAuth2 credentials trong `src/main/resources/application.properties`.
+
+```properties
+# Google OAuth2
+spring.security.oauth2.client.registration.google.client-id=YOUR_GOOGLE_CLIENT_ID
+spring.security.oauth2.client.registration.google.client-secret=YOUR_GOOGLE_CLIENT_SECRET
+spring.security.oauth2.client.registration.google.scope=openid,email,profile
+
+# Facebook OAuth2
+spring.security.oauth2.client.registration.facebook.client-id=YOUR_FACEBOOK_APP_ID
+spring.security.oauth2.client.registration.facebook.client-secret=YOUR_FACEBOOK_APP_SECRET
+spring.security.oauth2.client.registration.facebook.scope=email,public_profile
+spring.security.oauth2.client.registration.facebook.client-authentication-method=client_secret_post
+spring.security.oauth2.client.provider.facebook.authorization-uri=https://www.facebook.com/v18.0/dialog/oauth
+spring.security.oauth2.client.provider.facebook.token-uri=https://graph.facebook.com/v18.0/oauth/access_token
+spring.security.oauth2.client.provider.facebook.user-info-uri=https://graph.facebook.com/me?fields=id,name,email,picture
+spring.security.oauth2.client.provider.facebook.user-name-attribute=id
+```
+
+Sau khi đăng nhập OAuth2 thành công, server redirect về:
+```
+http://localhost:3000/oauth-success?token=JWT_TOKEN
+```
 
 ```bash
 mvn clean install
@@ -178,6 +205,9 @@ API chạy tại: http://localhost:8080
 ### Auth
 - POST /api/auth/register
 - POST /api/auth/login
+- GET /api/auth/profile
+- GET /oauth2/authorization/google
+- GET /oauth2/authorization/facebook
 
 ### User
 - GET /api/users/{id}
