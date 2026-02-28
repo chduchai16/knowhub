@@ -23,7 +23,7 @@ public class JwtTokenProvider implements TokenProvider {
         long expirationMillis = rememberMe ? 7L * 24 * 60 * 60 * 1000  : 3L * 60 * 60 * 1000;  // 7 ngày hoặc 3 giờ
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put("roleId", user.getRole().getId());
+        claims.put("roleId", user.getRole() != null ? user.getRole().getId() : null);
         claims.put("userId", user.getId());
         return Jwts.builder()
                 .setClaims(claims)

@@ -1,217 +1,226 @@
 # KnowHub - Backend
 
-KnowHub API là hệ thống backend mạnh mẽ cung cấp dịch vụ cho nền tảng kết nối cộng đồng và chia sẻ kiến thức. Dự án được phát triển theo kiến trúc Clean Architecture với CQRS pattern, giúp hệ thống dễ dàng mở rộng và bảo trì.
+KnowHub là hệ thống backend cho nền tảng mạng xã hội chia sẻ kiến thức. Dự án được xây dựng theo kiến trúc Clean Architecture kết hợp CQRS pattern, đảm bảo phân tách rõ ràng giữa các tầng và dễ dàng mở rộng.
 
-> [!NOTE]  
-> Dự án hiện đang trong quá trình phát triển (In Progress).
+Trạng thái: Tạm dừng phát triển.
+
+---
 
 ## Công nghệ sử dụng
 
-- **Framework:** [Spring Boot 3.5+](https://spring.io/projects/spring-boot)
-- **Language:** Java 17
-- **Database:** SQL Server
-- **Security:** Spring Security & JWT (JJWT)
-- **ORM:** Spring Data JPA
-- **Object Mapping:** [ModelMapper](https://modelmapper.org/)
-- **Media Storage:** [Cloudinary](https://cloudinary.com/)
-- **Real-time:** Server-Sent Events (SSE)
-- **Build Tool:** Maven
+- Java 17
+- Spring Boot 3.5
+- Spring Security + JWT (JJWT)
+- Spring Data JPA + Hibernate
+- SQL Server
+- Cloudinary (lưu trữ media)
+- WebSocket + STOMP (nhắn tin thời gian thực)
+- SSE - Server-Sent Events (thông báo thời gian thực)
+- ModelMapper
+- Maven
 
-## Tính năng hiện tại
+---
 
-### Core Features
-- **CQRS Pattern:** Phân tách luồng đọc (Query) và ghi (Command) thông qua Command/Query Bus
-- **Clean Architecture:** Cấu trúc phân lớp rõ ràng (Domain, Application, Infrastructure, Presentation)
-- **Event-Driven:** Spring Event System cho loose coupling và extensibility
+## Kiến trúc
 
-### Authentication & Security
-- **JWT Authentication:** Hệ thống bảo mật dựa trên JWT tokens
-- **SSE Token Support:** Hỗ trợ authentication qua query parameter cho SSE connections
-- **Username/Email Validation:** Kiểm tra duplicate và format validation
+Dự án áp dụng Clean Architecture với 4 tầng chính:
 
-### Social Features
-- **Post Management:** Tạo, chỉnh sửa, xóa bài viết với tags và media attachments
-- **Comment System:** 
-  - Nested comments với `rootId` và `parentId`
-  - Reply threading cho conversations
-  - Đếm số lượng replies cho mỗi root comment
-- **Reactions:** Like/Unlike bài viết
-- **User Follow:** Follow/Unfollow người dùng khác
-- **User Profile:** Quản lý thông tin cá nhân, avatar và cover photo
+```
+Presentation --> Application --> Domain <-- Infrastructure
+```
 
-### Notification System
-- **Real-time Notifications:** SSE (Server-Sent Events) cho instant updates
-- **Notification Types:** 
-  - `LIKE` - Khi ai đó thích bài viết
-  - `COMMENT` - Khi ai đó comment bài viết
-  - `REPLY` - Khi ai đó reply comment
-  - `FOLLOW` - Khi ai đó follow bạn
-- **Rich Notification Data:**
-  - Actor information (username, avatar)
-  - Reference tracking (postId, commentId)
-  - Read/unread status
-  - Timestamps
-- **Offline Support:** Notifications được lưu trong DB cho users offline
+- Domain: nghiệp vụ cốt lõi, không phụ thuộc framework
+- Application: điều phối use case qua Command/Query Bus (CQRS)
+- Infrastructure: JPA entity, repository impl, security, Cloudinary
+- Presentation: REST controller, WebSocket, SSE, DTO mapper
 
-### Media Management
-- **Cloudinary Integration:** Upload và quản lý images/videos
-- **Multi-file Upload:** Hỗ trợ upload nhiều files cùng lúc
-- **File Size Limits:** Configurable max file size (default: 100MB)
+### CQRS
 
-## Phát triển dự án (Local)
+Mọi thao tác ghi đi qua CommandBus, mọi thao tác đọc đi qua QueryBus. Mỗi handler chỉ xử lý một command hoặc query duy nhất.
 
-### 1. Yêu cầu hệ thống
+### Event-Driven
+
+Sau khi xử lý command, handler publish event (ví dụ: NotificationCreatedEvent). Listener nhận event và xử lý bất đồng bộ, ví dụ đẩy thông báo realtime qua SSE.
+
+### Exception theo tầng
+
+Mỗi tầng có exception riêng biệt:
+- Domain: kiểm tra tính hợp lệ của nghiệp vụ
+- Infrastructure: lỗi truy cập database, external service
+- Application: lỗi điều phối use case
+- Presentation: lỗi mapping response
+
+---
+
+## Tính năng đã xây dựng
+
+### Xác thực
+- Đăng ký tài khoản
+- Đăng nhập trả về JWT token
+
+### Quản lý người dùng
+- Xem profile người dùng
+- Cập nhật thông tin cá nhân
+- Upload avatar, ảnh bìa
+- Follow / Unfollow người dùng
+
+### Phân quyền
+- Role và Permission
+- Quản lý role (tạo, cập nhật, tìm kiếm, gán permission)
+- Mỗi user chỉ có một role
+
+### Bài viết
+- Tạo, cập nhật, xóa bài viết
+- Đính kèm media (ảnh, video) từ Cloudinary
+- Gắn tag cho bài viết
+- Newsfeed (bài viết công khai theo thứ tự thời gian)
+- Đếm số lượt like và comment trên mỗi bài viết
+
+### Bình luận
+- Tạo comment gốc (root comment)
+- Reply comment theo chuỗi (rootId + parentId)
+- Đếm số lượng reply cho mỗi comment gốc
+
+### Like
+- Like / Unlike bài viết
+- Kiểm tra trạng thái đã like của người dùng hiện tại
+
+### Thông báo
+- Các loại thông báo: LIKE, COMMENT, REPLY, FOLLOW
+- Lưu vào database cho người dùng offline
+- Đẩy thông báo thời gian thực qua SSE khi người dùng online
+- Đánh dấu đã đọc
+
+### Nhắn tin
+- Gửi tin nhắn trực tiếp giữa hai người dùng qua WebSocket + STOMP
+- Đính kèm media trong tin nhắn
+- Lịch sử hội thoại (inbox list)
+- Nhận tin nhắn thời gian thực qua /user/queue/messages
+
+### Media
+- Upload ảnh và video lên Cloudinary
+- Gán media cho bài viết hoặc tin nhắn
+- Hỗ trợ upload nhiều file cùng lúc
+
+### Báo cáo (Report)
+- Báo cáo bài viết hoặc người dùng vi phạm
+
+---
+
+## Cấu trúc thư mục
+
+```
+src/main/java/com/spring/knowhub/
+│
+├── domain/
+│   ├── models/           # Domain model: User, Post, Comment, Message, Notification...
+│   ├── repositories/     # Repository interface (port)
+│   ├── enums/            # Enum dùng chung
+│   ├── exceptions/       # Domain exception theo từng aggregate
+│   ├── constants/        # Hằng số domain
+│   ├── specifications/   # Specification pattern cho query
+│   └── security/         # Interface TokenProvider
+│
+├── application/
+│   ├── buses/            # CommandBus, QueryBus
+│   ├── commands/         # Command + CommandHandler (auth, user, post, comment, message...)
+│   ├── queries/          # Query + QueryHandler
+│   ├── validators/       # Validate business rule trước khi xử lý
+│   ├── events/           # Domain event và handler
+│   ├── exceptions/       # Application exception theo từng aggregate
+│   └── ports/            # Application port interface
+│
+├── infrastructure/
+│   ├── entities/         # JPA entity ánh xạ database
+│   ├── repositories/
+│   │   ├── jpas/         # Spring Data JPA interface
+│   │   └── impls/        # Repository implementation
+│   ├── mappers/          # Entity <-> Domain model mapper
+│   ├── security/         # JWT filter, UserDetailsService, SecurityConfig
+│   ├── cloudinary/       # Cloudinary upload service
+│   ├── realtime/         # SSE connection registry
+│   ├── configurations/   # Bean config (ModelMapper, CORS...)
+│   └── exceptions/       # Infrastructure exception theo từng aggregate
+│
+└── presentation/
+    ├── controllers/      # REST controller (auth, user, post, comment, message, notification...)
+    ├── websocket/        # WebSocket controller (ChatWsController)
+    ├── sse/              # SSE controller và registry
+    ├── requests/         # Request DTO
+    ├── response/         # Response DTO
+    ├── mappers/          # Domain model <-> Response DTO mapper
+    ├── advices/          # GlobalExceptionHandler
+    └── exceptions/       # Presentation exception theo từng aggregate
+```
+
+---
+
+## Chạy dự án
+
+Yêu cầu:
 - Java 17+
-- SQL Server 2012+
+- SQL Server
 - Maven 3.6+
 
-### 2. Cấu hình môi trường
-
-Cấu hình database, Cloudinary, và file upload limits trong `src/main/resources/application.properties`
-
-### 3. Chạy ứng dụng
+Cấu hình kết nối database, Cloudinary và JWT secret trong `src/main/resources/application.properties`.
 
 ```bash
 mvn clean install
 mvn spring-boot:run
 ```
 
-API sẽ chạy tại: [http://localhost:8080](http://localhost:8080)
+API chạy tại: http://localhost:8080
 
+---
 
-## Cấu trúc dự án
+## API chính
 
-```
-src/main/java/com/spring/knowhub/
-│
-├── domain/                          # Domain Layer - Business Logic Core
-│   ├── models/                      # Domain Models (Entities)
-│   │   ├── user/                    # User, Role, UserFollow
-│   │   ├── post/                    # Post, PostLike, PostMedia, Tag
-│   │   ├── comment/                 # Comment (with rootId, parentId)
-│   │   └── notification/            # Notification, UserNotification
-│   ├── repositories/                # Repository Interfaces
-│   ├── enums/                       # Domain Enums (NotificationType, UserStatus, etc.)
-│   ├── exceptions/                  # Domain Exceptions
-│   └── security/                    # Security Interfaces (TokenProvider)
-│
-├── application/                     # Application Layer - Use Cases
-│   ├── commands/                    # Write Operations (CQRS)
-│   │   ├── auth/                    # Register, Login
-│   │   ├── user/                    # CreateUser, UpdateUser, UserFollow
-│   │   ├── post/                    # CreatePost, UpdatePost, PostLike
-│   │   └── comment/                 # CreateComment (with rootId logic)
-│   ├── queries/                     # Read Operations (CQRS)
-│   │   ├── user/                    # GetUserById, GetUserProfile
-│   │   ├── post/                    # GetPostById, GetPostsByUserId
-│   │   ├── comment/                 # GetCommentsByPostId, GetCommentsByRootId
-│   │   └── notification/            # GetNotificationsByUserId
-│   ├── buses/                       # Command/Query Bus Implementation
-│   ├── validators/                  # Business Validation Logic
-│   ├── events/                      # Domain Events
-│   │   ├── NotificationCreatedEvent.java
-│   │   └── handlers/
-│   │       └── PushNotificationRealtimeHandler.java  # SSE Event Handler
-│   └── listeners/                   # Event Listeners
-│
-├── infrastructure/                  # Infrastructure Layer - External Concerns
-│   ├── entities/                    # JPA Entities (Database Mapping)
-│   │   ├── user/                    # UserEntity
-│   │   ├── post/                    # PostEntity, PostMediaEntity
-│   │   ├── comment/                 # CommentEntity (rootId column)
-│   │   └── notification/            # NotificationEntity (postId column)
-│   ├── repositories/
-│   │   ├── jpas/                    # JPA Repository Interfaces
-│   │   │   └── comment/
-│   │   │       └── JpaCommentRepository.java  # findByPostId, findByRootId, countByRootId
-│   │   └── impls/                   # Repository Implementations
-│   ├── mappers/                     # Entity ↔ Domain Model Mappers
-│   │   ├── user/                    # UserMapper
-│   │   ├── post/                    # PostMapper
-│   │   ├── comment/                 # CommentMapper
-│   │   └── notification/            # NotificationMapper
-│   ├── security/                    # Security Implementation
-│   │   ├── jwt/
-│   │   │   ├── JwtAuthenticationFilter.java  # Token from header/query param
-│   │   │   └── JwtTokenProvider.java
-│   │   ├── SpringSecurityConfig.java
-│   │   └── UserDetailsServiceImpl.java
-│   └── services/                    # External Services
-│       └── cloudinary/              # Cloudinary Integration
-│
-└── presentation/                    # Presentation Layer - API & DTOs
-    ├── controllers/                 # REST Controllers
-    │   ├── auth/                    # AuthController
-    │   ├── user/                    # UserController
-    │   ├── post/                    # PostController
-    │   ├── comment/                 # CommentController
-    │   └── notification/            # NotificationController
-    ├── sse/                         # Server-Sent Events
-    │   ├── NotificationSseController.java  # /api/notifications/stream
-    │   ├── SseConnectionRegistry.java      # Manage SSE connections
-    │   └── payload/
-    │       └── NotificationRealtimePayload.java
-    ├── request/                     # Request DTOs
-    ├── response/                    # Response DTOs
-    │   ├── comment/
-    │   │   └── CommentResponse.java         # includes replyQuantity
-    │   └── notification/
-    │       └── NotificationResponse.java    # includes postId, actor info
-    ├── mappers/                     # DTO Mappers
-    │   ├── comment/
-    │   │   └── CommentResponseMapper.java   # calculates replyQuantity
-    │   └── notification/
-    │       └── NotificationResponseMapper.java
-    └── exceptions/                  # Global Exception Handlers
-```
+### Auth
+- POST /api/auth/register
+- POST /api/auth/login
 
-## Key Architectural Patterns
+### User
+- GET /api/users/{id}
+- PUT /api/users/{id}
+- PUT /api/users/{id}/avatar
+- POST /api/users/{id}/follow
+- DELETE /api/users/{id}/unfollow
 
-### CQRS (Command Query Responsibility Segregation)
-- **Commands:** Modify state (Create, Update, Delete)
-- **Queries:** Read state (Get, List, Search)
-- **Bus Pattern:** Centralized routing for commands/queries
+### Role & Permission
+- POST /api/roles
+- GET /api/roles
+- PUT /api/roles/{id}
+- GET /api/permissions
 
-### Event-Driven Architecture
-- Command Handlers publish events
-- Event Listeners handle asynchronously
-- Loose coupling between components
+### Post
+- GET /api/posts/newsfeed
+- GET /api/posts/{id}
+- POST /api/posts
+- PUT /api/posts/{id}
+- DELETE /api/posts/{id}
+- POST /api/posts/{id}/like
+- DELETE /api/posts/{id}/unlike
 
+### Comment
+- GET /api/posts/{postId}/comments
+- GET /api/comments/{rootId}/replies
+- POST /api/comments
 
-### Clean Architecture Layers
-```
-Presentation → Application → Domain ← Infrastructure
-     ↓              ↓           ↑            ↑
-   DTOs        Use Cases    Entities    JPA/External
-```
+### Message
+- GET /api/messages/inbox
+- GET /api/messages/conversation/{partnerId}
+- WebSocket: SEND /app/chat.send
 
-## API Endpoints
+### Notification
+- GET /api/notifications
+- PUT /api/notifications/{id}/read
+- GET /api/notifications/stream (SSE)
 
-### Authentication
-- `POST /api/auth/register` - Đăng ký tài khoản
-- `POST /api/auth/login` - Đăng nhập
+### Media
+- POST /api/media/upload
 
-### Users
-- `GET /api/users/{id}` - Lấy thông tin user
-- `PUT /api/users/{id}` - Cập nhật thông tin
-- `POST /api/users/{id}/follow` - Follow user
-- `DELETE /api/users/{id}/unfollow` - Unfollow user
+---
 
-### Posts
-- `GET /api/posts` - Lấy danh sách posts
-- `POST /api/posts` - Tạo post mới
-- `PUT /api/posts/{id}` - Cập nhật post
-- `DELETE /api/posts/{id}` - Xóa post
-- `POST /api/posts/{id}/like` - Like post
-- `DELETE /api/posts/{id}/unlike` - Unlike post
+## Ghi chú
 
-### Comments
-- `GET /api/posts/{postId}/comments` - Lấy root comments của post
-- `GET /api/comments/{rootId}/replies` - Lấy replies của comment
-- `POST /api/comments` - Tạo comment/reply mới
-
-### Notifications
-- `GET /api/notifications` - Lấy danh sách notifications
-- `PUT /api/notifications/{id}/read` - Đánh dấu đã đọc
-- `GET /api/notifications/stream` - SSE endpoint (real-time)
-© 2026 KnowHub Team.
+Dự án được xây dựng với mục tiêu học tập và thực hành kiến trúc phần mềm theo DDD + Clean Architecture + CQRS. Một số tính năng vẫn còn ở dạng prototype hoặc chưa hoàn thiện toàn bộ edge case.

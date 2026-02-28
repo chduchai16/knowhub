@@ -21,10 +21,10 @@ public class UserEntity extends BaseEntity {
     @Column(unique = true, nullable = false, length = 255, columnDefinition = "NVARCHAR(255)")
     private String email;
 
-    @Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String password;
 
-    @Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String fullName;
 
     @Column(columnDefinition = "NVARCHAR(MAX)")
@@ -47,5 +47,8 @@ public class UserEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private RoleEntity role;
+
+    @Column(columnDefinition = "NVARCHAR(50)")
+    private String provider;
 
 }
